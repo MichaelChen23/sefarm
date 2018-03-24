@@ -1,5 +1,7 @@
 package com.sefarm.common.base;
 
+import com.sefarm.common.Constant;
+
 import javax.persistence.Transient;
 import java.io.Serializable;
 
@@ -12,10 +14,10 @@ import java.io.Serializable;
 public class BaseDO implements Serializable {
 
     @Transient
-    private Integer pageIndex = 1;
+    private Integer pageIndex = Constant.DEFAULT_PAGE_INDEX;
 
     @Transient
-    private Integer pageSize = 10;
+    private Integer pageSize = Constant.DEFAULT_ROWS;
 
     /**
      * searchKey-查询的字段
@@ -45,13 +47,13 @@ public class BaseDO implements Serializable {
      * 排序的字段
      */
     @Transient
-    String sort;
+    String sortStr;
 
     /**
      * 排序的升降
      */
     @Transient
-    String order;
+    String orderStr;
 
     public Integer getPageIndex() {
         return pageIndex;
@@ -101,20 +103,20 @@ public class BaseDO implements Serializable {
         this.createTimeEnd = createTimeEnd;
     }
 
-    public String getSort() {
-        return sort;
+    public String getSortStr() {
+        return sortStr;
     }
 
-    public void setSort(String sort) {
-        this.sort = sort;
+    public void setSortStr(String sortStr) {
+        this.sortStr = sortStr;
     }
 
-    public String getOrder() {
-        return order;
+    public String getOrderStr() {
+        return orderStr;
     }
 
-    public void setOrder(String order) {
-        this.order = order;
+    public void setOrderStr(String orderStr) {
+        this.orderStr = orderStr;
     }
 
     @Override
@@ -126,8 +128,8 @@ public class BaseDO implements Serializable {
                 ", searchValue='" + searchValue + '\'' +
                 ", createTimeBegin='" + createTimeBegin + '\'' +
                 ", createTimeEnd='" + createTimeEnd + '\'' +
-                ", sort='" + sort + '\'' +
-                ", order='" + order + '\'' +
+                ", sortStr='" + sortStr + '\'' +
+                ", orderStr='" + orderStr + '\'' +
                 '}';
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sefarm.dao.system.SmsMapper">
+  <resultMap id="BaseResultMap" type="com.sefarm.model.system.SmsDO">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="sms_return_code" jdbcType="VARCHAR" property="smsReturnCode" />
+    <result column="result_code" jdbcType="VARCHAR" property="resultCode" />
+  </resultMap>
+</mapper>

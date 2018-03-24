@@ -15,7 +15,7 @@ public abstract class Constant {
 
 	public static final String FAIL_MSG = "失败";
 
-	public static final Integer DEFAULT_CURRENT_PAGE = 1;
+	public static final Integer DEFAULT_PAGE_INDEX = 0;
 	
 	public static final Integer DEFAULT_ROWS = 10;
 
