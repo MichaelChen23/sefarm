@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- 自动化构建操作手册：
+        前提条件：需要在数据库上建立要自动化生成相应dao操作接口和实体的表，
+        1.Run ->> edit-configurations ->> + 号添加 里选择maven项目的命令，随意给个名字，如generator；
+        2.Working directory里面填写要构建的项目目录；
+        3.Command line 里面填写mybatis-generator:generate -e 这句命令 然后 OK即可完成配置；
+        4.选择该配置，run运行，如果通过maven编译，就会在相关目录生成相关文件。
+    -->
+    <!--<properties resource="generator.properties"/>-->
+
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="com.sefarm.common.base.SeFarmMapper"/>
+        </plugin>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/sefarm_db?useUnicode=true&amp;characterEncoding=utf-8&amp;zeroDateTimeBehavior=round&amp;allowMultiQueries=true&amp;autoReconnect=true"
+                        userId="root"
+                        password="123456">
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.sefarm.model.system" targetProject="sefarm-model/src/main/java"/>
+
+        <sqlMapGenerator targetPackage="mapper.system" targetProject="sefarm-service/src/main/resources"/>
+
+        <javaClientGenerator targetPackage="com.sefarm.dao.system" targetProject="sefarm-service/src/main/java"
+                             type="XMLMAPPER"/>
+
+        <table tableName="sefarm_sys_user" domainObjectName="SysUserDO" mapperName="SysUserMapper">
+            <!--mysql 配置-->
+            <generatedKey column="id" sqlStatement="Mysql" identity="false"/>
+            <!--oracle 配置-->
+            <!--<generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre"/>-->
+        </table>
+    </context>
+</generatorConfiguration>

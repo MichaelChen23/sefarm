@@ -1,0 +1,25 @@
+# 自动化打jar包
+#        1.Run ->> edit-configurations ->> + 号添加 里选择maven项目的命令，随意给个名字，如package；
+#        2.Working directory里面填写要构建的项目目录；
+#        3.Command line 里面填写clean package 这句命令 然后 OK即可完成配置；
+#        4.选择该配置，run运行，如果通过maven编译，就会在target目录下打出ji.jar包。
+
+# 多模块 新打jar方法 modify by mc 2018-2-26
+# idea右侧的maven命令或者命令行里执行 对父目录ji的mvn clean命令
+# idea右侧的maven命令或者命令行里执行 对父目录ji的mvn compile命令
+# idea右侧的maven命令或者命令行里执行 对子项目ji-web的mvn package命令，这样就可以在ji-web的target目录里找到打包好的ji.jar
+
+# 默认的profile为develop，其他环境通过指定启动参数使用不同的profile，比如：
+#   开发环境：java -jar my-spring-boot.jar --spring.profiles.active=dev
+#   测试环境：java -jar my-spring-boot.jar --spring.profiles.active=test
+# springboot配置
+spring:
+    # 多环境配置
+    profiles:
+        active: dev
+    # 编码
+    http:
+        encoding:
+            force: true
+            charset: UTF-8
+            enabled: true

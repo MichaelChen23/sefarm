@@ -1,0 +1,29 @@
+########################################################
+### 开发环境配置
+########################################################
+# springboot配置
+spring:
+    # 多环境配置
+    profiles: dev
+    # dubbo
+    dubbo:
+        application:
+            name: sefarm-web
+        registry:
+            address: zookeeper://127.0.0.1:2181
+            timeout: 40000
+        scan: com.sefarm.controller
+    # srping mvc
+    mvc:
+        view:
+            prefix: /templates/
+            suffix: .html
+
+########################################################
+### server 配置
+########################################################
+server:
+      port: 8188
+      context-path: /
+      tomcat:
+          uri-encoding: utf-8
