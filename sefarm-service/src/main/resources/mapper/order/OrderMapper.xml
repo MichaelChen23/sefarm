@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sefarm.dao.order.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.sefarm.model.order.OrderDO">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="carry" jdbcType="VARCHAR" property="carry" />
+    <result column="carry_fee_total" jdbcType="DECIMAL" property="carryFeeTotal" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="product_total" jdbcType="DECIMAL" property="productTotal" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="exchange_score" jdbcType="DECIMAL" property="exchangeScore" />
+    <result column="requirement" jdbcType="VARCHAR" property="requirement" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+</mapper>

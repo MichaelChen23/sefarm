@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sefarm.dao.order.OrderDeliveryMapper">
+  <resultMap id="BaseResultMap" type="com.sefarm.model.order.OrderDeliveryDO">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="express_name" jdbcType="VARCHAR" property="expressName" />
+    <result column="express_no" jdbcType="VARCHAR" property="expressNo" />
+    <result column="handler_account" jdbcType="VARCHAR" property="handlerAccount" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
+    <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+</mapper>
