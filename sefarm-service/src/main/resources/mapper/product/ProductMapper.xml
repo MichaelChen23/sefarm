@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sefarm.dao.product.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.sefarm.model.product.ProductDO">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="now_price" jdbcType="DECIMAL" property="nowPrice" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="new_flag" jdbcType="CHAR" property="newFlag" />
+    <result column="sale_flag" jdbcType="CHAR" property="saleFlag" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="sell_count" jdbcType="BIGINT" property="sellCount" />
+    <result column="stock" jdbcType="BIGINT" property="stock" />
+    <result column="reply_hit" jdbcType="BIGINT" property="replyHit" />
+    <result column="search_word" jdbcType="VARCHAR" property="searchWord" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="product_type_id" jdbcType="BIGINT" property="productTypeId" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="product_html" jdbcType="LONGVARCHAR" property="productHtml" />
+    <result column="images" jdbcType="LONGVARCHAR" property="images" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+</mapper>
