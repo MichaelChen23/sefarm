@@ -28,6 +28,17 @@
         <java.version>1.8</java.version>
         <springboot.version>1.5.6.RELEASE</springboot.version>
         <springboot.dubbo.version>1.0.0</springboot.dubbo.version>
+        <commons.lang3.version>3.5</commons.lang3.version>
+        <shiro.version>1.4.0</shiro.version>
+        <fastjson.version>1.2.31</fastjson.version>
+        <commons.io.version>2.5</commons.io.version>
+        <velocity.version>1.7</velocity.version>
+        <kaptcha.version>2.3.2</kaptcha.version>
+        <ehcache.version>3.3.1</ehcache.version>
+        <zxing.version>3.2.1</zxing.version>
+        <druid.version>1.0.28</druid.version>
+        <beetl.version>2.7.15</beetl.version>
+        <swagger.version>2.2.2</swagger.version>
     </properties>
 
     <dependencyManagement>
@@ -41,6 +52,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${springboot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons.lang3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
