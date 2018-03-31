@@ -27,8 +27,28 @@ public class SysUserController {
 
     private static final Logger logger = LoggerFactory.getLogger(SysUserController.class);
 
+    /**
+     * 网页路径的前缀
+     */
+    private static String PREFIX = "/system/sysuser/";
+
     @Reference(version = "1.0.0", timeout = 10000)
     public ISysUserService sysUserService;
+
+
+    /**
+     * 跳转到查看系统用户列表的页面
+     */
+    @RequestMapping("")
+    public String index() {
+        return PREFIX + "sysuser.html";
+    }
+
+
+
+
+
+
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public BaseResponse<Boolean> save(@RequestBody SysUserDO sysUserDO) {

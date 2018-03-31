@@ -9,13 +9,14 @@
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="sys_role_id" jdbcType="BIGINT" property="sysRoleId" />
+    <result column="sys_dept_id" jdbcType="BIGINT" property="sysDeptId" />
     <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
-    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />

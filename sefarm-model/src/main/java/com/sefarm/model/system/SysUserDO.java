@@ -2,20 +2,20 @@ package com.sefarm.model.system;
 
 import com.sefarm.common.base.BaseDO;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.*;
 
 /**
- * 系统用户的实体类
+ * 系统角色的实体类
  *
  * @author mc
- * @date 2018-3-18
+ * @date 2018-3-24
  */
 @Table(name = "sefarm_sys_user")
 public class SysUserDO extends BaseDO implements Serializable {
     /**
-     * 系统用户ID
+     * 系统用户ID 
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
@@ -37,6 +37,16 @@ public class SysUserDO extends BaseDO implements Serializable {
     private String name;
 
     /**
+     * 性别：m-男；w-女
+     */
+    private String sex;
+
+    /**
+     * 生日
+     */
+    private Date birthday;
+
+    /**
      * 电话号码
      */
     private String phone;
@@ -52,27 +62,21 @@ public class SysUserDO extends BaseDO implements Serializable {
     private String email;
 
     /**
-     * 系统角色id
+     * 系统角色id 
      */
     @Column(name = "sys_role_id")
     private Long sysRoleId;
 
     /**
+     * 系统公司部门id
+     */
+    @Column(name = "sys_dept_id")
+    private Long sysDeptId;
+
+    /**
      * 状态：y-启用；n-禁用，默认为y
      */
     private String status;
-
-    /**
-     * 最后登录IP
-     */
-    @Column(name = "last_login_ip")
-    private String lastLoginIp;
-
-    /**
-     * 最后登录时间
-     */
-    @Column(name = "last_login_time")
-    private Date lastLoginTime;
 
     /**
      * 创建人
@@ -104,18 +108,18 @@ public class SysUserDO extends BaseDO implements Serializable {
     private String remark;
 
     /**
-     * 获取系统用户ID
+     * 获取系统用户ID 
      *
-     * @return id - 系统用户ID
+     * @return id - 系统用户ID 
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * 设置系统用户ID
+     * 设置系统用户ID 
      *
-     * @param id 系统用户ID
+     * @param id 系统用户ID 
      */
     public void setId(Long id) {
         this.id = id;
@@ -176,6 +180,42 @@ public class SysUserDO extends BaseDO implements Serializable {
     }
 
     /**
+     * 获取性别：m-男；w-女
+     *
+     * @return sex - 性别：m-男；w-女
+     */
+    public String getSex() {
+        return sex;
+    }
+
+    /**
+     * 设置性别：m-男；w-女
+     *
+     * @param sex 性别：m-男；w-女
+     */
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    /**
+     * 获取生日
+     *
+     * @return birthday - 生日
+     */
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    /**
+     * 设置生日
+     *
+     * @param birthday 生日
+     */
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    /**
      * 获取电话号码
      *
      * @return phone - 电话号码
@@ -230,21 +270,39 @@ public class SysUserDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取系统角色id
+     * 获取系统角色id 
      *
-     * @return sys_role_id - 系统角色id
+     * @return sys_role_id - 系统角色id 
      */
     public Long getSysRoleId() {
         return sysRoleId;
     }
 
     /**
-     * 设置系统角色id
+     * 设置系统角色id 
      *
-     * @param sysRoleId 系统角色id
+     * @param sysRoleId 系统角色id 
      */
     public void setSysRoleId(Long sysRoleId) {
         this.sysRoleId = sysRoleId;
+    }
+
+    /**
+     * 获取系统公司部门id
+     *
+     * @return sys_dept_id - 系统公司部门id
+     */
+    public Long getSysDeptId() {
+        return sysDeptId;
+    }
+
+    /**
+     * 设置系统公司部门id
+     *
+     * @param sysDeptId 系统公司部门id
+     */
+    public void setSysDeptId(Long sysDeptId) {
+        this.sysDeptId = sysDeptId;
     }
 
     /**
@@ -263,42 +321,6 @@ public class SysUserDO extends BaseDO implements Serializable {
      */
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    /**
-     * 获取最后登录IP
-     *
-     * @return last_login_ip - 最后登录IP
-     */
-    public String getLastLoginIp() {
-        return lastLoginIp;
-    }
-
-    /**
-     * 设置最后登录IP
-     *
-     * @param lastLoginIp 最后登录IP
-     */
-    public void setLastLoginIp(String lastLoginIp) {
-        this.lastLoginIp = lastLoginIp;
-    }
-
-    /**
-     * 获取最后登录时间
-     *
-     * @return last_login_time - 最后登录时间
-     */
-    public Date getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    /**
-     * 设置最后登录时间
-     *
-     * @param lastLoginTime 最后登录时间
-     */
-    public void setLastLoginTime(Date lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
     }
 
     /**
@@ -398,13 +420,14 @@ public class SysUserDO extends BaseDO implements Serializable {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
+                ", sex='" + sex + '\'' +
+                ", birthday=" + birthday +
                 ", phone='" + phone + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", email='" + email + '\'' +
                 ", sysRoleId=" + sysRoleId +
+                ", sysDeptId=" + sysDeptId +
                 ", status='" + status + '\'' +
-                ", lastLoginIp='" + lastLoginIp + '\'' +
-                ", lastLoginTime=" + lastLoginTime +
                 ", createBy='" + createBy + '\'' +
                 ", createTime=" + createTime +
                 ", updateBy='" + updateBy + '\'' +

@@ -32,7 +32,7 @@ public class LoginController extends BaseController {
     /**
      * 跳转到主页
      */
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String index(Model model) {
         //获取菜单列表
 //        List<Integer> roleList = ShiroKit.getUser().getRoleList();
@@ -58,7 +58,7 @@ public class LoginController extends BaseController {
     /**
      * 跳转到登录页面
      */
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/login", method = RequestMethod.GET)
     public String login() {
 //        if (ShiroKit.isAuthenticated() || ShiroKit.getUser() != null) {
 //            return REDIRECT + "/";
@@ -70,7 +70,7 @@ public class LoginController extends BaseController {
     /**
      * 点击登录执行的动作
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/login", method = RequestMethod.POST)
     public String loginVali() {
 
         String username = super.getPara("username").trim();
@@ -109,9 +109,9 @@ public class LoginController extends BaseController {
             userDO = sysUserService.getOneByObj(sysUserDO);
         }
         if (userDO != null && Constant.STATUS_UNLOCK.equals(userDO.getStatus())) {
-            userDO.setLastLoginTime(new Date());
-            //更新最新登录时间
-            sysUserService.updateByObj(userDO);
+//            userDO.setLastLoginTime(new Date());
+//            //更新最新登录时间
+//            sysUserService.updateByObj(userDO);
             return "/index.html";
         } else {
             return "/login.html";
@@ -122,11 +122,11 @@ public class LoginController extends BaseController {
     /**
      * 退出登录
      */
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/logout", method = RequestMethod.GET)
     public String logOut() {
 //        LogManager.me().executeLog(LogTaskFactory.exitLog(ShiroKit.getUser().getId(), getIp()));
 //        ShiroKit.getSubject().logout();
-        return REDIRECT + "/login";
+        return REDIRECT + "/admin/login";
     }
 
 }
