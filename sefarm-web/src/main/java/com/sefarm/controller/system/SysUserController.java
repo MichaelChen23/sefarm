@@ -4,14 +4,13 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.system.SysUserDO;
 import com.sefarm.service.system.ISysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,9 +20,9 @@ import java.util.List;
  * @author mc
  * @date 2018-3-18
  */
-@RestController
+@Controller//controller对应beetl模版链接，restcontroller对应所有接口以restful方式返回结果，如果不用restController则要对每个接口使用@ResponseBody，两者只能选其一
 @RequestMapping("/sys-user")
-public class SysUserController {
+public class SysUserController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(SysUserController.class);
 
@@ -108,6 +107,7 @@ public class SysUserController {
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @ResponseBody
     public PageInfo<SysUserDO> getList(@RequestBody SysUserDO sysUserDO) {//通过输入page页数和rows每页查询的行数来查询lsit，如果不输入，默认值查询第一页；如果改用select（Obj）方法输入唯一性字段来查询会查到相关唯一的记录。
         try {
             List<SysUserDO> list = sysUserService.getListByObj(sysUserDO);

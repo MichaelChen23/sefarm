@@ -4,7 +4,9 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.google.code.kaptcha.Constants;
 import com.sefarm.common.Constant;
 import com.sefarm.common.exception.InvalidKaptchaException;
+import com.sefarm.common.node.MenuNode;
 import com.sefarm.model.system.SysUserDO;
+import com.sefarm.service.system.ISysMenuService;
 import com.sefarm.service.system.ISysUserService;
 import com.sefarm.util.ToolUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -28,6 +31,8 @@ public class LoginController extends BaseController {
     @Reference(version = "1.0.0", timeout = 10000)
     public ISysUserService sysUserService;
 
+    @Reference(version = "1.0.0", timeout = 10000)
+    public ISysMenuService sysMenuService;
 
     /**
      * 跳转到主页
@@ -41,9 +46,9 @@ public class LoginController extends BaseController {
 //        model.addAttribute("tips", "该用户没有角色，无法登陆");
 //        return "/login.html";
 //        }
-//        List<MenuNode> menus = menuDao.getMenusByRoleIds(roleList);
-//        List<MenuNode> titles = MenuNode.buildTitle(menus);
-//        model.addAttribute("titles", titles);
+        List<MenuNode> menus = sysMenuService.getMenusByRoleId(1);
+        List<MenuNode> titles = MenuNode.buildTitle(menus);
+        model.addAttribute("titles", titles);
 //
 //        //获取用户头像
 //        Integer id = ShiroKit.getUser().getId();

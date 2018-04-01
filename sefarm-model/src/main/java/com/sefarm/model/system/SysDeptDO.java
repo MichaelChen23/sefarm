@@ -7,29 +7,30 @@ import java.util.Date;
 import javax.persistence.*;
 
 /**
- * 系统角色的实体类
+ * 系统部门的实体类
  *
  * @author mc
  * @date 2018-3-24
  */
-@Table(name = "sefarm_sys_role")
-public class SysRoleDO extends BaseDO implements Serializable {
+@Table(name = "sefarm_sys_dept")
+public class SysDeptDO extends BaseDO implements Serializable {
     /**
-     * 系统角色ID 
+     * 系统部门ID 
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
     private Long id;
 
     /**
-     * 角色名称
+     * 部门名简称
      */
     private String name;
 
     /**
-     * 角色编号
+     * 部门名全称
      */
-    private String code;
+    @Column(name = "full_name")
+    private String fullName;
 
     /**
      * 排序号，1最小，默认为1
@@ -37,15 +38,19 @@ public class SysRoleDO extends BaseDO implements Serializable {
     private Integer sort;
 
     /**
-     * 父角色id
+     * 描述
+     */
+    private String description;
+
+    /**
+     * 父部门id
      */
     private Long pid;
 
     /**
-     * 系统公司部门id
+     * 所有父部门id集合，用‘,’隔开
      */
-    @Column(name = "sys_dept_id")
-    private Long sysDeptId;
+    private String pids;
 
     /**
      * 状态：y-启用；n-禁用，默认为y
@@ -77,62 +82,57 @@ public class SysRoleDO extends BaseDO implements Serializable {
     private Date updateTime;
 
     /**
-     * 备注
-     */
-    private String remark;
-
-    /**
-     * 获取系统角色ID 
+     * 获取系统部门ID 
      *
-     * @return id - 系统角色ID 
+     * @return id - 系统部门ID 
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * 设置系统角色ID 
+     * 设置系统部门ID 
      *
-     * @param id 系统角色ID 
+     * @param id 系统部门ID 
      */
     public void setId(Long id) {
         this.id = id;
     }
 
     /**
-     * 获取角色名称
+     * 获取部门名简称
      *
-     * @return name - 角色名称
+     * @return name - 部门名简称
      */
     public String getName() {
         return name;
     }
 
     /**
-     * 设置角色名称
+     * 设置部门名简称
      *
-     * @param name 角色名称
+     * @param name 部门名简称
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * 获取角色编号
+     * 获取部门名全称
      *
-     * @return code - 角色编号
+     * @return full_name - 部门名全称
      */
-    public String getCode() {
-        return code;
+    public String getFullName() {
+        return fullName;
     }
 
     /**
-     * 设置角色编号
+     * 设置部门名全称
      *
-     * @param code 角色编号
+     * @param fullName 部门名全称
      */
-    public void setCode(String code) {
-        this.code = code;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     /**
@@ -154,39 +154,57 @@ public class SysRoleDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取父角色id
+     * 获取描述
      *
-     * @return pid - 父角色id
+     * @return description - 描述
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * 设置描述
+     *
+     * @param description 描述
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * 获取父部门id
+     *
+     * @return pid - 父部门id
      */
     public Long getPid() {
         return pid;
     }
 
     /**
-     * 设置父角色id
+     * 设置父部门id
      *
-     * @param pid 父角色id
+     * @param pid 父部门id
      */
     public void setPid(Long pid) {
         this.pid = pid;
     }
 
     /**
-     * 获取系统公司部门id
+     * 获取所有父部门id集合，用‘,’隔开
      *
-     * @return sys_dept_id - 系统公司部门id
+     * @return pids - 所有父部门id集合，用‘,’隔开
      */
-    public Long getSysDeptId() {
-        return sysDeptId;
+    public String getPids() {
+        return pids;
     }
 
     /**
-     * 设置系统公司部门id
+     * 设置所有父部门id集合，用‘,’隔开
      *
-     * @param sysDeptId 系统公司部门id
+     * @param pids 所有父部门id集合，用‘,’隔开
      */
-    public void setSysDeptId(Long sysDeptId) {
-        this.sysDeptId = sysDeptId;
+    public void setPids(String pids) {
+        this.pids = pids;
     }
 
     /**
@@ -279,39 +297,21 @@ public class SysRoleDO extends BaseDO implements Serializable {
         this.updateTime = updateTime;
     }
 
-    /**
-     * 获取备注
-     *
-     * @return remark - 备注
-     */
-    public String getRemark() {
-        return remark;
-    }
-
-    /**
-     * 设置备注
-     *
-     * @param remark 备注
-     */
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     @Override
     public String toString() {
-        return "SysRoleDO{" +
+        return "SysDeptDO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", code='" + code + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", sort=" + sort +
+                ", description='" + description + '\'' +
                 ", pid=" + pid +
-                ", sysDeptId=" + sysDeptId +
+                ", pids='" + pids + '\'' +
                 ", status='" + status + '\'' +
                 ", createBy='" + createBy + '\'' +
                 ", createTime=" + createTime +
                 ", updateBy='" + updateBy + '\'' +
                 ", updateTime=" + updateTime +
-                ", remark='" + remark + '\'' +
                 '}';
     }
 }
