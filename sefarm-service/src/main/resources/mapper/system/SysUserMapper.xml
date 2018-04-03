@@ -8,6 +8,8 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
     <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
@@ -23,4 +25,62 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
+
+  <resultMap id="SysUserVOResultMap" type="com.sefarm.common.vo.SysUserVO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="salt" jdbcType="VARCHAR" property="salt" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="sys_role_name" jdbcType="VARCHAR" property="sysRoleName" />
+    <result column="sys_dept_name" jdbcType="VARCHAR" property="sysDeptName" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="selectSysUserDOALL">
+    SELECT id, username, password, name, sex, birthday, phone, mobile, email, sys_role_id, sys_dept_id, status, create_by, create_time, update_by, update_time, remark
+    FROM sefarm_sys_user
+  </sql>
+
+  <sql id="selectSysUserVOALL">
+    SELECT ssu.id, ssu.username, ssu.password, ssu.salt, ssu.avatar, ssu.name, ssu.sex, DATE_FORMAT(ssu.birthday, '%Y-%m-%d') AS birthday,
+    ssu.phone, ssu.mobile, ssu.email, ssr.name AS sys_role_name, ssd.name AS sys_dept_name,
+    ssu.status, ssu.create_by, DATE_FORMAT(ssu.create_time, '%Y-%m-%d %T') AS create_time, ssu.update_by, DATE_FORMAT(ssu.update_time, '%Y-%m-%d %T') AS update_time, ssu.remark
+    FROM sefarm_sys_user ssu
+    LEFT JOIN sefarm_sys_role ssr ON ssr.id = ssu.sys_role_id
+    LEFT JOIN sefarm_sys_dept ssd ON ssd.id = ssu.sys_dept_id
+  </sql>
+
+  <select id="getSysUserVOList" resultMap="SysUserVOResultMap">
+    <include refid="selectSysUserVOALL" />
+    <where>
+      <if test="name != null and '' != name">
+        AND (ssu.username LIKE CONCAT('%', #{name}, '%') OR ssu.name LIKE CONCAT('%', #{name}, '%')
+        OR ssu.mobile LIKE CONCAT('%', #{name}, '%'))
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(ssu.create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(ssu.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
+
 </mapper>

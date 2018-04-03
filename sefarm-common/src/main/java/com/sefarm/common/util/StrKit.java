@@ -1,5 +1,7 @@
 package com.sefarm.common.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -10,6 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 字符串工具类
@@ -37,6 +41,10 @@ public class StrKit {
 
 	public static final String EMPTY_JSON = "{}";
 
+	/**
+	 * A-Z的字母正则表达式
+	 */
+	public static final Pattern ALPHABET = Pattern.compile("[A-Z]");
 
 	/**
 	 * 首字母变小写
@@ -1132,7 +1140,9 @@ public class StrKit {
 			}
 			if (Character.isUpperCase(c)) {
 				if (!isPreUpperCase || !isNextUpperCase) {
-					if (i > 0) sb.append(UNDERLINE);
+					if (i > 0) {
+						sb.append(UNDERLINE);
+					}
 				}
 				isPreUpperCase = true;
 			} else {
@@ -1172,8 +1182,9 @@ public class StrKit {
 				}
 			}
 			return sb.toString();
-		} else
+		} else {
 			return name;
+		}
 	}
 
 	/**
@@ -1366,5 +1377,24 @@ public class StrKit {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(format("Charset [{}] unsupported!", charset));
 		}
+	}
+
+	/**
+	 * 通过正则表达式来把obj的驼峰表达式字段转化为数据库DB的字段, 并与表名拼接起来
+	 * add by mc 2017-8-30
+	 * @param tableName 表别名
+	 * @param objField 类字段
+	 * @return
+	 */
+	public static String changeDBfieldPattern(String tableName, String objField) {
+		Matcher m = ALPHABET.matcher(objField);
+		String result = objField;
+		while(m.find()) {
+			result = result.replace(m.group(),"_" + m.group().toLowerCase());
+		}
+		if(StringUtils.isNotBlank(tableName) && StringUtils.isNotBlank(result)) {
+			result = tableName + "." + result;
+		}
+		return result;
 	}
 }

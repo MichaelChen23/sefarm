@@ -6,17 +6,17 @@ package com.sefarm.common;
  * @date 2018-3-18
  */
 public abstract class Constant {
-	
+
 	public static final Integer SUCCESS_CODE = 200;
-	
+
 	public static final String SUCCESS_MSG = "成功";
 
 	public static final Integer FAIL_CODE = 500;
 
 	public static final String FAIL_MSG = "失败";
 
-	public static final Integer DEFAULT_PAGE_INDEX = 0;
-	
+	public static final Integer DEFAULT_PAGE_INDEX = 1;
+
 	public static final Integer DEFAULT_ROWS = 10;
 
 	public static final String STATUS_UNLOCK = "y";

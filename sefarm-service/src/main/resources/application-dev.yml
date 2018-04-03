@@ -63,14 +63,22 @@ mapper:
       identity: select uuid()
       order: before
 
+pagehelper:
+      helperDialect: mysql
+      reasonable: true
+      supportMethodsArguments: true
+      params: count=countSql
+
 ########################################################
 ### server 配置
 ########################################################
 server:
       port: 8088
 
-#logging: # 与 logback.xml配置任选其一，如果两者存在，优先xml配置文件
-#      level:  #控制台输出——日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出。
-#          root: info # logging.level.root=WARN：root日志以WARN级别输出
-#          tk.mybatis: info # logging.level.com.ji=DEBUG：com.ji包下所有class以DEBUG级别输出
-#      path: /log # 设置目录，会在该目录下创建spring.log文件，并写入日志内容
+logging: # 与 logback.xml配置任选其一，如果两者存在，优先xml配置文件
+      level:  #控制台输出——日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出。
+          root: info # logging.level.root=WARN：root日志以WARN级别输出
+          tk.mybatis: info # logging.level.com.ji=DEBUG：com.ji包下所有class以DEBUG级别输出
+          com.sefarm: info
+      path: /log # 设置目录，会在该目录下创建spring.log文件，并写入日志内容
+      file: sefarm_server.log

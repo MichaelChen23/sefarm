@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.vo.SysUserVO;
 import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.system.SysUserDO;
 import com.sefarm.service.system.ISysUserService;
@@ -43,9 +44,30 @@ public class SysUserController extends BaseController {
         return PREFIX + "sysuser.html";
     }
 
+    /**
+     * 跳转到新增系统用户的页面
+     */
+    @RequestMapping("/sysuser_save")
+    public String saveView() {
+        return PREFIX + "sysuser_save.html";
+    }
 
-
-
+    /**
+     * 按照查询条件查询系统用户列表
+     * @return
+     */
+    @RequestMapping(value = "/sysuser_list", method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo<SysUserVO> getSysUserList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
+                                                @RequestParam(required = false) String name, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
+        try {
+            PageInfo<SysUserVO> result = sysUserService.getSysUserVOList(pageIndex, pageSize, sortStr, orderStr, name, createTimeBegin, createTimeEnd);
+            return result;
+        } catch (Exception e) {
+            logger.error("get sys-user list fail(获取系统用户列表失败) -- :{}", e.getMessage());
+            return null;
+        }
+    }
 
 
 
@@ -108,10 +130,10 @@ public class SysUserController extends BaseController {
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
-    public PageInfo<SysUserDO> getList(@RequestBody SysUserDO sysUserDO) {//通过输入page页数和rows每页查询的行数来查询lsit，如果不输入，默认值查询第一页；如果改用select（Obj）方法输入唯一性字段来查询会查到相关唯一的记录。
+    public List<SysUserDO> getList(@RequestBody SysUserDO sysUserDO) {//通过输入page页数和rows每页查询的行数来查询lsit，如果不输入，默认值查询第一页；如果改用select（Obj）方法输入唯一性字段来查询会查到相关唯一的记录。
         try {
             List<SysUserDO> list = sysUserService.getListByObj(sysUserDO);
-            return new PageInfo<SysUserDO>(list);
+            return list;
         } catch (Exception e) {
             logger.error("sys-user get list fail(获取列表失败)--"+sysUserDO.toString()+":{}", e.getMessage());
             return null;

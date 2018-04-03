@@ -88,13 +88,6 @@
             </exclusions>
         </dependency>
 
-        <!--pagehelper-->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.1.2</version>
-        </dependency>
-
         <!--druid 必须加上，要不引用commmon包涉及db的配置问题 -->
         <dependency>
             <groupId>com.alibaba</groupId>

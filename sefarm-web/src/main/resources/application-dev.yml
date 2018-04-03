@@ -20,11 +20,6 @@ spring:
             prefix: /WEB-INF/view
 #            suffix: .html
 
-pagehelper:
-    helperDialect: mysql
-    reasonable: true
-    supportMethodsArguments: true
-    params: count=countSql
 
 ########################################################
 ### server 配置

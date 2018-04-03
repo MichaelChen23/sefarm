@@ -32,6 +32,16 @@ public class SysUserDO extends BaseDO implements Serializable {
     private String password;
 
     /**
+     * MD5密码盐
+     */
+    private String salt;
+
+    /**
+     * 头像
+     */
+    private String avatar;
+
+    /**
      * 真实姓名
      */
     private String name;
@@ -159,6 +169,42 @@ public class SysUserDO extends BaseDO implements Serializable {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * 获取MD5密码盐
+     *
+     * @return salt - MD5密码盐
+     */
+    public String getSalt() {
+        return salt;
+    }
+
+    /**
+     * 设置MD5密码盐
+     *
+     * @param salt MD5密码盐
+     */
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    /**
+     * 获取头像
+     *
+     * @return avatar - 头像
+     */
+    public String getAvatar() {
+        return avatar;
+    }
+
+    /**
+     * 设置头像
+     *
+     * @param avatar 头像
+     */
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     /**
@@ -419,6 +465,8 @@ public class SysUserDO extends BaseDO implements Serializable {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", name='" + name + '\'' +
                 ", sex='" + sex + '\'' +
                 ", birthday=" + birthday +
