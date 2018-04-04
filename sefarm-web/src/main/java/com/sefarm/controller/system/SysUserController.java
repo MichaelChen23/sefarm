@@ -3,7 +3,12 @@ package com.sefarm.controller.system;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.constant.tips.ErrorTip;
+import com.sefarm.common.constant.tips.Tip;
+import com.sefarm.common.exception.BizExceptionEnum;
+import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.vo.SysUserVO;
 import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.system.SysUserDO;
@@ -11,8 +16,11 @@ import com.sefarm.service.system.ISysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,16 +77,40 @@ public class SysUserController extends BaseController {
         }
     }
 
-
-
+    /**
+     * 添加系统用户
+     * @param sysUserDO
+     * @return
+     */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public BaseResponse<Boolean> save(@RequestBody SysUserDO sysUserDO) {
+    @ResponseBody
+    public Tip save(@Valid SysUserDO sysUserDO, BindingResult result) {
+//        if (result.hasErrors()) {
+//            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+//        }
+
+        // 判断账号是否重复
+        SysUserDO sysUserQuery = new SysUserDO();
+        sysUserQuery.setUsername(sysUserDO.getUsername());
+        SysUserDO theSysUser = sysUserService.getOneByObj(sysUserQuery);
+        if (theSysUser != null) {
+            throw new BussinessException(BizExceptionEnum.USER_ALREADY_REG);
+        }
+
         try {
-            Boolean result = sysUserService.saveByObj(sysUserDO);
-            return BaseResponse.getRespByResultBool(result);
+            // 完善账号信息
+            sysUserDO.setCreateBy("sys");
+            sysUserDO.setCreateTime(new Date());
+
+            Boolean res = sysUserService.saveByObj(sysUserDO);
+            if (res) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
         } catch (Exception e) {
             logger.error("sys-user save fail(保存失败)--"+sysUserDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
         }
     }
 

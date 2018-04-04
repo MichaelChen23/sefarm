@@ -1,10 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>sysuser_save</title>
-</head>
-<body>
-    <h1>this is add sys user!</h1>
-</body>
-</html>
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#input id="username" name="账号" underline="true"/>
+
+                    <#select id="sex" name="性别" underline="true">
+                        <option value="m">男</option>
+                        <option value="w">女</option>
+                    </#select>
+
+                    <#input id="password" name="密码" underline="true" type="password"/>
+
+                    <#input id="mobile" name="手机" underline="true"/>
+
+                    <#input id="roleid" name="角色" underline="true" disabled="disabled"/>
+
+                    <#input id="email" name="邮箱" type="email"/>
+
+                    <#input id="remark" name="备注" underline="true"/>
+                </div>
+                <div class="col-sm-6">
+                    <div id="driverInfoContent">
+
+                        <#input id="name" name="姓名" underline="true"/>
+
+                        <#input id="birthday" name="出生日期" underline="true" type="date"
+                                clickFun="laydate({istime: false, format: 'YYYY-MM-DD'})"/>
+
+                        <#input id="rePassword" name="确认密码" type="password" underline="true"/>
+
+                        <#input id="phone" name="座机电话" underline="true"/>
+
+                        <#input id="citySel" name="部门" underline="true" readonly="readonly" hidden="sysDeptId"
+                                clickFun="SysUserInfoDlg.showDeptSelectTree(); return false;"
+                                style="background-color: #ffffff !important;"/>
+
+                        <#select id="status" name="状态" underline="true">
+                            <option value="y">开启</option>
+                            <option value="n">停用</option>
+                        </#select>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 这是部门选择的下拉框 -->
+            <div id="menuContent" class="menuContent"
+                 style="display: none; position: absolute; z-index: 200;">
+                <ul id="treeDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SysUserInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SysUserInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/system/sysuser/sysuser_info.js"></script>
+@}

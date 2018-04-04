@@ -110,7 +110,7 @@ $(function () {
     var table = new BSTable("sysUserTable", "/sys-user/sysuser_list", defaultColunms);
     table.setPaginationType("server");
     SysUser.table = table.init();
-    var ztree = new $ZTree("deptTree", "/dept/tree");
+    var ztree = new $ZTree("deptTree", "/sys-dept/getZtree");
     ztree.bindOnClick(SysUser.onClickDept);
     ztree.init();
 });

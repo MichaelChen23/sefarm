@@ -18,4 +18,18 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <!-- add by mc 2018-4-4 获取部门ztree -->
+  <select id="getDeptZtree" resultType="com.sefarm.common.node.ZTreeNode">
+    SELECT id, pid AS pId, name,
+    (
+      CASE
+      WHEN (pId = 0 OR pId IS NULL) THEN
+      'true'
+      ELSE
+      'false'
+      END
+    ) AS isOpen FROM sefarm_sys_dept
+  </select>
+
 </mapper>
