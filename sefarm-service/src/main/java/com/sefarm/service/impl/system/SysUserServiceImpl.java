@@ -22,13 +22,18 @@ import java.util.List;
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDO> implements ISysUserService {
 
     @Override
-    public PageInfo<SysUserVO> getSysUserVOList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, String name, String createTimeBegin, String createTimeEnd) {
+    public PageInfo<SysUserVO> getSysUserVOList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, Long sysDeptId,  String name, String createTimeBegin, String createTimeEnd) {
         if (pageIndex != null && pageIndex > 0 && pageSize != null && pageSize > 0) {
             PageHelper.startPage(pageIndex, pageSize);
         }
-        List<SysUserVO> list = getMapper().getSysUserVOList(name, createTimeBegin, createTimeEnd, StrKit.changeDBfieldPattern("", sortStr), orderStr);
+        List<SysUserVO> list = getMapper().getSysUserVOList(sysDeptId, name, createTimeBegin, createTimeEnd, StrKit.changeDBfieldPattern("", sortStr), orderStr);
         PageInfo<SysUserVO> page = new PageInfo<>(list);
         return page;
+    }
+
+    @Override
+    public SysUserVO getSysUserVO(Long sysUserId) {
+        return getMapper().getSysUserVO(sysUserId);
     }
 
 }

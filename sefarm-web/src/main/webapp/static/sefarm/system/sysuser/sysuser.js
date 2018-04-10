@@ -92,7 +92,7 @@ SysUser.resetSearch = function () {
 SysUser.search = function () {
     var queryData = {};
 
-    // queryData['deptid'] = SysUser.deptid;
+    queryData['sysDeptId'] = SysUser.deptid;
     queryData['name'] = $("#name").val();
     queryData['createTimeBegin'] = $("#beginTime").val();
     queryData['createTimeEnd'] = $("#endTime").val();
@@ -105,6 +105,101 @@ SysUser.onClickDept = function (e, treeId, treeNode) {
     SysUser.search();
 };
 
+/**
+ * 点击添加系统用户
+ */
+SysUser.openSaveSysUser = function () {
+    var index = layer.open({
+        type: 2,
+        title: '添加系统用户',
+        area: ['800px', '600px'], //宽高
+        fix: false, //不固定
+        maxmin: true,
+        content: Feng.ctxPath + '/sys-user/sysuser_save'
+    });
+    this.layerIndex = index;
+};
+
+/**
+ * 点击修改按钮时
+ * @param userId 系统用户id
+ */
+SysUser.openChangeUser = function () {
+    if (this.check()) {
+        var index = layer.open({
+            type: 2,
+            title: '编辑系统用户',
+            area: ['800px', '500px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/sys-user/sysuser_update/' + this.seItem.id
+        });
+        this.layerIndex = index;
+    }
+};
+
+/**
+ * 删除用户
+ */
+SysUser.delSysUser = function () {
+    if (this.check()) {
+
+        var operation = function(){
+            var userId = SysUser.seItem.id;
+            var ajax = new $ax(Feng.ctxPath + "/sys-user/remove", function () {
+                Feng.success("删除成功!");
+                SysUser.table.refresh();
+            }, function (data) {
+                Feng.error("删除失败!" + data.responseJSON.message + "!");
+            });
+            ajax.set("userId", userId);
+            ajax.start();
+        };
+
+        Feng.confirm("是否删除用户" + SysUser.seItem.username + "?",operation);
+    }
+};
+
+/**
+ * 重置密码
+ */
+SysUser.resetPwd = function () {
+    if (this.check()) {
+        var userId = this.seItem.id;
+        parent.layer.confirm('是否重置密码为888888？', {
+            btn: ['确定', '取消'],
+            shade: false //不显示遮罩
+        }, function () {
+            var ajax = new $ax(Feng.ctxPath + "/sys-user/reset", function (data) {
+                Feng.success("重置密码成功!");
+                SysUser.table.refresh();
+            }, function (data) {
+                Feng.error("重置密码失败!");
+            });
+            ajax.set("userId", userId);
+            ajax.start();
+        });
+    }
+};
+
+/**
+ * 点击系统角色分配
+ * @param
+ */
+SysUser.roleAssign = function () {
+    if (this.check()) {
+        var index = layer.open({
+            type: 2,
+            title: '系统角色分配',
+            area: ['300px', '400px'], //宽高
+            fix: false, //不固定
+            maxmin: true,
+            content: Feng.ctxPath + '/sys-user/role_assign/' + this.seItem.id
+        });
+        this.layerIndex = index;
+    }
+};
+
 $(function () {
     var defaultColunms = SysUser.initColumn();
     var table = new BSTable("sysUserTable", "/sys-user/sysuser_list", defaultColunms);
@@ -114,18 +209,3 @@ $(function () {
     ztree.bindOnClick(SysUser.onClickDept);
     ztree.init();
 });
-
-/**
- * 点击添加系统用户
- */
-SysUser.openSaveSysUser = function () {
-    var index = layer.open({
-        type: 2,
-        title: '添加系统用户',
-        area: ['800px', '550px'], //宽高
-        fix: false, //不固定
-        maxmin: true,
-        content: Feng.ctxPath + '/sys-user/sysuser_save'
-    });
-    this.layerIndex = index;
-};

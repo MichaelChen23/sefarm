@@ -13,9 +13,11 @@ import com.sefarm.common.vo.SysUserVO;
 import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.system.SysUserDO;
 import com.sefarm.service.system.ISysUserService;
+import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +30,10 @@ import java.util.List;
  *
  * @author mc
  * @date 2018-3-18
+ *
+ * controller对应beetl模版链接，restcontroller对应所有接口以restful方式返回结果，如果不用restController则要对每个接口使用@ResponseBody，两者只能选其一
  */
-@Controller//controller对应beetl模版链接，restcontroller对应所有接口以restful方式返回结果，如果不用restController则要对每个接口使用@ResponseBody，两者只能选其一
+@Controller
 @RequestMapping("/sys-user")
 public class SysUserController extends BaseController {
 
@@ -61,15 +65,44 @@ public class SysUserController extends BaseController {
     }
 
     /**
+     * 跳转到修改系统用户的页面
+     */
+    @RequestMapping("/sysuser_update/{userId}")
+    public String updateView(@PathVariable Long userId, Model model) {
+        if(ToolUtil.isEmpty(userId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        SysUserVO sysUserVO = sysUserService.getSysUserVO(userId);
+        model.addAttribute(sysUserVO);
+        return PREFIX + "sysuser_update.html";
+    }
+
+    /**
+     * 跳转到分配系统角色的页面
+     */
+    @RequestMapping("/role_assign/{userId}")
+    public String roleAssign(@PathVariable Long userId, Model model) {
+        if (ToolUtil.isEmpty(userId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        SysUserDO sysUser = new SysUserDO();
+        sysUser.setId(userId);
+        SysUserDO sysUserDO = sysUserService.getOneByObj(sysUser);
+        model.addAttribute("userId", userId);
+        model.addAttribute("username", sysUserDO.getUsername());
+        return PREFIX + "sysuser_roleassign.html";
+    }
+
+    /**
      * 按照查询条件查询系统用户列表
      * @return
      */
     @RequestMapping(value = "/sysuser_list", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo<SysUserVO> getSysUserList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
-                                                @RequestParam(required = false) String name, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
+                                              @RequestParam(required = false) Long sysDeptId, @RequestParam(required = false) String name, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
         try {
-            PageInfo<SysUserVO> result = sysUserService.getSysUserVOList(pageIndex, pageSize, sortStr, orderStr, name, createTimeBegin, createTimeEnd);
+            PageInfo<SysUserVO> result = sysUserService.getSysUserVOList(pageIndex, pageSize, sortStr, orderStr,sysDeptId, name, createTimeBegin, createTimeEnd);
             return result;
         } catch (Exception e) {
             logger.error("get sys-user list fail(获取系统用户列表失败) -- :{}", e.getMessage());
@@ -85,9 +118,9 @@ public class SysUserController extends BaseController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public Tip save(@Valid SysUserDO sysUserDO, BindingResult result) {
-//        if (result.hasErrors()) {
-//            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-//        }
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
 
         // 判断账号是否重复
         SysUserDO sysUserQuery = new SysUserDO();
@@ -114,16 +147,123 @@ public class SysUserController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
-    public BaseResponse<Boolean> remove(@RequestBody SysUserDO sysUserDO) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+    /**
+     * 更新编辑 系统用户
+     * @param sysUserDO
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip update(@Valid SysUserDO sysUserDO, BindingResult result) {//一定要通过id来修改
         try {
-            Boolean result = sysUserService.removeByObj(sysUserDO);
-            return BaseResponse.getRespByResultBool(result);
+            if (result.hasErrors()) {
+                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+            }
+            if (sysUserDO != null) {
+                sysUserDO.setUpdateBy("sys");
+                sysUserDO.setUpdateTime(new Date());
+                Boolean res = sysUserService.updateByObj(sysUserDO);
+                if (res) {
+                    return SUCCESS_TIP;
+                }
+            }
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
         } catch (Exception e) {
-            logger.error("sys-user delete fail(删除失败)--"+sysUserDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            logger.error("sys-user update fail(更新失败)--"+sysUserDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
         }
     }
+
+    /**
+     * 删除系统用户
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip remove(@RequestParam Long userId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+        try {
+            if (ToolUtil.isEmpty(userId)) {
+                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+            }
+            SysUserDO sysUserDO = new SysUserDO();
+            sysUserDO.setId(userId);
+            Boolean result = sysUserService.removeByObj(sysUserDO);
+            if (result) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("sys-user delete fail(删除失败)--"+userId+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 重置系统用户的密码 设置为默认密码888888
+     * @param userId
+     * @return
+     */
+    @RequestMapping("/reset")
+    @ResponseBody
+    public Tip resetPassword(@RequestParam Long userId) {
+        try {
+            if (ToolUtil.isEmpty(userId)) {
+                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+            }
+            SysUserDO sysUser = new SysUserDO();
+            sysUser.setId(userId);
+            SysUserDO sysUserDO = sysUserService.getOneByObj(sysUser);
+            sysUserDO.setPassword(Constant.DEFAULT_SYS_USER_PWD);
+            sysUserDO.setUpdateBy("sys");
+            sysUserDO.setUpdateTime(new Date());
+            Boolean res = sysUserService.updateByObj(sysUserDO);
+            if (res) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("sys-user reset password fail(重置密码失败)--"+userId+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 分配系统角色
+     */
+    @RequestMapping("/setSysRole")
+    @ResponseBody
+    public Tip setSysRole(@RequestParam("userId") Long userId, @RequestParam("roleIds") String roleIds) {
+        try {
+            if (ToolUtil.isOneEmpty(userId, roleIds)) {
+                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+            }
+            String[] roleIdArray = roleIds.split(",");
+            SysUserDO sysUser = new SysUserDO();
+            sysUser.setId(userId);
+            SysUserDO sysUserDO = sysUserService.getOneByObj(sysUser);
+            //只允许选择--最后选中的角色
+            sysUserDO.setSysRoleId(Long.valueOf(roleIdArray[0]));
+            sysUserDO.setUpdateBy("sys");
+            sysUserDO.setUpdateTime(new Date());
+            Boolean res = sysUserService.updateByObj(sysUserDO);
+            if (res) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("sys-user set sys-role fail(设置系统角色失败)--"+userId+"---roleids--"+roleIds+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+
+
+
 
     @RequestMapping(value = "/removeList", method = RequestMethod.POST)
     public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除
@@ -133,17 +273,6 @@ public class SysUserController extends BaseController {
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
             logger.error("sys-user batch delete fail(批量删除失败)--"+ids+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
-    }
-
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public BaseResponse<Boolean> update(@RequestBody SysUserDO sysUserDO) {//一定要通过id来修改
-        try {
-            Boolean result = sysUserService.updateByObj(sysUserDO);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("sys-user update fail(更新失败)--"+sysUserDO.toString()+":{}", e.getMessage());
             return BaseResponse.getRespByResultBool(false);
         }
     }

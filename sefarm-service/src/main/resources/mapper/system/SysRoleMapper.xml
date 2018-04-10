@@ -18,4 +18,9 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
+
+  <select id="getSysRoleTree" resultType="com.sefarm.common.node.ZTreeNode">
+    SELECT id, pid AS pId, name , (CASE WHEN (pid=0 OR pid IS NULL) THEN 'true'
+    ELSE 'false' END) AS open FROM sefarm_sys_role
+  </select>
 </mapper>

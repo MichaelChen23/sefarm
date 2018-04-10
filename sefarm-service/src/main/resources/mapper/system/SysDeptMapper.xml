@@ -29,7 +29,7 @@
       ELSE
       'false'
       END
-    ) AS isOpen FROM sefarm_sys_dept
+    ) AS open FROM sefarm_sys_dept
   </select>
 
 </mapper>

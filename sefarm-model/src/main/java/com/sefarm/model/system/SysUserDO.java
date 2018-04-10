@@ -1,10 +1,11 @@
 package com.sefarm.model.system;
 
 import com.sefarm.common.base.BaseDO;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * 系统角色的实体类
@@ -54,6 +55,7 @@ public class SysUserDO extends BaseDO implements Serializable {
     /**
      * 生日
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     /**

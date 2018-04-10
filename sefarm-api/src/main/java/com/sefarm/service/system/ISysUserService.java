@@ -13,6 +13,7 @@ import com.sefarm.model.system.SysUserDO;
  */
 public interface ISysUserService extends IBaseService<SysUserDO> {
 
-    PageInfo<SysUserVO> getSysUserVOList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, String name, String createTimeBegin, String createTimeEnd);
+    PageInfo<SysUserVO> getSysUserVOList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, Long sysDeptId, String name, String createTimeBegin, String createTimeEnd);
 
+    SysUserVO getSysUserVO(Long sysUserId);
 }

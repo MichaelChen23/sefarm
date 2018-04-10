@@ -39,6 +39,7 @@
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="sys_role_name" jdbcType="VARCHAR" property="sysRoleName" />
+    <result column="sys_dept_id" jdbcType="BIGINT" property="sysDeptId" />
     <result column="sys_dept_name" jdbcType="VARCHAR" property="sysDeptName" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
@@ -55,7 +56,7 @@
 
   <sql id="selectSysUserVOALL">
     SELECT ssu.id, ssu.username, ssu.password, ssu.salt, ssu.avatar, ssu.name, ssu.sex, DATE_FORMAT(ssu.birthday, '%Y-%m-%d') AS birthday,
-    ssu.phone, ssu.mobile, ssu.email, ssr.name AS sys_role_name, ssd.name AS sys_dept_name,
+    ssu.phone, ssu.mobile, ssu.email, ssr.name AS sys_role_name, ssu.sys_dept_id, ssd.name AS sys_dept_name,
     ssu.status, ssu.create_by, DATE_FORMAT(ssu.create_time, '%Y-%m-%d %T') AS create_time, ssu.update_by, DATE_FORMAT(ssu.update_time, '%Y-%m-%d %T') AS update_time, ssu.remark
     FROM sefarm_sys_user ssu
     LEFT JOIN sefarm_sys_role ssr ON ssr.id = ssu.sys_role_id
@@ -65,6 +66,9 @@
   <select id="getSysUserVOList" resultMap="SysUserVOResultMap">
     <include refid="selectSysUserVOALL" />
     <where>
+      <if test="sysDeptId != null and sysDeptId > 0">
+        AND ssu.sys_dept_id = #{sysDeptId}
+      </if>
       <if test="name != null and '' != name">
         AND (ssu.username LIKE CONCAT('%', #{name}, '%') OR ssu.name LIKE CONCAT('%', #{name}, '%')
         OR ssu.mobile LIKE CONCAT('%', #{name}, '%'))
@@ -83,4 +87,10 @@
     ORDER BY ${sortName} ${sortOrder}
   </select>
 
+  <select id="getSysUserVO" resultMap="SysUserVOResultMap">
+    <include refid="selectSysUserVOALL" />
+    <where>
+      ssu.id = #{sysUserId}
+    </where>
+  </select>
 </mapper>

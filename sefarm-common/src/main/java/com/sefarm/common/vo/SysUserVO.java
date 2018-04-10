@@ -71,6 +71,11 @@ public class SysUserVO implements Serializable {
     private String sysRoleName;
 
     /**
+     * 系统公司部门Id
+     */
+    private Long sysDeptId;
+
+    /**
      * 系统公司部门名
      */
     private String sysDeptName;
@@ -201,6 +206,14 @@ public class SysUserVO implements Serializable {
         this.sysRoleName = sysRoleName;
     }
 
+    public Long getSysDeptId() {
+        return sysDeptId;
+    }
+
+    public void setSysDeptId(Long sysDeptId) {
+        this.sysDeptId = sysDeptId;
+    }
+
     public String getSysDeptName() {
         return sysDeptName;
     }
@@ -272,6 +285,7 @@ public class SysUserVO implements Serializable {
                 ", mobile='" + mobile + '\'' +
                 ", email='" + email + '\'' +
                 ", sysRoleName='" + sysRoleName + '\'' +
+                ", sysDeptId=" + sysDeptId +
                 ", sysDeptName='" + sysDeptName + '\'' +
                 ", status='" + status + '\'' +
                 ", createBy='" + createBy + '\'' +

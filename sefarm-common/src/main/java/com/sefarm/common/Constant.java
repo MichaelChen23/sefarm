@@ -33,4 +33,8 @@ public abstract class Constant {
 	 */
 	public static final String ORDER_DESC = "desc";
 
+	/**
+	 * 系统用户默认密码
+	 */
+	public static final String DEFAULT_SYS_USER_PWD = "888888";
 }
