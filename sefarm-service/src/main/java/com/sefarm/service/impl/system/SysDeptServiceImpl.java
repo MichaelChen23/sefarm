@@ -19,7 +19,7 @@ import java.util.List;
 public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptDO> implements ISysDeptService {
 
     @Override
-    public List<ZTreeNode> getDeptZtree() {
-        return getMapper().getDeptZtree();
+    public List<ZTreeNode> getDeptTree() {
+        return getMapper().getDeptTree();
     }
 }

@@ -186,7 +186,7 @@ function onBodyDown(event) {
 }
 
 $(function () {
-    var ztree = new $ZTree("treeDemo", "/sys-dept/getZtree");
+    var ztree = new $ZTree("treeDemo", "/sys-dept/getDeptTree");
     ztree.bindOnClick(SysUserInfoDlg.onClickDept);
     ztree.init();
     instance = ztree;

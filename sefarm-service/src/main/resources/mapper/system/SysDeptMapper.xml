@@ -20,7 +20,7 @@
   </resultMap>
 
   <!-- add by mc 2018-4-4 获取部门ztree -->
-  <select id="getDeptZtree" resultType="com.sefarm.common.node.ZTreeNode">
+  <select id="getDeptTree" resultType="com.sefarm.common.node.ZTreeNode">
     SELECT id, pid AS pId, name,
     (
       CASE

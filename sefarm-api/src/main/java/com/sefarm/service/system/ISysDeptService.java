@@ -19,5 +19,5 @@ public interface ISysDeptService extends IBaseService<SysDeptDO> {
      *
      * @return
      */
-    List<ZTreeNode> getDeptZtree();
+    List<ZTreeNode> getDeptTree();
 }

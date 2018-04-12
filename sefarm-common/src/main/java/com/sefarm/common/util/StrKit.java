@@ -1397,4 +1397,73 @@ public class StrKit {
 		}
 		return result;
 	}
+
+	/**
+	 * 用","隔开的ids string，分隔成long数组
+	 * @param idsStr
+	 * @return
+	 */
+	public static Long[] idsStrToLongArray(String idsStr) {
+		Long[] longArray = new Long[] {};
+		if (StringUtils.isNotBlank(idsStr)) {
+			String[] array = idsStr.split(",");
+			longArray = new Long[array.length];
+			for (int i = 0 ; i < array.length; i++) {
+				Long each = toLong(array[i], 0L);
+				longArray[i] = each;
+			}
+		}
+		return longArray;
+	}
+
+	/**
+	 * 转换为Long<br>
+	 * 如果给定的值为空，或者转换失败，返回默认值<br>
+	 * 转换失败不会报错
+	 *
+	 * @param value 被转换的值
+	 * @param defaultValue 转换错误时的默认值
+	 * @return 结果
+	 */
+	public static Long toLong(Object value, Long defaultValue) {
+		if (value == null) {
+			return defaultValue;
+		}
+		if (value instanceof Long) {
+			return (Long) value;
+		}
+		if (value instanceof Number) {
+			return ((Number) value).longValue();
+		}
+		final String valueStr = toStr(value, null);
+		if (isBlank(valueStr)) {
+			return defaultValue;
+		}
+		try {
+			return Long.parseLong(valueStr.trim());
+		} catch (Exception e) {
+			return defaultValue;
+		}
+	}
+
+	/**
+	 * 转换为字符串<br>
+	 * 如果给定的值为null，或者转换失败，返回默认值<br>
+	 * 转换失败不会报错
+	 *
+	 * @param value 被转换的值
+	 * @param defaultValue 转换错误时的默认值
+	 * @return 结果
+	 */
+	public static String toStr(Object value, String defaultValue) {
+		if (null == value) {
+			return defaultValue;
+		}
+		if (value instanceof String) {
+			return (String) value;
+		} else if (CollectionKit.isArray(value)) {
+			return CollectionKit.toString(value);
+		}
+		return value.toString();
+	}
 }

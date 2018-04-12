@@ -46,7 +46,7 @@ public class LoginController extends BaseController {
 //        model.addAttribute("tips", "该用户没有角色，无法登陆");
 //        return "/login.html";
 //        }
-        List<MenuNode> menus = sysMenuService.getMenusByRoleId(88);
+        List<MenuNode> menus = sysMenuService.getMenusByRoleId(88L);
         List<MenuNode> titles = MenuNode.buildTitle(menus);
         model.addAttribute("titles", titles);
 //

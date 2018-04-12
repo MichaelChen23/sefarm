@@ -43,10 +43,10 @@ public class SysDeptController extends BaseController {
     /**
      * 获取部门的tree列表
      */
-    @RequestMapping(value = "/getZtree")
+    @RequestMapping(value = "/getDeptTree")
     @ResponseBody
-    public List<ZTreeNode> getZtree() {
-        List<ZTreeNode> tree = sysDeptService.getDeptZtree();
+    public List<ZTreeNode> getDeptTree() {
+        List<ZTreeNode> tree = sysDeptService.getDeptTree();
         tree.add(ZTreeNode.createParent());
         return tree;
     }

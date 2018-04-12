@@ -30,7 +30,8 @@ SysUser.initColumn = function () {
         {title: '创建人', field: 'createBy', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '创建时间', field: 'createTime', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '更新人', field: 'updateBy', visible: false, align: 'center', valign: 'middle', sortable: true},
-        {title: '创建时间', field: 'updateTime', visible: false, align: 'center', valign: 'middle', sortable: true}
+        {title: '创建时间', field: 'updateTime', visible: false, align: 'center', valign: 'middle', sortable: true},
+        {title: '备注', field: 'remark', align: 'center', valign: 'middle', sortable: true}
     ];
     return columns;
 };
@@ -205,7 +206,7 @@ $(function () {
     var table = new BSTable("sysUserTable", "/sys-user/sysuser_list", defaultColunms);
     table.setPaginationType("server");
     SysUser.table = table.init();
-    var ztree = new $ZTree("deptTree", "/sys-dept/getZtree");
+    var ztree = new $ZTree("deptTree", "/sys-dept/getDeptTree");
     ztree.bindOnClick(SysUser.onClickDept);
     ztree.init();
 });

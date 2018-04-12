@@ -55,4 +55,83 @@
     WHERE m.is_menu = 1
     ORDER BY m.levels ASC , m.sort DESC
   </select>
+
+  <!--角色菜单权益配置，根据角色id获取权限下的菜单id-->
+  <select id="getMenuIdsByRoleId" resultType="java.lang.Long">
+    SELECT sys_menu_id FROM sefarm_sys_role_menu WHERE sys_role_id = #{roleId}
+  </select>
+
+  <!--获取所有的菜单树-->
+  <select id="getAllMenuTree" resultType="com.sefarm.common.node.ZTreeNode">
+    SELECT
+		ssm.id AS id,
+		(
+          CASE
+          WHEN (pssm.id = 0 OR pssm.id IS NULL) THEN
+          0
+          ELSE
+          pssm.id
+          END
+		) AS pId,
+		ssm.name AS name,
+		(
+          CASE
+          WHEN (pssm.id = 0 OR pssm.id IS NULL) THEN
+          'true'
+          ELSE
+          'false'
+          END
+		) AS open
+		FROM
+		sefarm_sys_menu ssm
+		LEFT JOIN sefarm_sys_menu pssm ON pssm.code = ssm.pcode
+		ORDER BY ssm.id ASC
+  </select>
+
+  <!--根据用户权限下的菜单id获取菜单树-->
+  <select id="getMemuTreeByMenuIds" resultType="com.sefarm.common.node.ZTreeNode">
+    SELECT
+    m.id AS id,
+    (
+      CASE
+      WHEN (pm.id = 0 OR pm.id IS NULL) THEN
+      0
+      ELSE
+      pm.id
+      END
+    ) AS pId,
+    m.name AS name,
+    (
+      CASE
+      WHEN (pm.id = 0 OR pm.id IS NULL) THEN
+      'true'
+      ELSE
+      'false'
+      END
+    ) AS open,
+    (
+      CASE
+      WHEN (sm.id = 0 OR sm.id IS NULL) THEN
+      'false'
+      ELSE
+      'true'
+      END
+    ) AS checked
+    FROM
+    sefarm_sys_menu m
+    LEFT JOIN sefarm_sys_menu pm ON pm.code = m.pcode
+    LEFT JOIN (
+      SELECT
+      id
+      FROM
+      sefarm_sys_menu
+      WHERE
+      id IN
+      <foreach collection="list" index="index" item="i" open="("
+               separator="," close=")">
+        #{i}
+      </foreach>
+    ) sm on sm.id = m.id
+    ORDER BY m.id ASC
+  </select>
 </mapper>

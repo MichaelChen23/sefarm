@@ -18,5 +18,5 @@ public interface SysDeptMapper extends SeFarmMapper<SysDeptDO> {
      * 获取部门组织的Ztree
      * @return
      */
-    List<ZTreeNode> getDeptZtree();
+    List<ZTreeNode> getDeptTree();
 }

@@ -19,8 +19,62 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
 
+  <resultMap id="SysRoleVOResultMap" type="com.sefarm.common.vo.SysRoleVO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="p_name" jdbcType="VARCHAR" property="pName" />
+    <result column="sys_dept_id" jdbcType="BIGINT" property="sysDeptId" />
+    <result column="dept_name" jdbcType="BIGINT" property="deptName" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
   <select id="getSysRoleTree" resultType="com.sefarm.common.node.ZTreeNode">
     SELECT id, pid AS pId, name , (CASE WHEN (pid=0 OR pid IS NULL) THEN 'true'
     ELSE 'false' END) AS open FROM sefarm_sys_role
+  </select>
+
+  <sql id="selectSysRoleVOALL">
+    SELECT
+    ssr.id, ssr.name, ssr.code, ssr.sort, ssr.pid, ssr.sys_dept_id,
+    pssr.name AS p_name, ssd.name AS dept_name,
+    ssr.status, ssr.create_by, DATE_FORMAT(ssr.create_time, '%Y-%m-%d %T') AS create_time, ssr.update_by, DATE_FORMAT(ssr.update_time, '%Y-%m-%d %T') AS update_time, ssr.remark
+    FROM sefarm_sys_role ssr
+    LEFT JOIN sefarm_sys_role pssr ON pssr.id = ssr.pid
+    LEFT JOIN sefarm_sys_dept ssd ON ssd.id = ssr.sys_dept_id
+  </sql>
+
+  <select id="getSysRoleVOList" resultMap="SysRoleVOResultMap">
+    <include refid="selectSysRoleVOALL" />
+    <where>
+      <if test="name != null and '' != name">
+        AND ssr.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(ssr.create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(ssr.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
+
+  <select id="getSysRoleVO" resultMap="SysRoleVOResultMap">
+    <include refid="selectSysRoleVOALL" />
+    <where>
+       ssr.id = #{sysRoleId}
+    </where>
   </select>
 </mapper>
