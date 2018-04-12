@@ -104,7 +104,7 @@ public class SysRoleController extends BaseController {
      */
     @RequestMapping(value = "/sysrole_list", method = RequestMethod.POST)
     @ResponseBody
-    public PageInfo<SysRoleVO> getSysUserList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
+    public PageInfo<SysRoleVO> getSysRoleList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
                                               @RequestParam(required = false) String name, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
         try {
             PageInfo<SysRoleVO> result = sysRoleService.getSysRoleVOList(pageIndex, pageSize, sortStr, orderStr, name, createTimeBegin, createTimeEnd);

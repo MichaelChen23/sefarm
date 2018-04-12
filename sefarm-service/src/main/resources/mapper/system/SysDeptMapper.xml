@@ -19,6 +19,22 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
+  <resultMap id="SysDeptVOResultMap" type="com.sefarm.common.vo.SysDeptVO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="full_name" jdbcType="VARCHAR" property="fullName" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="p_name" jdbcType="VARCHAR" property="pName" />
+    <result column="pids" jdbcType="VARCHAR" property="pids" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
   <!-- add by mc 2018-4-4 获取部门ztree -->
   <select id="getDeptTree" resultType="com.sefarm.common.node.ZTreeNode">
     SELECT id, pid AS pId, name,
@@ -32,4 +48,39 @@
     ) AS open FROM sefarm_sys_dept
   </select>
 
+  <sql id="selectSysDeptVOALL">
+    SELECT
+    ssd.id, ssd.name, ssd.full_name, ssd.sort, ssd.description, ssd.pid,
+    pssd.name AS p_name, ssd.pids,
+    ssd.status, ssd.create_by, DATE_FORMAT(ssd.create_time, '%Y-%m-%d %T') AS create_time, ssd.update_by, DATE_FORMAT(ssd.update_time, '%Y-%m-%d %T') AS update_time
+    FROM sefarm_sys_dept ssd
+    LEFT JOIN sefarm_sys_dept pssd ON pssd.id = ssd.pid
+  </sql>
+
+  <select id="getSysDeptVOList" resultMap="SysDeptVOResultMap">
+    <include refid="selectSysDeptVOALL" />
+    <where>
+      <if test="name != null and '' != name">
+        AND ssd.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(ssd.create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(ssd.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
+
+  <select id="getSysDeptVO" resultMap="SysDeptVOResultMap">
+    <include refid="selectSysDeptVOALL" />
+    <where>
+      ssd.id = #{sysDeptId}
+    </where>
+  </select>
 </mapper>

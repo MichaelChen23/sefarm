@@ -1,7 +1,9 @@
 package com.sefarm.service.system;
 
+import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.IBaseService;
 import com.sefarm.common.node.ZTreeNode;
+import com.sefarm.common.vo.SysDeptVO;
 import com.sefarm.model.system.SysDeptDO;
 
 import java.util.List;
@@ -20,4 +22,8 @@ public interface ISysDeptService extends IBaseService<SysDeptDO> {
      * @return
      */
     List<ZTreeNode> getDeptTree();
+
+    PageInfo<SysDeptVO> getSysDeptVOList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, String name, String createTimeBegin, String createTimeEnd);
+
+    SysDeptVO getSysDeptVO(Long sysDeptId);
 }

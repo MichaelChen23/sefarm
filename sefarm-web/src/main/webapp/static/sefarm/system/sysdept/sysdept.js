@@ -1,8 +1,8 @@
 /**
- * 角色管理的单例
+ * 部门管理的单例
  */
-var SysRole = {
-    id: "sysRoleTable",	//表格id
+var SysDept = {
+    id: "sysDeptTable",	//表格id
     seItem: null,		//选中的条目
     table: null,
     layerIndex: -1
@@ -11,21 +11,20 @@ var SysRole = {
 /**
  * 初始化表格的列
  */
-SysRole.initColumn = function () {
+SysDept.initColumn = function () {
     var columns = [
         {field: 'selectItem', radio: true},
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
-        {title: '角色名', field: 'name', align: 'center', valign: 'middle', sortable: true},
-        {title: '角色代码', field: 'code', align: 'center', valign: 'middle', sortable: true},
+        {title: '部门名', field: 'name', align: 'center', valign: 'middle', sortable: true},
+        {title: '部门全称', field: 'fullName', align: 'center', valign: 'middle', sortable: true},
         {title: '排序号', field: 'sort', align: 'center', valign: 'middle', sortable: true},
-        {title: '上级角色', field: 'pName', align: 'center', valign: 'middle', sortable: true},
-        {title: '所在部门', field: 'deptName', align: 'center', valign: 'middle', sortable: true},
+        {title: '描述', field: 'description', align: 'center', valign: 'middle', sortable: true},
+        {title: '上级部门', field: 'pName', align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'status', align: 'center', valign: 'middle', sortable: true, formatter: statusFormatter},
         {title: '创建人', field: 'createBy', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '创建时间', field: 'createTime', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '更新人', field: 'updateBy', visible: false, align: 'center', valign: 'middle', sortable: true},
-        {title: '更新时间', field: 'updateTime', visible: false, align: 'center', valign: 'middle', sortable: true},
-        {title: '备注', field: 'remark', align: 'center', valign: 'middle', sortable: true}
+        {title: '更新时间', field: 'updateTime', visible: false, align: 'center', valign: 'middle', sortable: true}
     ];
     return columns;
 };
@@ -49,112 +48,94 @@ function statusFormatter(value, row, index) {
 /**
  * 检查是否选中
  */
-SysRole.check = function () {
+SysDept.check = function () {
     var selected = $('#' + this.id).bootstrapTable('getSelections');
     if (selected.length == 0) {
         Feng.info("请先选中表格中的某一记录！");
         return false;
     } else {
-        SysRole.seItem = selected[0];
+        SysDept.seItem = selected[0];
         return true;
     }
 };
 
-SysRole.resetSearch = function () {
+SysDept.resetSearch = function () {
     $("#name").val("");
     $("#beginTime").val("");
     $("#endTime").val("");
 
-    SysRole.search();
+    SysDept.search();
 };
 
 
-SysRole.search = function () {
+SysDept.search = function () {
     var queryData = {};
 
     queryData['name'] = $("#name").val();
     queryData['createTimeBegin'] = $("#beginTime").val();
     queryData['createTimeEnd'] = $("#endTime").val();
 
-    SysRole.table.refresh({query: queryData});
+    SysDept.table.refresh({query: queryData});
 };
 
 /**
- * 点击添加系统角色
+ * 点击添加系统部门
  */
-SysRole.openSaveSysRole = function () {
+SysDept.openSaveSysDept = function () {
     var index = layer.open({
         type: 2,
-        title: '添加系统角色',
+        title: '添加系统部门',
         area: ['800px', '600px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/sys-role/sysrole_save'
+        content: Feng.ctxPath + '/sys-dept/sysdept_save'
     });
     this.layerIndex = index;
 };
 
 /**
- * 点击修改按钮时
- * @param userId 系统角色id
+ * 点击修改系统部门
+ * @param deptId 系统部门id
  */
-SysRole.openUpdateSysRole = function () {
+SysDept.openUpdateSysDept = function () {
     if (this.check()) {
         var index = layer.open({
             type: 2,
-            title: '编辑系统角色',
+            title: '编辑系统部门',
             area: ['800px', '500px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/sys-role/sysrole_update/' + this.seItem.id
+            content: Feng.ctxPath + '/sys-dept/sysdept_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
 };
 
 /**
- * 删除系统角色
+ * 删除系统部门
  */
-SysRole.delSysRole = function () {
+SysDept.delSysDept = function () {
     if (this.check()) {
 
         var operation = function(){
-            var roleId = SysRole.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/sys-role/remove", function () {
+            var deptId = SysDept.seItem.id;
+            var ajax = new $ax(Feng.ctxPath + "/sys-dept/remove", function () {
                 Feng.success("删除成功!");
-                SysRole.table.refresh();
+                SysDept.table.refresh();
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
-            ajax.set("roleId", roleId);
+            ajax.set("deptId", deptId);
             ajax.start();
         };
 
-        Feng.confirm("是否删除系统角色" + SysRole.seItem.name + "?",operation);
-    }
-};
-
-/**
- * 系统角色的权限配置
- */
-SysRole.assignAuth = function () {
-    if (this.check()) {
-        var index = layer.open({
-            type: 2,
-            title: '权限配置',
-            area: ['300px', '450px'], //宽高
-            fix: false, //不固定
-            maxmin: true,
-            content: Feng.ctxPath + '/sys-role/sysrole_assignauth/' + this.seItem.id
-        });
-        this.layerIndex = index;
+        Feng.confirm("是否删除系统部门" + SysDept.seItem.name + "?",operation);
     }
 };
 
 $(function () {
-    var defaultColunms = SysRole.initColumn();
-    var table = new BSTable("sysRoleTable", "/sys-role/sysrole_list", defaultColunms);
+    var defaultColunms = SysDept.initColumn();
+    var table = new BSTable("sysDeptTable", "/sys-dept/sysdept_list", defaultColunms);
     table.setPaginationType("server");
-    SysRole.table = table.init();
+    SysDept.table = table.init();
 });
-
