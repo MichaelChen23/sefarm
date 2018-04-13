@@ -4,9 +4,12 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.sefarm.common.base.BaseServiceImpl;
 import com.sefarm.common.node.MenuNode;
 import com.sefarm.common.node.ZTreeNode;
+import com.sefarm.common.vo.SysMenuTreeVO;
+import com.sefarm.common.vo.SysMenuVO;
 import com.sefarm.dao.system.SysMenuMapper;
 import com.sefarm.model.system.SysMenuDO;
 import com.sefarm.service.system.ISysMenuService;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -39,5 +42,25 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuDO
         return getMapper().getMemuTreeByMenuIds(menuIds);
     }
 
+    @Override
+    public List<SysMenuTreeVO> getSysMenuDOAllList(String name, Integer level, String createTimeBegin, String createTimeEnd) {
+        return getMapper().getSysMenuDOAllList(name, level, createTimeBegin, createTimeEnd);
+    }
+
+    @Override
+    public SysMenuVO getSysMenuVO(Long sysMenuId) {
+        return getMapper().getSysMenuVO(sysMenuId);
+    }
+
+    @Override
+    public void removeAllSubMenusByMenuId(Long MenuId) {
+        SysMenuDO pSysMenuDO = getMapper().selectByPrimaryKey(MenuId);
+        //删除当前菜单
+        removeByObj(pSysMenuDO);
+        //删除所有子菜单
+        Example example = new Example(SysMenuDO.class);
+        example.createCriteria().andLike("pcodes","%[" + pSysMenuDO.getCode() + "]%");
+        getMapper().deleteByExample(example);
+    }
 
 }

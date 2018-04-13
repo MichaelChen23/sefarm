@@ -3,7 +3,10 @@ package com.sefarm.dao.system;
 import com.sefarm.common.base.SeFarmMapper;
 import com.sefarm.common.node.MenuNode;
 import com.sefarm.common.node.ZTreeNode;
+import com.sefarm.common.vo.SysMenuTreeVO;
+import com.sefarm.common.vo.SysMenuVO;
 import com.sefarm.model.system.SysMenuDO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -41,4 +44,21 @@ public interface SysMenuMapper extends SeFarmMapper<SysMenuDO> {
      * @return
      */
     List<ZTreeNode> getMemuTreeByMenuIds(List<Long> menuIds);
+
+    /**
+     * 按条件获取所有的菜单列表
+     * @param name
+     * @param level
+     * @param createTimeBegin
+     * @param createTimeEnd
+     * @return
+     */
+    List<SysMenuTreeVO> getSysMenuDOAllList(@Param("name")String name, @Param("level")Integer level, @Param("createTimeBegin")String createTimeBegin, @Param("createTimeEnd")String createTimeEnd);
+
+    /**
+     * 编辑菜单信息--根据菜单id获取菜单信息
+     * @param sysMenuId
+     * @return
+     */
+    SysMenuVO getSysMenuVO(@Param("sysMenuId")Long sysMenuId);
 }

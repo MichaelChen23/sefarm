@@ -1,0 +1,71 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${sysMenuVO.id}">
+            <input type="hidden" id="statusValue" value="${sysMenuVO.status}">
+            <input type="hidden" id="isMenuValue" value="${sysMenuVO.isMenu}">
+            <input type="hidden" id="isOpenValue" value="${sysMenuVO.isOpen}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+
+                    <#input id="name" name="菜单名称" underline="true" value="${sysMenuVO.name}"/>
+
+                    <#input id="icon" name="图标" underline="true" value="${sysMenuVO.icon}"/>
+
+                    <#input id="sort" name="排序号" underline="true" value="${sysMenuVO.sort}"/>
+
+                    <#select id="isMenu" name="是否菜单" underline="true">
+                        <option value=1>是</option>
+                        <option value=0>不是</option>
+                    </#select>
+
+                    <#select id="isOpen" name="是否打开" underline="true">
+                        <option value=1>是</option>
+                        <option value=0>不是</option>
+                    </#select>
+
+                    <#input id="pName" name="上级菜单名称" underline="true" hidden="pcode" readonly="readonly" hiddenValue="${sysMenuVO.pcode}" value="${sysMenuVO.pName}"
+                            clickFun="SysMenuInfoDlg.showPNameSelectTree(); return false;"
+                            style="background-color: #ffffff !important;"/>
+                </div>
+                <div class="col-sm-6">
+                    <div id="driverInfoContent">
+
+                        <#input id="code" name="菜单编号" underline="true" value="${sysMenuVO.code}"/>
+
+                        <#input id="url" name="链接" underline="true" value="${sysMenuVO.url}"/>
+
+                        <#input id="description" name="描述" underline="true" value="${sysMenuVO.description}"/>
+
+                        <#input id="levels" name="菜单层级" underline="true" value="${sysMenuVO.levels}"/>
+
+                        <#select id="status" name="状态" underline="true">
+                            <option value="y">开启</option>
+                            <option value="n">停用</option>
+                        </#select>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 这是上级菜单下拉框 -->
+            <div id="pNameContent" class="menuContent"
+                 style="display: none; position: absolute; z-index: 200;">
+                <ul id="pNameTree" class="ztree tree-box" style="width: 250px !important;"></ul>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SysMenuInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SysMenuInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/system/sysmenu/sysmenu_info.js"></script>
+@}

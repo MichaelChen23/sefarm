@@ -24,6 +24,27 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 
+  <resultMap id="SysMenuVOResultMap" type="com.sefarm.common.vo.SysMenuVO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_menu" jdbcType="INTEGER" property="isMenu" />
+    <result column="levels" jdbcType="INTEGER" property="levels" />
+    <result column="pcode" jdbcType="CHAR" property="pcode" />
+    <result column="p_name" jdbcType="VARCHAR" property="pName" />
+    <result column="pcodes" jdbcType="VARCHAR" property="pcodes" />
+    <result column="is_open" jdbcType="INTEGER" property="isOpen" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
   <!--根据用户角色来获取所能操作菜单-->
   <select id="getMenusByRoleId" resultType="com.sefarm.common.node.MenuNode">
     SELECT
@@ -134,4 +155,81 @@
     ) sm on sm.id = m.id
     ORDER BY m.id ASC
   </select>
+
+  <sql id="selectSysMenuDOALL">
+    SELECT
+    ssm.id, ssm.name, ssm.code, ssm.icon, ssm.url, ssm.sort, ssm.description, ssm.is_menu,
+    ssm.levels, ssm.pcode, ssm.pcodes, ssm.is_open,
+    ssm.status, ssm.create_by, ssm.create_time, ssm.update_by, ssm.update_time
+    FROM sefarm_sys_menu ssm
+  </sql>
+
+  <select id="getSysMenuDOAllList" resultType="com.sefarm.common.vo.SysMenuTreeVO">
+    SELECT
+    ssm.id, ssm.name, ssm.code, ssm.icon, ssm.url, ssm.sort, ssm.description,
+    (
+      CASE
+      WHEN ssm.is_menu = 1 THEN
+      '是'
+      WHEN ssm.is_menu = 0 THEN
+      '不是'
+      ELSE '未知'
+      END
+    ) AS isMenu,
+    ssm.levels, ssm.pcode, ssm.pcodes,
+    (
+      CASE
+      WHEN ssm.is_open = 1 THEN
+      '是'
+      WHEN ssm.is_open = 0 THEN
+      '不是'
+      ELSE '未知'
+      END
+    ) AS isOpen,
+    (
+      CASE
+      WHEN ssm.status = 'y' THEN
+      '开启'
+      WHEN ssm.status = 'n' THEN
+      '停用'
+      ELSE '未知'
+      END
+    ) AS status
+    FROM sefarm_sys_menu ssm
+    <where>
+      <if test="name != null and '' != name">
+        AND (ssm.name LIKE CONCAT('%', #{name}, '%') OR ssm.code LIKE CONCAT('%', #{name}, '%'))
+      </if>
+      <if test="level != null">
+        AND ssm.levels = #{level}
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(ssm.create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(ssm.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+  </select>
+
+  <sql id="selectSysMenuVOALL">
+    SELECT
+    ssm.id, ssm.name, ssm.code, ssm.icon, ssm.url, ssm.sort, ssm.description, ssm.is_menu,
+    ssm.levels, ssm.pcode, pssm.name AS p_name, ssm.pcodes, ssm.is_open,
+    ssm.status, ssm.create_by, DATE_FORMAT(ssm.create_time, '%Y-%m-%d %T') AS create_time, ssm.update_by, DATE_FORMAT(ssm.update_time, '%Y-%m-%d %T') AS update_time
+    FROM sefarm_sys_menu ssm
+    LEFT JOIN sefarm_sys_menu pssm ON pssm.code = ssm.pcode
+  </sql>
+
+  <select id="getSysMenuVO" resultMap="SysMenuVOResultMap">
+    <include refid="selectSysMenuVOALL" />
+    <where>
+      ssm.id = #{sysMenuId}
+    </where>
+  </select>
+
 </mapper>
