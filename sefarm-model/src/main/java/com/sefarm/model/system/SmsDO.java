@@ -2,9 +2,12 @@ package com.sefarm.model.system;
 
 import com.sefarm.common.base.BaseDO;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * 短信的实体类
@@ -18,7 +21,7 @@ public class SmsDO extends BaseDO implements Serializable {
      * 短信ID 
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
+    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     /**

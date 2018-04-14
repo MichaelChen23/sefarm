@@ -1,10 +1,14 @@
 package com.sefarm.model.system;
 
 import com.sefarm.common.base.BaseDO;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * 广告的实体类
@@ -18,7 +22,7 @@ public class AdvertDO extends BaseDO implements Serializable {
      * 首页广告ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
+    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     /**
@@ -49,12 +53,14 @@ public class AdvertDO extends BaseDO implements Serializable {
     /**
      * 广告上架时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "start_time")
     private Date startTime;
 
     /**
      * 广告下架时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "end_time")
     private Date endTime;
 

@@ -1,19 +1,25 @@
 package com.sefarm.controller.system;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.Constant;
+import com.sefarm.common.constant.tips.ErrorTip;
+import com.sefarm.common.constant.tips.Tip;
+import com.sefarm.common.exception.BizExceptionEnum;
+import com.sefarm.common.exception.BussinessException;
+import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.system.AdvertDO;
 import com.sefarm.service.system.IAdvertService;
+import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * 广告的Controller
@@ -21,119 +27,139 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@RestController
+@Controller
 @RequestMapping("/advert")
-public class AdvertController {
+public class AdvertController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdvertController.class);
+
+    private static String PREFIX = "/system/advert/";
 
     @Reference(version = "1.0.0", timeout = 10000)
     public IAdvertService advertService;
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public BaseResponse<Boolean> save(@RequestBody AdvertDO advertDO) {
-        try {
-            Boolean result = advertService.saveByObj(advertDO);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("advert save fail(保存失败)--"+advertDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
+    /**
+     * 跳转到查看 广告列表的页面
+     */
+    @RequestMapping("")
+    public String index() {
+        return PREFIX + "advert.html";
     }
 
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
-    public BaseResponse<Boolean> remove(@RequestBody AdvertDO advertDO) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
-        try {
-            Boolean result = advertService.removeByObj(advertDO);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("advert delete fail(删除失败)--"+advertDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
+    /**
+     * 跳转到新增 广告的页面
+     */
+    @RequestMapping("/advert_save")
+    public String saveView() {
+        return PREFIX + "advert_save.html";
     }
 
-    @RequestMapping(value = "/removeList", method = RequestMethod.POST)
-    public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除
-        try {
-            List<String> list = JSON.parseArray(ids, String.class);
-            Boolean result = advertService.batchRemoveByIds(list);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("advert batch delete fail(批量删除失败)--"+ids+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+    /**
+     * 跳转到修改 广告的页面
+     */
+    @RequestMapping("/advert_update/{advertId}")
+    public String updateView(@PathVariable Long advertId, Model model) {
+        if(ToolUtil.isEmpty(advertId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
+        AdvertDO query = new AdvertDO();
+        query.setId(advertId);
+        AdvertDO advertDO = advertService.getOneByObj(query);
+        model.addAttribute(advertDO);
+        return PREFIX + "advert_update.html";
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public BaseResponse<Boolean> update(@RequestBody AdvertDO advertDO) {//一定要通过id来修改
+    /**
+     * 按照查询条件查询 广告列表
+     * @return
+     */
+    @RequestMapping(value = "/advert_list", method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo<AdvertDO> getAdvertDOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
+                                              @RequestParam(required = false) String name, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
         try {
-            Boolean result = advertService.updateByObj(advertDO);
-            return BaseResponse.getRespByResultBool(result);
+            PageInfo<AdvertDO> result = advertService.getAdvertDOList(pageIndex, pageSize, sortStr, orderStr, name, createTimeBegin, createTimeEnd);
+            return result;
         } catch (Exception e) {
-            logger.error("advert update fail(更新失败)--"+advertDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
-    }
-
-    @RequestMapping(value = "/get", method = RequestMethod.POST)
-    public BaseResponse<AdvertDO> get(@RequestBody AdvertDO advertDO) {//可以通过id来查找，也可以同唯一性的条件来查找出唯一的数据，例如username是不相同，唯一的，就可以定位到唯一的数据
-        AdvertDO result = null;
-        try {
-            result = (AdvertDO) advertService.getOneByObj(advertDO);
-            return new BaseResponse<AdvertDO>(result);
-        } catch (Exception e) {
-            logger.error("advert get fail(获取失败)--"+advertDO.toString()+":{}", e.getMessage());
-            return new BaseResponse(result);
-        }
-    }
-
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageInfo<AdvertDO> getList(@RequestBody AdvertDO advertDO) {//通过输入page页数和rows每页查询的行数来查询lsit，如果不输入，默认值查询第一页；如果改用select（Obj）方法输入唯一性字段来查询会查到相关唯一的记录。
-        try {
-            List<AdvertDO> list = advertService.getListByObj(advertDO);
-            return new PageInfo<AdvertDO>(list);
-        } catch (Exception e) {
-            logger.error("advert get list fail(获取列表失败)--"+advertDO.toString()+":{}", e.getMessage());
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public BaseResponse<List<AdvertDO>> getAll() {
-        try {
-            List<AdvertDO> list = advertService.getALL();
-            return new BaseResponse<>(list);
-        } catch (Exception e) {
-            logger.error("advert get all(获取所有数据失败)-- :{}", e.getMessage());
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/count", method = RequestMethod.POST)
-    public Integer getCount(@RequestBody AdvertDO advertDO) {//输入为null，查询全部的数量，输入唯一性的字段，根据该字段数值查询唯一，数量为1
-        try {
-            Integer count = advertService.getCount(advertDO);
-            return count;
-        } catch (Exception e) {
-            logger.error("advert count fail(统计数目失败)--"+advertDO.toString()+":{}", e.getMessage());
+            logger.error("get advert list fail(获取 广告列表失败) -- :{}", e.getMessage());
             return null;
         }
     }
 
     /**
-     * 根据输入字段和值，进行模糊查询
+     * 新增 广告
      * @param advertDO
+     * @param result
      * @return
-     * searchKey-查询的字段，searchValue-查询字段的值
      */
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public PageInfo<AdvertDO> searchList(@RequestBody AdvertDO advertDO) {
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip save(@Valid AdvertDO advertDO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            List<AdvertDO> list = advertService.searchListByKV(advertDO);
-            return new PageInfo<AdvertDO>(list);
+            // 完善广告信息
+            advertDO.setCreateBy("sys");
+            advertDO.setCreateTime(new Date());
+            Boolean res = advertService.saveByObj(advertDO);
+            if (res) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
         } catch (Exception e) {
-            logger.error("advert search query fail(搜索查询失败)--"+advertDO.toString()+":{}", e.getMessage());
-            return null;
+            logger.error("advert save fail(保存失败)--"+advertDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 更新编辑 广告
+     * @param advertDO
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip update(@Valid AdvertDO advertDO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            if (advertDO != null) {
+                advertDO.setUpdateBy("sys");
+                advertDO.setUpdateTime(new Date());
+                Boolean res = advertService.updateByObj(advertDO);
+                if (res) {
+                    return SUCCESS_TIP;
+                }
+            }
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        } catch (Exception e) {
+            logger.error("advert update fail(更新失败)--"+advertDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip remove(@RequestParam Long advertId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+        if (ToolUtil.isEmpty(advertId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            AdvertDO advertDO = new AdvertDO();
+            advertDO.setId(advertId);
+            Boolean result = advertService.removeByObj(advertDO);
+            if (result) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("advert delete fail(删除失败)--"+advertId+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
         }
     }
 

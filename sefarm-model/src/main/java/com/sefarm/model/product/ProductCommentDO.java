@@ -2,9 +2,12 @@ package com.sefarm.model.product;
 
 import com.sefarm.common.base.BaseDO;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * 产品评论的实体类
@@ -18,7 +21,7 @@ public class ProductCommentDO extends BaseDO implements Serializable {
      * 产品评论ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
+    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     /**

@@ -2,10 +2,13 @@ package com.sefarm.model.order;
 
 import com.sefarm.common.base.BaseDO;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * 订单项的实体类
@@ -19,7 +22,7 @@ public class OrderItemDO extends BaseDO implements Serializable {
      * 订单项ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
+    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     /**

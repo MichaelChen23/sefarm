@@ -22,4 +22,25 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="html" jdbcType="LONGVARCHAR" property="html" />
   </resultMap>
+
+  <select id="getAdvertDOList" resultMap="BaseResultMap">
+    SELECT *
+    FROM sefarm_advert
+    <where>
+      <if test="name != null and '' != name">
+        AND (title LIKE CONCAT('%', #{name}, '%') OR content LIKE CONCAT('%', #{name}, '%'))
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
 </mapper>

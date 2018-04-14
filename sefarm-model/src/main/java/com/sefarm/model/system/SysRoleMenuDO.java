@@ -2,7 +2,10 @@ package com.sefarm.model.system;
 
 import com.sefarm.common.base.BaseDO;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,7 +21,7 @@ public class SysRoleMenuDO extends BaseDO implements Serializable {
      * 系统角色菜单ID 
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
+    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     /**

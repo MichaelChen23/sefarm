@@ -53,22 +53,6 @@ function sexFormatter (value, row, index) {
 };
 
 /**
- * 状态判断
- * @param value
- * @param row
- * @param index
- */
-function statusFormatter(value, row, index) {
-    if (row['status'] == 'y') {
-        return '开启';
-    }
-    if (row['status'] == 'n') {
-        return '停用';
-    }
-    return value;
-};
-
-/**
  * 检查是否选中
  */
 SysUser.check = function () {
