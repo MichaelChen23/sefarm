@@ -31,4 +31,73 @@
     <result column="images" jdbcType="LONGVARCHAR" property="images" />
     <result column="description" jdbcType="LONGVARCHAR" property="description" />
   </resultMap>
+
+  <resultMap id="ProductVOResultMap" type="com.sefarm.common.vo.ProductVO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="now_price" jdbcType="DECIMAL" property="nowPrice" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="new_flag" jdbcType="CHAR" property="newFlag" />
+    <result column="sale_flag" jdbcType="CHAR" property="saleFlag" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="sell_count" jdbcType="BIGINT" property="sellCount" />
+    <result column="stock" jdbcType="BIGINT" property="stock" />
+    <result column="reply_hit" jdbcType="BIGINT" property="replyHit" />
+    <result column="search_word" jdbcType="VARCHAR" property="searchWord" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="product_type_id" jdbcType="BIGINT" property="productTypeId" />
+    <result column="product_type_name" jdbcType="VARCHAR" property="productTypeName" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+    <result column="product_html" jdbcType="LONGVARCHAR" property="productHtml" />
+    <result column="images" jdbcType="LONGVARCHAR" property="images" />
+    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+  </resultMap>
+
+  <sql id="selectProductVOALL">
+    SELECT
+    sp.id, sp.name, sp.introduce, sp.price, sp.now_price, sp.picture, sp.new_flag, sp.sale_flag, sp.unit, sp.sort, sp.sell_count, sp.stock, sp.reply_hit,
+    sp.search_word, sp.title, sp.remark, sp.product_type_id, spt.name AS product_type_name, sp.product_html, sp.images, sp.description,
+    sp.status, sp.create_by, DATE_FORMAT(sp.create_time, '%Y-%m-%d %T') AS create_time, sp.update_by, DATE_FORMAT(sp.update_time, '%Y-%m-%d %T') AS update_time
+    FROM sefarm_product sp
+    LEFT JOIN sefarm_product_type spt ON spt.id = sp.product_type_id
+  </sql>
+
+  <select id="getProductVOList" resultMap="ProductVOResultMap">
+    <include refid="selectProductVOALL" />
+    <where>
+      <if test="name != null and '' != name">
+        AND sp.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="productTypeId != null">
+        AND sp.product_type_id = #{productTypeId}
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(sp.create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(sp.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
+
+  <select id="getProductVO" resultMap="ProductVOResultMap">
+    <include refid="selectProductVOALL" />
+    <where>
+      sp.id = #{prodId}
+    </where>
+  </select>
+
 </mapper>

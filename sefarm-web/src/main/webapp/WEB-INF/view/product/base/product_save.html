@@ -1,0 +1,80 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#input id="name" name="产品名" underline="true"/>
+
+                    <#input id="price" name="定价" underline="true"/>
+
+                    <#input id="picture" name="小图片" underline="true"/>
+
+                    <#select id="newFlag" name="是否新品" underline="true">
+                        <option value="y">是</option>
+                        <option value="n">否</option>
+                    </#select>
+
+                    <#input id="unit" name="单位" underline="true"/>
+
+                    <#input id="sellCount" name="销售量" underline="true"/>
+
+                    <#input id="replyHit" name="评价量" underline="true"/>
+
+                    <#input id="title" name="详情标题" underline="true"/>
+
+                    <#input id="productHtml" name="详情HTML" underline="true"/>
+
+                    <#select id="productTypeId" name="产品类型名" />
+
+                </div>
+                <div class="col-sm-6">
+                    <div id="driverInfoContent">
+
+                        <#input id="introduce" name="简介" underline="true"/>
+
+                        <#input id="nowPrice" name="现价" underline="true"/>
+
+                        <#input id="images" name="多图片" underline="true"/>
+
+                        <#select id="saleFlag" name="是否特价" underline="true">
+                            <option value="y">是</option>
+                            <option value="n">否</option>
+                        </#select>
+
+                        <#input id="sort" name="排序号" underline="true"/>
+
+                        <#input id="stock" name="库存" underline="true"/>
+
+                        <#input id="searchWord" name="搜索关键词" underline="true"/>
+
+                        <#input id="remark" name="备注" underline="true"/>
+
+                        <#input id="description" name="详情描述" underline="true"/>
+
+                        <#select id="status" name="状态" underline="true">
+                            <option value="new">新增</option>
+                            <option value="on">上架</option>
+                            <option value="off">下架</option>
+                            <option value="del">已删除</option>
+                        </#select>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="ProductInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="ProductInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/product/base/product_info.js"></script>
+@}

@@ -170,6 +170,18 @@ public class ProductTypeController extends BaseController {
         }
     }
 
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
+    @ResponseBody
+    public BaseResponse<List<ProductTypeDO>> getAll() {
+        try {
+            List<ProductTypeDO> list = productTypeService.getALL();
+            return new BaseResponse<>(list);
+        } catch (Exception e) {
+            logger.error("prod-type get all(获取所有数据失败)-- :{}", e.getMessage());
+            return null;
+        }
+    }
+
     @RequestMapping(value = "/removeList", method = RequestMethod.POST)
     public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除
         try {
@@ -201,17 +213,6 @@ public class ProductTypeController extends BaseController {
             return new PageInfo<ProductTypeDO>(list);
         } catch (Exception e) {
             logger.error("prod-type get list fail(获取列表失败)--"+productTypeDO.toString()+":{}", e.getMessage());
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public BaseResponse<List<ProductTypeDO>> getAll() {
-        try {
-            List<ProductTypeDO> list = productTypeService.getALL();
-            return new BaseResponse<>(list);
-        } catch (Exception e) {
-            logger.error("prod-type get all(获取所有数据失败)-- :{}", e.getMessage());
             return null;
         }
     }
