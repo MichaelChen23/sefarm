@@ -1,0 +1,50 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>产品类型管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-lg-10 col-sm-9">
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-3">
+                                        <#NameCon id="name" name="类型名" />
+                                    </div>
+                                    <div class="col-lg-3 col-sm-3">
+                                        <#select id="catalog" name="目录"/>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-3">
+                                        <#TimeCon id="beginTime" name="创建开始日期" isTime="false" pattern="YYYY-MM-DD"/>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-3">
+                                        <#TimeCon id="endTime" name="创建结束日期" isTime="false" pattern="YYYY-MM-DD"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-sm-3">
+                                <div class="row">
+                                    <div class="col-lg-12 col-sm-12">
+                                        <#button name="搜索" icon="fa-search" clickFun="ProdType.search()"/>
+                                        <#button name="重置" icon="fa-trash" clickFun="ProdType.resetSearch()" space="true"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="managerTableToolbar" role="group">
+                            <#button name="添加" icon="fa-plus" clickFun="ProdType.openSaveProdType()" />
+                            <#button name="修改" icon="fa-edit" clickFun="ProdType.openUpdateProdType()" space="true"/>
+                            <#button name="删除" icon="fa-remove" clickFun="ProdType.delProdType()" space="true"/>
+                        </div>
+                        <#table id="prodTypeTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/product/type/type.js"></script>
+@}

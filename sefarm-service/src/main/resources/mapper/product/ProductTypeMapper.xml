@@ -16,4 +16,60 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <resultMap id="ProductTypeVOResultMap" type="com.sefarm.common.vo.ProductTypeVO">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="product_catalog_id" jdbcType="BIGINT" property="productCatalogId" />
+    <result column="product_catalog_name" jdbcType="VARCHAR" property="productCatalogName" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+  </resultMap>
+
+  <sql id="selectProductTypeVOALL">
+    SELECT
+    spt.id, spt.name, spt.product_catalog_id,
+    spc.name AS product_catalog_name, spt.sort, spt.description,
+    spt.status, spt.create_by, DATE_FORMAT(spt.create_time, '%Y-%m-%d %T') AS create_time, spt.update_by, DATE_FORMAT(spt.update_time, '%Y-%m-%d %T') AS update_time
+    FROM sefarm_product_type spt
+    LEFT JOIN sefarm_product_catalog spc ON spc.id = spt.product_catalog_id
+  </sql>
+
+  <select id="getProductTypeVOList" resultMap="ProductTypeVOResultMap">
+    <include refid="selectProductTypeVOALL" />
+    <where>
+      <if test="name != null and '' != name">
+        AND spt.name LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="productCatalogId != null">
+        AND spt.product_catalog_id = #{productCatalogId}
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(spt.create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(spt.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
+
+  <select id="getProductTypeVO" resultMap="ProductTypeVOResultMap">
+    <include refid="selectProductTypeVOALL" />
+    <where>
+      spt.id = #{prodTypeId}
+    </where>
+  </select>
 </mapper>
