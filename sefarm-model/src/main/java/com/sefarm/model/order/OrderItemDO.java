@@ -1,6 +1,7 @@
 package com.sefarm.model.order;
 
 import com.sefarm.common.base.BaseDO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -81,14 +82,14 @@ public class OrderItemDO extends BaseDO implements Serializable {
     private String remark;
 
     /**
-     * 创建人
+     * 用户帐号
      */
-    @Column(name = "create_by")
-    private String createBy;
+    private String account;
 
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "create_time")
     private Date createTime;
 
@@ -303,21 +304,21 @@ public class OrderItemDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取创建人
+     * 获取用户帐号
      *
-     * @return create_by - 创建人
+     * @return account - 用户帐号
      */
-    public String getCreateBy() {
-        return createBy;
+    public String getAccount() {
+        return account;
     }
 
     /**
-     * 设置创建人
+     * 设置创用户帐号
      *
-     * @param createBy 创建人
+     * @param account 用户帐号
      */
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     /**
@@ -388,7 +389,7 @@ public class OrderItemDO extends BaseDO implements Serializable {
                 ", total=" + total +
                 ", commentFlag='" + commentFlag + '\'' +
                 ", remark='" + remark + '\'' +
-                ", createBy='" + createBy + '\'' +
+                ", account='" + account + '\'' +
                 ", createTime=" + createTime +
                 ", updateBy='" + updateBy + '\'' +
                 ", updateTime=" + updateTime +

@@ -3,16 +3,26 @@ package com.sefarm.controller.order;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.constant.tips.ErrorTip;
+import com.sefarm.common.constant.tips.Tip;
+import com.sefarm.common.exception.BizExceptionEnum;
+import com.sefarm.common.exception.BussinessException;
+import com.sefarm.common.vo.OrderItemVO;
+import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.order.OrderItemDO;
 import com.sefarm.service.order.IOrderItemService;
+import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,34 +31,140 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@RestController
+@Controller
 @RequestMapping("/order-item")
-public class OrderItemController {
+public class OrderItemController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderItemController.class);
+
+    private static String PREFIX = "/order/item/";
 
     @Reference(version = "1.0.0", timeout = 10000)
     public IOrderItemService orderItemService;
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public BaseResponse<Boolean> save(@RequestBody OrderItemDO orderItemDO) {
+    /**
+     * 跳转到查看 订单项 列表的页面
+     */
+    @RequestMapping("")
+    public String index() {
+        return PREFIX + "item.html";
+    }
+
+    /**
+     * 跳转到新增 订单项 的页面
+     */
+    @RequestMapping("/item_save")
+    public String saveView() {
+        return PREFIX + "item_save.html";
+    }
+
+    /**
+     * 跳转到修改 订单项 的页面
+     */
+    @RequestMapping("/item_update/{itemId}")
+    public String updateView(@PathVariable Long itemId, Model model) {
+        if(ToolUtil.isEmpty(itemId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        //获取产品的信息
+        OrderItemVO orderItemVO = orderItemService.getOrderItemVO(itemId);
+        model.addAttribute(orderItemVO);
+        return PREFIX + "item_update.html";
+    }
+
+    /**
+     * 按照查询条件查询 订单项 列表
+     * @return
+     */
+    @RequestMapping(value = "/item_list", method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo<OrderItemVO> getOrderItemVOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr, @RequestParam(required = false) String name,
+                                                    @RequestParam(required = false) String orderNo, @RequestParam(required = false) String productName, @RequestParam(required = false) String commentFlag, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
         try {
-            Boolean result = orderItemService.saveByObj(orderItemDO);
-            return BaseResponse.getRespByResultBool(result);
+            PageInfo<OrderItemVO> result = orderItemService.getOrderItemVOList(pageIndex, pageSize, sortStr, orderStr, name, orderNo, productName, commentFlag, createTimeBegin, createTimeEnd);
+            return result;
         } catch (Exception e) {
-            logger.error("order-item save fail(保存失败)--"+orderItemDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            logger.error("get order item list fail(获取 订单项 列表失败) -- :{}", e.getMessage());
+            return null;
         }
     }
 
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
-    public BaseResponse<Boolean> remove(@RequestBody OrderItemDO orderItemDO) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+    /**
+     * 添加 订单项
+     * @param orderItemDO
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip save(@Valid OrderItemDO orderItemDO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            Boolean result = orderItemService.removeByObj(orderItemDO);
-            return BaseResponse.getRespByResultBool(result);
+            Boolean res = orderItemService.saveByObj(orderItemDO);
+            if (res) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
         } catch (Exception e) {
-            logger.error("order-item delete fail(删除失败)--"+orderItemDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            logger.error("order-item save fail(保存失败)--"+orderItemDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 更新编辑 订单项
+     * @param orderItemDO
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip update(@Valid OrderItemDO orderItemDO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            if (orderItemDO != null) {
+                orderItemDO.setUpdateBy("sys");
+                orderItemDO.setUpdateTime(new Date());
+                Boolean res = orderItemService.updateByObj(orderItemDO);
+                if (res) {
+                    return SUCCESS_TIP;
+                }
+            }
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        } catch (Exception e) {
+            logger.error("order-item update fail(更新失败)--"+orderItemDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 删除 订单项
+     * @param itemId
+     * @return
+     */
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip remove(@RequestParam Long itemId) {
+        if (ToolUtil.isEmpty(itemId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            OrderItemDO orderItemDO = new OrderItemDO();
+            orderItemDO.setId(itemId);
+            Boolean result = orderItemService.removeByObj(orderItemDO);
+            if (result) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("order-item delete fail(删除失败)--"+itemId+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
         }
     }
 
@@ -60,17 +176,6 @@ public class OrderItemController {
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
             logger.error("order-item batch delete fail(批量删除失败)--"+ids+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
-    }
-
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public BaseResponse<Boolean> update(@RequestBody OrderItemDO orderItemDO) {//一定要通过id来修改
-        try {
-            Boolean result = orderItemService.updateByObj(orderItemDO);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("order-item update fail(更新失败)--"+orderItemDO.toString()+":{}", e.getMessage());
             return BaseResponse.getRespByResultBool(false);
         }
     }

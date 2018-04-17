@@ -16,9 +16,74 @@
     <result column="total" jdbcType="DECIMAL" property="total" />
     <result column="comment_flag" jdbcType="CHAR" property="commentFlag" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <resultMap id="OrderItemVOResultMap" type="com.sefarm.common.vo.OrderItemVO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="carry_fee" jdbcType="DECIMAL" property="carryFee" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="comment_flag" jdbcType="CHAR" property="commentFlag" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+  </resultMap>
+
+  <sql id="selectOrderItemVOALL">
+    SELECT
+    soi.id, soi.order_id, so.order_no AS order_no, soi.product_id, soi.product_name, soi.price,
+    soi.number, soi.unit, soi.carry_fee, soi.total, soi.comment_flag, soi.remark,
+    soi.account, DATE_FORMAT(soi.create_time, '%Y-%m-%d %T') AS create_time, soi.update_by, DATE_FORMAT(soi.update_time, '%Y-%m-%d %T') AS update_time
+    FROM sefarm_order_item soi
+    LEFT JOIN sefarm_order so ON so.id = soi.order_id
+  </sql>
+
+  <select id="getOrderItemVOList" resultMap="OrderItemVOResultMap">
+    <include refid="selectOrderItemVOALL" />
+    <where>
+      <if test="name != null and '' != name">
+        AND soi.account LIKE CONCAT(#{name}, '%')
+      </if>
+      <if test="orderNo != null and '' != orderNo">
+        AND so.order_no LIKE CONCAT(#{orderNo}, '%')
+      </if>
+      <if test="productName != null and '' != productName">
+        AND soi.product_name LIKE CONCAT(#{productName}, '%')
+      </if>
+      <if test="commentFlag != null and '' != commentFlag">
+        AND soi.comment_flag = #{commentFlag}
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(soi.create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(soi.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
+
+  <select id="getOrderItemVO" resultMap="OrderItemVOResultMap">
+    <include refid="selectOrderItemVOALL" />
+    <where>
+      soi.id = #{itemId}
+    </where>
+  </select>
+
 </mapper>

@@ -1,0 +1,57 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#input id="orderId" name="订单id" underline="true"/>
+
+                    <#input id="productName" name="产品名称" underline="true"/>
+
+                    <#input id="number" name="数量" underline="true"/>
+
+                    <#input id="carryFee" name="配送费" underline="true"/>
+
+                    <#select id="commentFlag" name="是否评价" underline="true">
+                        <option value="y">是</option>
+                        <option value="n" selected="true">否</option>
+                    </#select>
+
+                    <#input id="account" name="用户帐号"/>
+
+                </div>
+                <div class="col-sm-6">
+                    <div id="driverInfoContent">
+
+                        <#input id="productId" name="产品id" underline="true"/>
+
+                        <#input id="price" name="单价" underline="true"/>
+
+                        <#input id="unit" name="单位" underline="true"/>
+
+                        <#input id="total" name="总金额" underline="true"/>
+
+                        <#input id="remark" name="备注" underline="true"/>
+
+                        <#input id="createTime" name="创建时间"
+                                clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="OrderItemInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="OrderItemInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/order/item/item_info.js"></script>
+@}
