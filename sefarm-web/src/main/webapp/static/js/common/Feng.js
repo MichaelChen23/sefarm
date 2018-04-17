@@ -114,3 +114,52 @@ var Feng = {
         return $(obj);
     }
 };
+
+/**
+ * 状态判断
+ * @param value
+ * @param row
+ * @param index
+ */
+function statusFormatter(value, row, index) {
+    if (row['status'] == 'y') {
+        return '开启';
+    }
+    if (row['status'] == 'n') {
+        return '停用';
+    }
+    return value;
+};
+
+/**
+ * 把date类型转换为yyyy-mm-dd hh:mm:ss 形式
+ * add by mc 2018-4-14
+ *
+ * @param value
+ * @param row
+ * @param index
+ * @returns {string}
+ */
+function timeFormatter(value, row, index) {
+    if (value != null) {
+        var date = new Date(value);
+        var year = date.getFullYear();
+        var month = fixFormatter(date.getMonth() + 1);
+        var day = fixFormatter(date.getDate());
+        var hour = fixFormatter(date.getHours());
+        var minute = fixFormatter(date.getMinutes());
+        var second = fixFormatter(date.getSeconds());
+        return year + '-' + month + '-' + day + " " + hour + ":" + minute + ":" + second;
+    }
+};
+
+/**
+ * fix 0 before format 不满10补0函数
+ * @param value
+ * @returns {string}
+ */
+function fixFormatter(value) {
+    return value < 10 ? ('0' + value) : value;
+};
+
+

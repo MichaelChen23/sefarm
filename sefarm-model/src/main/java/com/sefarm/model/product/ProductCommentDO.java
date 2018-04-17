@@ -1,6 +1,7 @@
 package com.sefarm.model.product;
 
 import com.sefarm.common.base.BaseDO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -54,7 +55,7 @@ public class ProductCommentDO extends BaseDO implements Serializable {
     /**
      * 评论星级：1，2，3，4，5，默认为0
      */
-    private Boolean star;
+    private Integer star;
 
     /**
      * 状态：y-显示；n-不显示，默认为y
@@ -80,6 +81,7 @@ public class ProductCommentDO extends BaseDO implements Serializable {
     /**
      * 商家评论回复时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "reply_time")
     private Date replyTime;
 
@@ -201,7 +203,7 @@ public class ProductCommentDO extends BaseDO implements Serializable {
      *
      * @return star - 评论星级：1，2，3，4，5，默认为0
      */
-    public Boolean getStar() {
+    public Integer getStar() {
         return star;
     }
 
@@ -210,7 +212,7 @@ public class ProductCommentDO extends BaseDO implements Serializable {
      *
      * @param star 评论星级：1，2，3，4，5，默认为0
      */
-    public void setStar(Boolean star) {
+    public void setStar(Integer star) {
         this.star = star;
     }
 

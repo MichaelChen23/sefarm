@@ -11,7 +11,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="star" jdbcType="BIT" property="star" />
+    <result column="star" jdbcType="INTEGER" property="star" />
     <result column="status" jdbcType="CHAR" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="replier" jdbcType="VARCHAR" property="replier" />
@@ -19,4 +19,69 @@
     <result column="reply_time" jdbcType="TIMESTAMP" property="replyTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
+
+  <resultMap id="ProductCommentVOResultMap" type="com.sefarm.common.vo.ProductCommentVO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="star" jdbcType="INTEGER" property="star" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="replier" jdbcType="VARCHAR" property="replier" />
+    <result column="reply" jdbcType="VARCHAR" property="reply" />
+    <result column="reply_time" jdbcType="VARCHAR" property="replyTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="selectProductCommentVOALL">
+    SELECT
+    spc.id, spc.product_id, sp.name AS product_name, spc.account, spc.name,
+    spc.order_id, so.order_no AS order_no, spc.content, spc.star,
+    spc.status, DATE_FORMAT(spc.create_time, '%Y-%m-%d %T') AS create_time, spc.replier, spc.reply, DATE_FORMAT(spc.reply_time, '%Y-%m-%d %T') AS reply_time, spc.remark
+    FROM sefarm_product_comment spc
+    LEFT JOIN sefarm_product sp ON sp.id = spc.product_id
+    LEFT JOIN sefarm_order so ON so.id = spc.order_id
+  </sql>
+
+  <select id="getProductCommentVOList" resultMap="ProductCommentVOResultMap">
+    <include refid="selectProductCommentVOALL" />
+    <where>
+      <if test="name != null and '' != name">
+        AND (spc.name LIKE CONCAT('%', #{name}, '%') OR spc.account LIKE CONCAT('%', #{name}, '%') OR spc.content LIKE CONCAT('%', #{name}, '%'))
+      </if>
+      <if test="productName != null and '' != productName">
+        AND sp.name = #{productName}
+      </if>
+      <if test="orderNo != null and '' != orderNo">
+        AND so.order_no = #{orderNo}
+      </if>
+      <if test="stars != null">
+        AND spc.star = #{stars}
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(spc.create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(spc.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
+
+  <select id="getProductCommentVO" resultMap="ProductCommentVOResultMap">
+    <include refid="selectProductCommentVOALL" />
+    <where>
+      spc.id = #{commentId}
+    </where>
+  </select>
+
 </mapper>
