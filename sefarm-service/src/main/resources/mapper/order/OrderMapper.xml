@@ -22,4 +22,31 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <select id="getOrderDOList" resultMap="BaseResultMap">
+    SELECT *
+    FROM sefarm_order
+    <where>
+      <if test="name != null and '' != name">
+        AND account LIKE CONCAT('%', #{name}, '%')
+      </if>
+      <if test="orderNo != null and '' != orderNo">
+        AND order_no LIKE CONCAT('%', #{orderNo}, '%')
+      </if>
+      <if test="status != null and '' != status">
+        AND status = #{status}
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
 </mapper>

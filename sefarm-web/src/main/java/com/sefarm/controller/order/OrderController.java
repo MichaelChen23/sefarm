@@ -3,16 +3,25 @@ package com.sefarm.controller.order;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.constant.tips.ErrorTip;
+import com.sefarm.common.constant.tips.Tip;
+import com.sefarm.common.exception.BizExceptionEnum;
+import com.sefarm.common.exception.BussinessException;
+import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.order.OrderDO;
 import com.sefarm.service.order.IOrderService;
+import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,34 +30,141 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@RestController
+@Controller
 @RequestMapping("/order")
-public class OrderController {
+public class OrderController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+
+    private static String PREFIX = "/order/base/";
 
     @Reference(version = "1.0.0", timeout = 10000)
     public IOrderService orderService;
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public BaseResponse<Boolean> save(@RequestBody OrderDO orderDO) {
+    /**
+     * 跳转到查看 订单 列表的页面
+     */
+    @RequestMapping("")
+    public String index() {
+        return PREFIX + "order.html";
+    }
+
+    /**
+     * 跳转到新增 订单 的页面
+     */
+    @RequestMapping("/order_save")
+    public String saveView() {
+        return PREFIX + "order_save.html";
+    }
+
+    /**
+     * 跳转到修改 订单 的页面
+     */
+    @RequestMapping("/order_update/{orderId}")
+    public String updateView(@PathVariable Long orderId, Model model) {
+        if(ToolUtil.isEmpty(orderId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        OrderDO query = new OrderDO();
+        query.setId(orderId);
+        OrderDO orderDO = orderService.getOneByObj(query);
+        model.addAttribute(orderDO);
+        return PREFIX + "order_update.html";
+    }
+
+    /**
+     * 按照查询条件查询 订单列表
+     * @return
+     */
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo<OrderDO> getOrderDOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr, @RequestParam(required = false) String name,
+                                            @RequestParam(required = false) String orderNo, @RequestParam(required = false) String status, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
         try {
-            Boolean result = orderService.saveByObj(orderDO);
-            return BaseResponse.getRespByResultBool(result);
+            PageInfo<OrderDO> result = orderService.getOrderDOList(pageIndex, pageSize, sortStr, orderStr, name, orderNo, status, createTimeBegin, createTimeEnd);
+            return result;
         } catch (Exception e) {
-            logger.error("order save fail(保存失败)--"+orderDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            logger.error("get order list fail(获取 订单列表失败) -- :{}", e.getMessage());
+            return null;
         }
     }
 
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
-    public BaseResponse<Boolean> remove(@RequestBody OrderDO orderDO) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+    /**
+     * 新增 订单
+     * @param orderDO
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip save(@Valid OrderDO orderDO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            Boolean result = orderService.removeByObj(orderDO);
-            return BaseResponse.getRespByResultBool(result);
+            Boolean res = orderService.saveByObj(orderDO);
+            if (res) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
         } catch (Exception e) {
-            logger.error("order delete fail(删除失败)--"+orderDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            logger.error("order save fail(保存失败)--"+orderDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 更新编辑 订单
+     * @param orderDO
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip update(@Valid OrderDO orderDO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            if (orderDO != null) {
+                orderDO.setUpdateBy("sys");
+                orderDO.setUpdateTime(new Date());
+                Boolean res = orderService.updateByObj(orderDO);
+                if (res) {
+                    return SUCCESS_TIP;
+                }
+            }
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        } catch (Exception e) {
+            logger.error("order update fail(更新失败)--"+orderDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 删除 订单
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip remove(@RequestParam Long orderId) {
+        if (ToolUtil.isEmpty(orderId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            OrderDO orderDO = new OrderDO();
+            orderDO.setId(orderId);
+            Boolean result = orderService.removeByObj(orderDO);
+            if (result) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("order delete fail(删除失败)--"+orderId+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
         }
     }
 
@@ -64,17 +180,6 @@ public class OrderController {
         }
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public BaseResponse<Boolean> update(@RequestBody OrderDO orderDO) {//一定要通过id来修改
-        try {
-            Boolean result = orderService.updateByObj(orderDO);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("order update fail(更新失败)--"+orderDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
-    }
-
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     public BaseResponse<OrderDO> get(@RequestBody OrderDO orderDO) {//可以通过id来查找，也可以同唯一性的条件来查找出唯一的数据，例如username是不相同，唯一的，就可以定位到唯一的数据
         OrderDO result = null;
@@ -84,17 +189,6 @@ public class OrderController {
         } catch (Exception e) {
             logger.error("order get fail(获取失败)--"+orderDO.toString()+":{}", e.getMessage());
             return new BaseResponse(result);
-        }
-    }
-
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageInfo<OrderDO> getList(@RequestBody OrderDO orderDO) {//通过输入page页数和rows每页查询的行数来查询lsit，如果不输入，默认值查询第一页；如果改用select（Obj）方法输入唯一性字段来查询会查到相关唯一的记录。
-        try {
-            List<OrderDO> list = orderService.getListByObj(orderDO);
-            return new PageInfo<OrderDO>(list);
-        } catch (Exception e) {
-            logger.error("order get list fail(获取列表失败)--"+orderDO.toString()+":{}", e.getMessage());
-            return null;
         }
     }
 

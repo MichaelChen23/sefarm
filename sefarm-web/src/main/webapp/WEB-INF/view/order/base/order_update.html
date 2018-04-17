@@ -1,0 +1,63 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${orderDO.id}">
+            <input type="hidden" id="statusValue" value="${orderDO.status}">
+            <input type="hidden" id="createTimeValue" value="${orderDO.createTime}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+
+                    <#input id="orderNo" name="订单号" underline="true" value="${orderDO.orderNo}"/>
+
+                    <#input id="payType" name="付款方式" underline="true" value="${orderDO.payType}"/>
+
+                    <#input id="carryFeeTotal" name="运送总费用" underline="true" value="${orderDO.carryFeeTotal}"/>
+
+                    <#input id="productTotal" name="产品总金额" underline="true" value="${orderDO.productTotal}"/>
+
+                    <#input id="exchangeScore" name="兑换总积分" underline="true" value="${orderDO.exchangeScore}"/>
+
+                    <#input id="remark" name="备注" underline="true" value="${orderDO.remark}"/>
+
+                    <#input id="createTime" name="下单时间"
+                            clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
+
+
+                </div>
+                <div class="col-sm-6">
+                    <div id="driverInfoContent">
+
+                        <#input id="account" name="用户账号" underline="true" value="${orderDO.account}"/>
+
+                        <#input id="carry" name="运送方式" underline="true" value="${orderDO.carry}"/>
+
+                        <#input id="quantity" name="产品总数量" underline="true" value="${orderDO.quantity}"/>
+
+                        <#input id="amount" name="订单总金额" underline="true" value="${orderDO.amount}"/>
+
+                        <#input id="requirement" name="客户要求" underline="true" value="${orderDO.requirement}"/>
+
+                        <#select id="status" name="订单状态">
+                            <option value="y">完成</option>
+                            <option value="n">未完成</option>
+                        </#select>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="OrderInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="OrderInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/order/base/order_info.js"></script>
+@}
