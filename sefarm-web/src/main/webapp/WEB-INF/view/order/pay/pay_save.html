@@ -1,0 +1,46 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                    <#input id="orderId" name="订单id" underline="true"/>
+
+                    <#input id="payAmount" name="支付金额" underline="true"/>
+
+                    <#input id="payType" name="支付方式" underline="true"/>
+
+                    <#input id="payTradeNo" name="支付流水号"/>
+
+                </div>
+                <div class="col-sm-6">
+                    <div id="driverInfoContent">
+
+                        <#input id="account" name="用户账号" underline="true"/>
+
+                        <#input id="payTime" name="支付时间" underline="true"
+                                clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
+
+                        <#input id="payAccount" name="实际支付帐号" underline="true"/>
+
+                        <#input id="payStatus" name="支付状态"/>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="OrderPayInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="OrderPayInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/order/pay/pay_info.js"></script>
+@}

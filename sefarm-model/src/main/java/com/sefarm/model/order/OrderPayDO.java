@@ -1,6 +1,7 @@
 package com.sefarm.model.order;
 
 import com.sefarm.common.base.BaseDO;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ import java.util.Date;
 @Table(name = "sefarm_order_pay")
 public class OrderPayDO extends BaseDO implements Serializable {
     /**
-     * 创建人
+     * 订单支付id
      */
     @Id
     @GeneratedValue(generator = "JDBC")
@@ -45,6 +46,7 @@ public class OrderPayDO extends BaseDO implements Serializable {
     /**
      * 支付时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "pay_time")
     private Date payTime;
 
@@ -73,18 +75,30 @@ public class OrderPayDO extends BaseDO implements Serializable {
     private String payStatus;
 
     /**
-     * 获取创建人
+     * 支付状态更新时间
+     */
+    @Column(name = "update_time")
+    private Date updateTime;
+
+    /**
+     * 支付结束时间
+     */
+    @Column(name = "end_time")
+    private Date endTime;
+
+    /**
+     * 获取订单支付id
      *
-     * @return id - 创建人
+     * @return id - 订单支付id
      */
     public Long getId() {
         return id;
     }
 
     /**
-     * 设置创建人
+     * 设置订单支付id
      *
-     * @param id 创建人
+     * @param id 订单支付id
      */
     public void setId(Long id) {
         this.id = id;
@@ -234,6 +248,42 @@ public class OrderPayDO extends BaseDO implements Serializable {
         this.payStatus = payStatus;
     }
 
+    /**
+     * 获取支付状态更新时间
+     *
+     * @return update_time 支付状态更新时间
+     */
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    /**
+     * 设置支付状态更新时间
+     *
+     * @param updateTime 支付状态更新时间
+     */
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取支付结束时间
+     *
+     * @return end_time 支付结束时间
+     */
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    /**
+     * 设置支付结束时间
+     *
+     * @param endTime 支付结束时间
+     */
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
     @Override
     public String toString() {
         return "OrderPayDO{" +
@@ -246,6 +296,8 @@ public class OrderPayDO extends BaseDO implements Serializable {
                 ", payAccount='" + payAccount + '\'' +
                 ", payTradeNo='" + payTradeNo + '\'' +
                 ", payStatus='" + payStatus + '\'' +
+                ", updateTime=" + updateTime +
+                ", endTime=" + endTime +
                 '}';
     }
 }

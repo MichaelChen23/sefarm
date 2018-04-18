@@ -1,0 +1,53 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${orderPayVO.id}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+
+                    <#input id="orderId" name="订单id" underline="true" value="${orderPayVO.orderId}"/>
+
+                    <#input id="payAmount" name="支付金额" underline="true" value="${orderPayVO.payAmount}"/>
+
+                    <#input id="payType" name="支付方式" underline="true" value="${orderPayVO.payType}"/>
+
+                    <#input id="payTradeNo" name="支付流水号" underline="true" value="${orderPayVO.payTradeNo}"/>
+
+                    <#input id="updateTime" name="状态更新时间" underline="true" value="${orderPayVO.updateTime}" disabled="disabled"/>
+
+                    <#input id="endTime" name="支付结束时间" value="${orderPayVO.endTime}" disabled="disabled"/>
+
+                </div>
+                <div class="col-sm-6">
+                    <div id="driverInfoContent">
+
+                        <#input id="orderNo" name="订单号" underline="true" value="${orderPayVO.orderNo}" disabled="disabled"/>
+
+                        <#input id="account" name="用户账号" underline="true" value="${orderPayVO.account}"/>
+
+                        <#input id="payTime" name="支付时间" underline="true" value="${orderPayVO.payTime}"
+                                clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
+
+                        <#input id="payAccount" name="实际支付帐号" underline="true" value="${orderPayVO.payAccount}"/>
+
+                        <#input id="payStatus" name="支付状态" value="${orderPayVO.payStatus}"/>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="OrderPayInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="OrderPayInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/order/pay/pay_info.js"></script>
+@}

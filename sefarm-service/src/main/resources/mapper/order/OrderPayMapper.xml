@@ -14,5 +14,68 @@
     <result column="pay_account" jdbcType="VARCHAR" property="payAccount" />
     <result column="pay_trade_no" jdbcType="VARCHAR" property="payTradeNo" />
     <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
   </resultMap>
+
+  <resultMap id="OrderPayVOResultMap" type="com.sefarm.common.vo.OrderPayVO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="pay_account" jdbcType="VARCHAR" property="payAccount" />
+    <result column="pay_trade_no" jdbcType="VARCHAR" property="payTradeNo" />
+    <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+  </resultMap>
+
+  <sql id="selectOrderPayVOALL">
+    SELECT
+    sop.id, sop.order_id, so.order_no AS order_no, sop.account, sop.pay_amount,
+    DATE_FORMAT(sop.pay_time, '%Y-%m-%d %T') AS pay_time, sop.pay_type, sop.pay_account,
+    sop.pay_trade_no, sop.pay_status, DATE_FORMAT(sop.update_time, '%Y-%m-%d %T') AS update_time, DATE_FORMAT(sop.end_time, '%Y-%m-%d %T') AS end_time
+    FROM sefarm_order_pay sop
+    LEFT JOIN sefarm_order so ON so.id = sop.order_id
+  </sql>
+
+  <select id="getOrderPayVOList" resultMap="OrderPayVOResultMap">
+    <include refid="selectOrderPayVOALL" />
+    <where>
+      <if test="name != null and '' != name">
+        AND sop.account LIKE CONCAT(#{name}, '%')
+      </if>
+      <if test="payAccount != null and '' != payAccount">
+        AND sop.pay_account LIKE CONCAT(#{payAccount}, '%')
+      </if>
+      <if test="orderNo != null and '' != orderNo">
+        AND so.order_no LIKE CONCAT(#{orderNo}, '%')
+      </if>
+      <if test="payStatus != null and '' != payStatus">
+        AND sop.pay_status = #{payStatus}
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(sop.pay_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(sop.pay_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
+
+  <select id="getOrderPayVO" resultMap="OrderPayVOResultMap">
+    <include refid="selectOrderPayVOALL" />
+    <where>
+      sop.id = #{payId}
+    </where>
+  </select>
+
 </mapper>
