@@ -7,15 +7,90 @@
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="sys_dept_id" jdbcType="BIGINT" property="sysDeptId" />
+    <result column="sys_user_id" jdbcType="BIGINT" property="sysUserId" />
     <result column="receiver" jdbcType="VARCHAR" property="receiver" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="express_name" jdbcType="VARCHAR" property="expressName" />
     <result column="express_no" jdbcType="VARCHAR" property="expressNo" />
-    <result column="handler_account" jdbcType="VARCHAR" property="handlerAccount" />
     <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
+
+  <resultMap id="OrderDeliveryVOResultMap" type="com.sefarm.common.vo.OrderDeliveryVO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="sys_dept_id" jdbcType="BIGINT" property="sysDeptId" />
+    <result column="sys_dept_name" jdbcType="VARCHAR" property="sysDeptName" />
+    <result column="sys_user_id" jdbcType="BIGINT" property="sysUserId" />
+    <result column="sys_user_name" jdbcType="VARCHAR" property="sysUserName" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="express_name" jdbcType="VARCHAR" property="expressName" />
+    <result column="express_no" jdbcType="VARCHAR" property="expressNo" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+    <result column="delivery_time" jdbcType="VARCHAR" property="deliveryTime" />
+    <result column="receive_time" jdbcType="VARCHAR" property="receiveTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+
+  <sql id="selectOrderDeliveryVOALL">
+    SELECT
+    sod.id, sod.order_id, so.order_no AS order_no, sod.sys_dept_id, ssd.name AS sys_dept_name, sod.sys_user_id, ssu.username AS sys_user_name,
+    sod.receiver, sod.address, sod.mobile, sod.express_name, sod.express_no, sod.status, sod.update_by,
+    DATE_FORMAT(sod.create_time, '%Y-%m-%d %T') AS create_time, DATE_FORMAT(sod.update_time, '%Y-%m-%d %T') AS update_time,
+    DATE_FORMAT(sod.delivery_time, '%Y-%m-%d %T') AS delivery_time, DATE_FORMAT(sod.receive_time, '%Y-%m-%d %T') AS receive_time, sod.remark
+    FROM sefarm_order_delivery sod
+    LEFT JOIN sefarm_order so ON so.id = sod.order_id
+    LEFT JOIN sefarm_sys_dept ssd ON ssd.id = sod.sys_dept_id
+    LEFT JOIN sefarm_sys_user ssu ON ssu.id = sod.sys_user_id
+  </sql>
+
+  <select id="getOrderDeliveryVOList" resultMap="OrderDeliveryVOResultMap">
+    <include refid="selectOrderDeliveryVOALL" />
+    <where>
+      <if test="orderNo != null and '' != orderNo">
+        AND so.order_no LIKE CONCAT(#{orderNo}, '%')
+      </if>
+      <if test="deptName != null and '' != deptName">
+        AND ssd.name LIKE CONCAT(#{deptName}, '%')
+      </if>
+      <if test="name != null and '' != name">
+        AND ssu.username LIKE CONCAT(#{name}, '%')
+      </if>
+      <if test="status != null and '' != status">
+        AND sod.status = #{status}
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(sod.create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(sod.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
+
+  <select id="getOrderDeliveryVO" resultMap="OrderDeliveryVOResultMap">
+    <include refid="selectOrderDeliveryVOALL" />
+    <where>
+      sod.id = #{deliveryId}
+    </where>
+  </select>
+
 </mapper>

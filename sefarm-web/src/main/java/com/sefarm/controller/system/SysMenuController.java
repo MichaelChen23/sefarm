@@ -128,13 +128,12 @@ public class SysMenuController extends BaseController {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
-
         try {
             // 完善菜单信息
             sysMenuDO.setCreateBy("sys");
             sysMenuDO.setCreateTime(new Date());
             //设上级菜单和层级
-            setMenuPcodeByPMenuId(sysMenuDO);
+            setMenuPcodeByPMenuId(sysMenuDO, true);
 
             Boolean res = sysMenuService.saveByObj(sysMenuDO);
             if (res) {
@@ -157,15 +156,15 @@ public class SysMenuController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public Tip update(@Valid SysMenuDO sysMenuDO, BindingResult result) {//一定要通过id来修改
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            if (result.hasErrors()) {
-                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-            }
             if (sysMenuDO != null) {
                 sysMenuDO.setUpdateBy("sys");
                 sysMenuDO.setUpdateTime(new Date());
                 //设上级菜单和层级
-                setMenuPcodeByPMenuId(sysMenuDO);
+                setMenuPcodeByPMenuId(sysMenuDO, false);
                 Boolean res = sysMenuService.updateByObj(sysMenuDO);
                 if (res) {
                     return SUCCESS_TIP;
@@ -186,10 +185,10 @@ public class SysMenuController extends BaseController {
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
     public Tip remove(@RequestParam Long menuId) {
+        if (ToolUtil.isEmpty(menuId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            if (ToolUtil.isEmpty(menuId)) {
-                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-            }
             sysMenuService.removeAllSubMenusByMenuId(menuId);
             return SUCCESS_TIP;
         } catch (Exception e) {
@@ -200,18 +199,24 @@ public class SysMenuController extends BaseController {
 
     /**
      * 根据上级菜单id设置pcode和层级
+     * @param isByPid 是否通过pid来查找上级
      */
-    private void setMenuPcodeByPMenuId(@Valid SysMenuDO sysMenuDO) {
+    private void setMenuPcodeByPMenuId(@Valid SysMenuDO sysMenuDO, Boolean isByPid) {
         if (StringUtils.isBlank(sysMenuDO.getPcode()) || sysMenuDO.getPcode().equals("0")) {
             sysMenuDO.setPcode("0");
             sysMenuDO.setPcodes("[0],");
             sysMenuDO.setLevels(1);
         } else {
-            //前端把上级菜单id存进了pcode
-            Long PMenuId = Long.parseLong(sysMenuDO.getPcode());
+            //新增保存的时候，前端把上级菜单id存进了pcode
             SysMenuDO menuDO = new SysMenuDO();
-            menuDO.setId(PMenuId);
+            if (isByPid) {
+                Long PMenuId = Long.parseLong(sysMenuDO.getPcode());
+                menuDO.setId(PMenuId);
+            } else {
+                menuDO.setCode(sysMenuDO.getPcode());
+            }
             SysMenuDO pMenu = sysMenuService.getOneByObj(menuDO);
+
             Integer pLevels = pMenu.getLevels();
             sysMenuDO.setPcode(pMenu.getCode());
 

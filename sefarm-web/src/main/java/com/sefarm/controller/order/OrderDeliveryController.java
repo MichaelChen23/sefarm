@@ -3,16 +3,25 @@ package com.sefarm.controller.order;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.constant.tips.ErrorTip;
+import com.sefarm.common.constant.tips.Tip;
+import com.sefarm.common.exception.BizExceptionEnum;
+import com.sefarm.common.exception.BussinessException;
+import com.sefarm.common.vo.OrderDeliveryVO;
+import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.order.OrderDeliveryDO;
 import com.sefarm.service.order.IOrderDeliveryService;
+import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -21,36 +30,143 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@RestController
+@Controller
 @RequestMapping("/order-dely")
-public class OrderDeliveryController {
+public class OrderDeliveryController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderDeliveryController.class);
+
+    private static String PREFIX = "/order/delivery/";
 
     @Reference(version = "1.0.0", timeout = 10000)
     public IOrderDeliveryService orderDeliveryService;
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public BaseResponse<Boolean> save(@RequestBody OrderDeliveryDO orderDeliveryDO) {
+    /**
+     * 跳转到查看 订单配送 列表的页面
+     */
+    @RequestMapping("")
+    public String index() {
+        return PREFIX + "delivery.html";
+    }
+
+    /**
+     * 跳转到新增 订单配送 的页面
+     */
+    @RequestMapping("/delivery_save")
+    public String saveView() {
+        return PREFIX + "delivery_save.html";
+    }
+
+    /**
+     * 跳转到修改 订单配送 的页面
+     */
+    @RequestMapping("/delivery_update/{deliveryId}")
+    public String updateView(@PathVariable Long deliveryId, Model model) {
+        if(ToolUtil.isEmpty(deliveryId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        //获取订单配送的信息
+        OrderDeliveryVO orderDeliveryVO = orderDeliveryService.getOrderDeliveryVO(deliveryId);
+        model.addAttribute(orderDeliveryVO);
+        return PREFIX + "delivery_update.html";
+    }
+
+    /**
+     * 按照查询条件查询 订单配送 列表
+     * @return
+     */
+    @RequestMapping(value = "/delivery_list", method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo<OrderDeliveryVO> getOrderDeliveryVOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr, @RequestParam(required = false) String orderNo,
+                                                            @RequestParam(required = false) String deptName, @RequestParam(required = false) String name, @RequestParam(required = false) String status, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
         try {
-            Boolean result = orderDeliveryService.saveByObj(orderDeliveryDO);
-            return BaseResponse.getRespByResultBool(result);
+            PageInfo<OrderDeliveryVO> result = orderDeliveryService.getOrderDeliveryVOList(pageIndex, pageSize, sortStr, orderStr, orderNo, deptName, name, status, createTimeBegin, createTimeEnd);
+            return result;
         } catch (Exception e) {
-            logger.error("order-dely save fail(保存失败)--"+orderDeliveryDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            logger.error("get order-dely list fail(获取 订单配送 列表失败) -- :{}", e.getMessage());
+            return null;
         }
     }
 
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
-    public BaseResponse<Boolean> remove(@RequestBody OrderDeliveryDO orderDeliveryDO) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+    /**
+     * 添加 订单配送
+     * @param orderDeliveryDO
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip save(@Valid OrderDeliveryDO orderDeliveryDO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            Boolean result = orderDeliveryService.removeByObj(orderDeliveryDO);
-            return BaseResponse.getRespByResultBool(result);
+            Boolean res = orderDeliveryService.saveByObj(orderDeliveryDO);
+            if (res) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
         } catch (Exception e) {
-            logger.error("order-dely delete fail(删除失败)--"+orderDeliveryDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            logger.error("order-dely save fail(保存失败)--"+orderDeliveryDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
         }
     }
+
+    /**
+     * 更新 订单配送
+     * @param orderDeliveryDO
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip update(@Valid OrderDeliveryDO orderDeliveryDO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            if (orderDeliveryDO != null) {
+                Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
+                if (res) {
+                    return SUCCESS_TIP;
+                }
+            }
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        } catch (Exception e) {
+            logger.error("order-dely update fail(更新失败)--"+orderDeliveryDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 删除 订单配送
+     * @param deliveryId
+     * @return
+     */
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip remove(@RequestParam Long deliveryId) {
+        if (ToolUtil.isEmpty(deliveryId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            OrderDeliveryDO orderDeliveryDO = new OrderDeliveryDO();
+            orderDeliveryDO.setId(deliveryId);
+            Boolean result = orderDeliveryService.removeByObj(orderDeliveryDO);
+            if (result) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("order-dely delete fail(删除失败)--"+deliveryId+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+
+
 
     @RequestMapping(value = "/removeList", method = RequestMethod.POST)
     public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除
@@ -60,17 +176,6 @@ public class OrderDeliveryController {
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
             logger.error("order-dely batch delete fail(批量删除失败)--"+ids+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
-    }
-
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public BaseResponse<Boolean> update(@RequestBody OrderDeliveryDO orderDeliveryDO) {//一定要通过id来修改
-        try {
-            Boolean result = orderDeliveryService.updateByObj(orderDeliveryDO);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("order-dely update fail(更新失败)--"+orderDeliveryDO.toString()+":{}", e.getMessage());
             return BaseResponse.getRespByResultBool(false);
         }
     }
