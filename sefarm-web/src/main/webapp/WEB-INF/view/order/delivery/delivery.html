@@ -22,11 +22,12 @@
                                     </div>
                                     <div class="col-lg-3 col-sm-3">
                                         <#select id="status" name="状态" underline="true">
-                                            <option value="new" selected="selected">新增</option>
+                                            <option value="" selected="selected">全部</option>
+                                            <option value="new">新增</option>
                                             <option value="check">审核中</option>
                                             <option value="ready">待发货</option>
                                             <option value="delivery">已发货</option>
-                                            <option value="sign">已签收</option>
+                                            <option value="receive">已接收</option>
                                             <option value="cancel">已取消</option>
                                         </#select>
                                     </div>
@@ -51,6 +52,9 @@
                             <#button name="添加" icon="fa-plus" clickFun="OrderDelivery.openSaveOrderDelivery()" />
                             <#button name="修改" icon="fa-edit" clickFun="OrderDelivery.openUpdateOrderDelivery()" space="true"/>
                             <#button name="删除" icon="fa-remove" clickFun="OrderDelivery.delOrderDelivery()" space="true"/>
+                            <#button name="待发货" icon="fa-pause" clickFun="OrderDelivery.readyOrder()" space="true"/>
+                            <#button name="发货" icon="fa-send" clickFun="OrderDelivery.deliveryOrder()" space="true"/>
+                            <#button name="已接收" icon="fa-sign-in" clickFun="OrderDelivery.receiveOrder()" space="true"/>
                         </div>
                         <#table id="orderDeliveryTable"/>
                     </div>

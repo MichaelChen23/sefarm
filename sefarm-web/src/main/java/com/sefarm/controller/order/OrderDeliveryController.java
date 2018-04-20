@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.constant.state.OrderDeliveryStatus;
 import com.sefarm.common.constant.tips.ErrorTip;
 import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
@@ -22,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -165,6 +167,90 @@ public class OrderDeliveryController extends BaseController {
         }
     }
 
+    /**
+     * 订单配送——待发货
+     * @param deliveryId
+     * @return
+     */
+    @RequestMapping(value = "/ready", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip readyOrder(@RequestParam Long deliveryId) {
+        if (ToolUtil.isEmpty(deliveryId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            OrderDeliveryDO orderDeliveryDO = new OrderDeliveryDO();
+            orderDeliveryDO.setId(deliveryId);
+            orderDeliveryDO.setStatus(OrderDeliveryStatus.READY.getCode());
+            orderDeliveryDO.setUpdateBy("sys");
+            orderDeliveryDO.setUpdateTime(new Date());
+            Boolean result = orderDeliveryService.updateByObj(orderDeliveryDO);
+            if (result) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("order-dely ready fail(待发货失败)--"+deliveryId+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 订单配送——发货
+     * @param deliveryId
+     * @return
+     */
+    @RequestMapping(value = "/delivery", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip deliveryOrder(@RequestParam Long deliveryId) {
+        if (ToolUtil.isEmpty(deliveryId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            OrderDeliveryDO orderDeliveryDO = new OrderDeliveryDO();
+            orderDeliveryDO.setId(deliveryId);
+            orderDeliveryDO.setStatus(OrderDeliveryStatus.DELIVERY.getCode());
+            orderDeliveryDO.setDeliveryTime(new Date());
+            Boolean result = orderDeliveryService.updateByObj(orderDeliveryDO);
+            if (result) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("order-dely delivery fail(发货失败)--"+deliveryId+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 订单配送——已签收
+     * @param deliveryId
+     * @return
+     */
+    @RequestMapping(value = "/receive", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip receiveOrder(@RequestParam Long deliveryId) {
+        if (ToolUtil.isEmpty(deliveryId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            OrderDeliveryDO orderDeliveryDO = new OrderDeliveryDO();
+            orderDeliveryDO.setId(deliveryId);
+            orderDeliveryDO.setStatus(OrderDeliveryStatus.RECEIVE.getCode());
+            orderDeliveryDO.setReceiveTime(new Date());
+            Boolean result = orderDeliveryService.updateByObj(orderDeliveryDO);
+            if (result) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("order-dely receive fail(接收失败)--"+deliveryId+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
 
 
 

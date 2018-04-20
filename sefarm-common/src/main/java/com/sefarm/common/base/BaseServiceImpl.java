@@ -76,6 +76,11 @@ public class BaseServiceImpl<M extends SeFarmMapper<T>, T extends BaseDO> implem
     }
 
     @Override
+    public List<T> getAllByObj(T DO) {
+        return mapper.select(DO);
+    }
+
+    @Override
     public Integer getCount(T DO) {
         return mapper.selectCount(DO);
     }

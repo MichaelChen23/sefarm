@@ -41,6 +41,71 @@ OrderDeliveryInfoDlg.close = function () {
 };
 
 /**
+ * 点击部门input框时
+ *
+ * @param e
+ * @param treeId
+ * @param treeNode
+ * @returns
+ */
+OrderDeliveryInfoDlg.onClickDept = function (e, treeId, treeNode) {
+    $("#deptSelect").attr("value", instance.getSelectedVal());
+    $("#sysDeptId").attr("value", treeNode.id);
+
+    //查找部门下的系统用户要先清空sysUserId的所有option
+    $("#sysUserId").empty();
+    //获取所选部门下的所有系统用户
+    $.ajax({
+        url: '/sys-user/list_by_deptid',
+        async: false,
+        type: "POST",
+        data: {
+            "deptId": treeNode.id
+        },
+        success: function (data, status) {
+            if (data != null) {
+                $.each(data, function (key, value) {
+                    var option = $("<option>").val(value.id).text(value.username);
+                    $("#sysUserId").append(option);
+                });
+            }
+        }
+    });
+
+};
+
+/**
+ * 显示部门选择的树
+ *
+ * @returns
+ */
+OrderDeliveryInfoDlg.showDeptSelectTree = function () {
+    var cityObj = $("#deptSelect");
+    var cityOffset = $("#deptSelect").offset();
+    $("#deptContent").css({
+        left: cityOffset.left + "px",
+        top: cityOffset.top + cityObj.outerHeight() + "px"
+    }).slideDown("fast");
+
+    $("body").bind("mousedown", onBodyDown);
+};
+
+/**
+ * 隐藏部门选择的树
+ */
+OrderDeliveryInfoDlg.hideDeptSelectTree = function () {
+    $("#deptContent").fadeOut("fast");
+    $("body").unbind("mousedown", onBodyDown);// mousedown当鼠标按下就可以触发，不用弹起
+};
+
+function onBodyDown(event) {
+    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(
+            event.target).parents("#menuContent").length > 0)) {
+        OrderDeliveryInfoDlg.hideDeptSelectTree();
+    }
+}
+
+/**
  * 收集数据
  */
 OrderDeliveryInfoDlg.collectData = function() {
@@ -89,9 +154,34 @@ OrderDeliveryInfoDlg.editSubmit = function() {
 };
 
 $(function() {
+    //初始化 部门树
+    var ztree = new $ZTree("deptTree", "/sys-dept/getDeptTree");
+    ztree.bindOnClick(OrderDeliveryInfoDlg.onClickDept);
+    ztree.init();
+    instance = ztree;
 
     //初始化状态选项
     $("#status").val($("#statusValue").val());
+
+    //获取所选部门下的所有系统用户
+    $.ajax({
+        url: '/sys-user/list_by_deptid',
+        async: false,
+        type: "POST",
+        data: {
+            "deptId": $("#sysDeptId").val()
+        },
+        success: function (data, status) {
+            if (data != null) {
+                $.each(data, function (key, value) {
+                    var option = $("<option>").val(value.id).text(value.username);
+                    $("#sysUserId").append(option);
+                });
+                //初始化 系统用户id
+                $("#sysUserId").find("option[value=" + $("#sysUserIdValue").val() + "]").attr("selected", true);
+            }
+        }
+    });
 
 });
 

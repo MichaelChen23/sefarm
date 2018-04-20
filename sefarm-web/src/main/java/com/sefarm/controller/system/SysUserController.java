@@ -261,7 +261,28 @@ public class SysUserController extends BaseController {
         }
     }
 
-
+    /**
+     * 根据部门id查询部门下所有系统用户
+     * @param deptId
+     * @return
+     */
+    @RequestMapping(value = "/list_by_deptid", method = RequestMethod.POST)
+    @ResponseBody
+    public List<SysUserDO> getListByDeptId(@RequestParam Long deptId) {
+        try {
+            //必须有选择dept的情况下才查询部门下的系统用户
+            if (!ToolUtil.isEmpty(deptId)) {
+                SysUserDO sysUserDO = new SysUserDO();
+                sysUserDO.setSysDeptId(deptId);
+                List<SysUserDO> list = sysUserService.getAllByObj(sysUserDO);
+                return list;
+            }
+            return null;
+        } catch (Exception e) {
+            logger.error("sys-user get list by deptId fail(获取列表失败)--"+deptId+":{}", e.getMessage());
+            return null;
+        }
+    }
 
 
 

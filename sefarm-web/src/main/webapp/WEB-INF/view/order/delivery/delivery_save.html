@@ -9,7 +9,9 @@
                 <div class="col-sm-6 b-r">
                     <#input id="orderId" name="订单id" underline="true"/>
 
-                    <#input id="sysDeptId" name="系统部门id" underline="true"/>
+                    <#input id="deptSelect" name="部门" underline="true" readonly="readonly" hidden="sysDeptId"
+                            clickFun="OrderDeliveryInfoDlg.showDeptSelectTree(); return false;"
+                            style="background-color: #ffffff !important;"/>
 
                     <#input id="receiver" name="收货人名" underline="true"/>
 
@@ -22,7 +24,7 @@
                         <option value="check">审核中</option>
                         <option value="ready">待发货</option>
                         <option value="delivery">已发货</option>
-                        <option value="sign">已签收</option>
+                        <option value="receive">已接收</option>
                         <option value="cancel">已取消</option>
                     </#select>
 
@@ -37,7 +39,7 @@
 
                         <#input id="orderNo" name="订单号" underline="true" disabled="disabled"/>
 
-                        <#input id="sysUserId" name="配送人id" underline="true"/>
+                        <#select id="sysUserId" name="配送人" underline="true"/>
 
                         <#input id="address" name="收货地址" underline="true"/>
 
@@ -56,6 +58,12 @@
 
                     </div>
                 </div>
+            </div>
+
+            <!-- 这是部门选择的下拉框 -->
+            <div id="deptContent" class="menuContent"
+                 style="display: none; position: absolute; z-index: 200;">
+                <ul id="deptTree" class="ztree tree-box" style="width: 250px !important;"></ul>
             </div>
 
             <div class="row btn-group-m-t">

@@ -286,14 +286,14 @@ public class MenuNode implements Comparable , Serializable {
         List<MenuNode> menuNodes = clearLevelTwo(clearBtn);
 
         //对菜单排序
-        Collections.sort(menuNodes);
+//        Collections.sort(menuNodes);
 
         //对菜单的子菜单进行排序
-        for (MenuNode menuNode : menuNodes) {
-            if (menuNode.getChildren() != null && menuNode.getChildren().size() > 0) {
-                Collections.sort(menuNode.getChildren());
-            }
-        }
+//        for (MenuNode menuNode : menuNodes) {
+//            if (menuNode.getChildren() != null && menuNode.getChildren().size() > 0) {
+//                Collections.sort(menuNode.getChildren());
+//            }
+//        }
 
         return menuNodes;
     }

@@ -56,11 +56,8 @@ function deliveryStatusFormatter(value, row, index) {
     if (row['status'] == 'delivery') {
         return '已发货';
     }
-    if (row['status'] == 'sign') {
-        return '已签收';
-    }
     if (row['status'] == 'receive') {
-        return '已签收';
+        return '已接收';
     }
     if (row['status'] == 'cancel') {
         return '已取消';
@@ -159,6 +156,57 @@ OrderDelivery.delOrderDelivery = function () {
         };
 
         Feng.confirm("是否删除 订单号为" + OrderDelivery.seItem.orderNo + " 的订单配送?", operation);
+    }
+};
+
+/**
+ * 订单配送——待发货
+ */
+OrderDelivery.readyOrder = function () {
+    if (this.check()) {
+        var deliveryId = OrderDelivery.seItem.id;
+        var ajax = new $ax(Feng.ctxPath + "/order-dely/ready", function () {
+            Feng.success("待发货成功!");
+            OrderDelivery.table.refresh();
+        }, function (data) {
+            Feng.error("待发货失败!" + data.responseJSON.message + "!");
+        });
+        ajax.set("deliveryId", deliveryId);
+        ajax.start();
+    }
+};
+
+/**
+ * 订单配送——发送
+ */
+OrderDelivery.deliveryOrder = function () {
+    if (this.check()) {
+        var deliveryId = OrderDelivery.seItem.id;
+        var ajax = new $ax(Feng.ctxPath + "/order-dely/delivery", function () {
+            Feng.success("发货成功!");
+            OrderDelivery.table.refresh();
+        }, function (data) {
+            Feng.error("发货失败!" + data.responseJSON.message + "!");
+        });
+        ajax.set("deliveryId", deliveryId);
+        ajax.start();
+    }
+};
+
+/**
+ * 订单配送——已接收
+ */
+OrderDelivery.receiveOrder = function () {
+    if (this.check()) {
+        var deliveryId = OrderDelivery.seItem.id;
+        var ajax = new $ax(Feng.ctxPath + "/order-dely/receive", function () {
+            Feng.success("接收成功!");
+            OrderDelivery.table.refresh();
+        }, function (data) {
+            Feng.error("接收失败!" + data.responseJSON.message + "!");
+        });
+        ajax.set("deliveryId", deliveryId);
+        ajax.start();
     }
 };
 
