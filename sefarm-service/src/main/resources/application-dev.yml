@@ -10,12 +10,9 @@ spring:
         # 主数据源，默认的
         main: master
         type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://192.168.30.26:3306/gd_dev?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=round&allowMultiQueries=true&autoReconnect=true
-        username: iperp_m2
-        password: QbdxeI8MUyOsfcIv0xNNvGIC
-#        url: jdbc:mysql://127.0.0.1:3306/sefarm_db?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=round&allowMultiQueries=true&autoReconnect=true
-#        username: root
-#        password: 123456
+        url: jdbc:mysql://127.0.0.1:3306/sefarm_db?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=round&allowMultiQueries=true&autoReconnect=true
+        username: root
+        password: 123456
         driverClassName: com.mysql.jdbc.Driver
         # Keep the connection alive if idle for a long time (needed in production)
         testWhileIdle: true
