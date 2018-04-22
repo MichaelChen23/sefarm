@@ -10,7 +10,7 @@
                 <div class="col-sm-6 b-r">
                     <#input id="name" name="角色名称" underline="true" value="${sysRoleVO.name}"/>
 
-                    <#input id="pName" name="上级名称" underline="true" hidden="pid" readonly="readonly" hiddenValue="${sysRoleVO.pid}" value="${sysRoleVO.pName}"
+                    <#input id="pNameSelect" name="上级名称" underline="true" hidden="pid" readonly="readonly" hiddenValue="${sysRoleVO.pid}" value="${sysRoleVO.pName}"
                             clickFun="SysRoleInfoDlg.showPNameSelectTree(); return false;"
                             style="background-color: #ffffff !important;"/>
 
@@ -23,7 +23,7 @@
 
                         <#input id="code" name="角色代码" underline="true" value="${sysRoleVO.code}"/>
 
-                        <#input id="deptName" name="部门名称" hidden="sysDeptId" readonly="readonly" hiddenValue="${sysRoleVO.sysDeptId}" value="${sysRoleVO.deptName}"
+                        <#input id="deptSelect" name="部门名称" hidden="sysDeptId" readonly="readonly" hiddenValue="${sysRoleVO.sysDeptId}" value="${sysRoleVO.deptName}"
                                 clickFun="SysRoleInfoDlg.showDeptNameSelectTree(); return false;"
                                 style="background-color: #ffffff !important;"/>
 

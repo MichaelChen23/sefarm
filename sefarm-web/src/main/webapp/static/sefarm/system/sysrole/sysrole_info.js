@@ -51,7 +51,7 @@ SysRoleInfoDlg.close = function () {
  * @returns
  */
 SysRoleInfoDlg.onClickDept = function(e, treeId, treeNode) {
-    $("#deptName").attr("value", SysRoleInfoDlg.deptZtree.getSelectedVal());
+    $("#deptSelect").attr("value", SysRoleInfoDlg.deptZtree.getSelectedVal());
     $("#sysDeptId").attr("value", treeNode.id);
 };
 
@@ -64,7 +64,7 @@ SysRoleInfoDlg.onClickDept = function(e, treeId, treeNode) {
  * @returns
  */
 SysRoleInfoDlg.onClickPName = function(e, treeId, treeNode) {
-    $("#pName").attr("value", SysRoleInfoDlg.pNameZtree.getSelectedVal());
+    $("#pNameSelect").attr("value", SysRoleInfoDlg.pNameZtree.getSelectedVal());
     $("#pid").attr("value", treeNode.id);
 };
 
@@ -74,8 +74,35 @@ SysRoleInfoDlg.onClickPName = function(e, treeId, treeNode) {
  * @returns
  */
 SysRoleInfoDlg.showDeptNameSelectTree = function() {
-    Feng.showInputTree("deptName","deptContent");
+    // Feng.showInputTree("deptName","deptContent");
+    //deptSelect为部门选择框的id
+    var deptObj = $("#deptSelect");
+    var deptOffset = $("#deptSelect").offset();
+    //deptContent为部门弹出框的id
+    $("#deptContent").css({
+        left: deptOffset.left + "px",
+        top: deptOffset.top + deptObj.outerHeight() + "px"
+    }).slideDown("fast");
+
+    $("body").bind("mousedown", onDeptBodyDown);
 };
+
+/**
+ * 隐藏部门选择的树
+ */
+SysRoleInfoDlg.hideDeptSelectTree = function () {
+    //deptContent为部门弹出框的id
+    $("#deptContent").fadeOut("fast");
+    $("body").unbind("mousedown", onDeptBodyDown);// mousedown当鼠标按下就可以触发，不用弹起
+};
+
+function onDeptBodyDown(event) {
+    //menuContent为部门弹出框deptContent的class样式
+    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(
+            event.target).parents("#menuContent").length > 0)) {
+        SysRoleInfoDlg.hideDeptSelectTree();
+    }
+}
 
 /**
  * 显示上级角色选择的树
@@ -83,7 +110,34 @@ SysRoleInfoDlg.showDeptNameSelectTree = function() {
  * @returns
  */
 SysRoleInfoDlg.showPNameSelectTree = function() {
-    Feng.showInputTree("pName","pNameContent");
+    // Feng.showInputTree("pName","pNameContent");
+    //pNameSelect为上级选择框的id
+    var pNameObj = $("#pNameSelect");
+    var pNameOffset = $("#pNameSelect").offset();
+    //pNameContent为上级弹出框的id
+    $("#pNameContent").css({
+        left: pNameOffset.left + "px",
+        top: pNameOffset.top + pNameObj.outerHeight() + "px"
+    }).slideDown("fast");
+
+    $("body").bind("mousedown", onpNameBodyDown);
+};
+
+/**
+ * 隐藏上级角色选择的树
+ */
+SysRoleInfoDlg.hidepNameSelectTree = function () {
+    //pNameContent为上级弹出框的id
+    $("#pNameContent").fadeOut("fast");
+    $("body").unbind("mousedown", onpNameBodyDown);// mousedown当鼠标按下就可以触发，不用弹起
+};
+
+function onpNameBodyDown(event) {
+    //menuContent为部门弹出框pNameContent的class样式
+    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(
+            event.target).parents("#menuContent").length > 0)) {
+        SysRoleInfoDlg.hidepNameSelectTree();
+    }
 };
 
 /**

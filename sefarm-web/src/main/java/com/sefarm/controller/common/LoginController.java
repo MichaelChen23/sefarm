@@ -46,9 +46,11 @@ public class LoginController extends BaseController {
 //        model.addAttribute("tips", "该用户没有角色，无法登陆");
 //        return "/login.html";
 //        }
+
         List<MenuNode> menus = sysMenuService.getMenusByRoleId(88L);
         List<MenuNode> titles = MenuNode.buildTitle(menus);
         model.addAttribute("titles", titles);
+
 //
 //        //获取用户头像
 //        Integer id = ShiroKit.getUser().getId();
@@ -117,7 +119,7 @@ public class LoginController extends BaseController {
 //            userDO.setLastLoginTime(new Date());
 //            //更新最新登录时间
 //            sysUserService.updateByObj(userDO);
-            return "/index.html";
+            return REDIRECT + "/admin";
         } else {
             return "/login.html";
         }

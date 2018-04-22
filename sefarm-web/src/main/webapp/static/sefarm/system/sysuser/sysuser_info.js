@@ -88,7 +88,7 @@ function onBodyDown(event) {
             event.target).parents("#menuContent").length > 0)) {
         SysUserInfoDlg.hideDeptSelectTree();
     }
-}
+};
 
 /**
  * 收集数据

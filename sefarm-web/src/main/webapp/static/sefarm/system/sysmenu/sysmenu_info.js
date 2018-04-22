@@ -50,7 +50,7 @@ SysMenuInfoDlg.close = function () {
  * @returns
  */
 SysMenuInfoDlg.onClickPName = function(e, treeId, treeNode) {
-    $("#pName").attr("value", SysMenuInfoDlg.pNameZtree.getSelectedVal());
+    $("#pNameSelect").attr("value", SysMenuInfoDlg.pNameZtree.getSelectedVal());
     $("#pcode").attr("value", treeNode.id);
 };
 
@@ -60,7 +60,34 @@ SysMenuInfoDlg.onClickPName = function(e, treeId, treeNode) {
  * @returns
  */
 SysMenuInfoDlg.showPNameSelectTree = function() {
-    Feng.showInputTree("pName","pNameContent");
+    // Feng.showInputTree("pName","pNameContent");
+    // pNameSelect为上级菜单选择框的id
+    var pNameObj = $("#pNameSelect");
+    var pNameOffset = $("#pNameSelect").offset();
+    //pNameContent为上级菜单弹出框的id
+    $("#pNameContent").css({
+        left: pNameOffset.left + "px",
+        top: pNameOffset.top + pNameObj.outerHeight() + "px"
+    }).slideDown("fast");
+
+    $("body").bind("mousedown", onpNameBodyDown);
+};
+
+/**
+ * 隐藏上级菜单选择的树
+ */
+SysMenuInfoDlg.hidepNameSelectTree = function () {
+    //pNameContent为上级菜单弹出框的id
+    $("#pNameContent").fadeOut("fast");
+    $("body").unbind("mousedown", onpNameBodyDown);// mousedown当鼠标按下就可以触发，不用弹起
+};
+
+function onpNameBodyDown(event) {
+    //menuContent为上级菜单弹出框pNameContent的class样式
+    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(
+            event.target).parents("#menuContent").length > 0)) {
+        SysMenuInfoDlg.hidepNameSelectTree();
+    }
 };
 
 /**
