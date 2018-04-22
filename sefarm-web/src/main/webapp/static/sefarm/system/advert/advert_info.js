@@ -79,8 +79,10 @@ AdvertInfoDlg.editSubmit = function() {
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/advert/update", function(data){
         Feng.success("修改成功!");
-        window.parent.Advert.table.refresh();
-        AdvertInfoDlg.close();
+        if(window.parent.Advert != undefined) {
+            window.parent.Advert.table.refresh();
+            AdvertInfoDlg.close();
+        }
     },function(data){
         Feng.error("修改失败!" + data.responseJSON.message + "!");
     });
@@ -95,5 +97,9 @@ $(function() {
     //初始化时间并转换格式
     $("#startTime").val(timeFormatter($("#startTimeValue").val()));
     $("#endTime").val(timeFormatter($("#endTimeValue").val()));
+
+    // 初始化图片上传
+    var imageUp = new $WebUpload("image");
+    imageUp.init();
 });
 

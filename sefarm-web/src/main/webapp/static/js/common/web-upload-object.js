@@ -13,7 +13,7 @@
 		this.pictureId = pictureId;
 		this.uploadBtnId = pictureId + "BtnId";
 		this.uploadPreId = pictureId + "PreId";
-		this.uploadUrl = Feng.ctxPath + '/mgr/upload';
+		this.uploadUrl = Feng.ctxPath + '/image/upload';
 		this.fileSizeLimit = 10 * 1024 * 1024;
 		this.picWidth = 800;
 		this.picHeight = 800;
@@ -83,7 +83,9 @@
 			// 文件上传成功，给item添加成功class, 用样式标记上传成功。
 			bindedObj.on('uploadSuccess', function(file,response) {
 				Feng.success("上传成功");
-				$("#" + me.pictureId).val(response);
+				// 获取成功上传文件的路径
+                var imageUrl = response._raw;
+				$("#" + me.pictureId).val(imageUrl);
 			});
 
 			// 文件上传失败，显示上传出错。

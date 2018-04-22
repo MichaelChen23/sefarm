@@ -2,14 +2,10 @@ package com.sefarm.controller.common;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
-import com.sefarm.config.properties.SeFarmProperties;
-import com.sefarm.common.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +23,6 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/kaptcha")
 public class KaptchaController {
-
-    @Resource
-    private SeFarmProperties seFarmProperties;
 
     /**
      * 图片处理类
@@ -97,25 +90,4 @@ public class KaptchaController {
         }
     }
 
-    /**
-     * 返回图片
-     *
-     * @author mc
-     * @date 2018-3-30
-     */
-    @RequestMapping("/{pictureId}")
-    public void renderPicture(@PathVariable("pictureId") String pictureId, HttpServletResponse response) {
-        String path = seFarmProperties.getFileUploadPath() + pictureId + ".jpg";
-        try {
-            byte[] bytes = FileUtil.toByteArray(path);
-            response.getOutputStream().write(bytes);
-        }catch (Exception e){
-            //如果找不到图片就返回一个默认图片
-            try {
-                response.sendRedirect("/static/img/girl.gif");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
 }
