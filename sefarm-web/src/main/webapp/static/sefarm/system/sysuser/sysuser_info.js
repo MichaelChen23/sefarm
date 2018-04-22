@@ -49,7 +49,9 @@ SysUserInfoDlg.close = function () {
  * @returns
  */
 SysUserInfoDlg.onClickDept = function (e, treeId, treeNode) {
-    $("#citySel").attr("value", instance.getSelectedVal());
+    //deptSelect为部门选择框的id
+    $("#deptSelect").attr("value", instance.getSelectedVal());
+    //sysDeptId为上传部门id
     $("#sysDeptId").attr("value", treeNode.id);
 };
 
@@ -59,27 +61,13 @@ SysUserInfoDlg.onClickDept = function (e, treeId, treeNode) {
  * @returns
  */
 SysUserInfoDlg.showDeptSelectTree = function () {
-    var cityObj = $("#citySel");
-    var cityOffset = $("#citySel").offset();
-    $("#menuContent").css({
-        left: cityOffset.left + "px",
-        top: cityOffset.top + cityObj.outerHeight() + "px"
-    }).slideDown("fast");
-
-    $("body").bind("mousedown", onBodyDown);
-};
-
-/**
- * 显示用户详情部门选择的树
- *
- * @returns
- */
-SysUserInfoDlg.showInfoDeptSelectTree = function () {
-    var cityObj = $("#citySel");
-    var cityPosition = $("#citySel").position();
-    $("#menuContent").css({
-        left: cityPosition.left + "px",
-        top: cityPosition.top + cityObj.outerHeight() + "px"
+    //deptSelect为部门选择框的id
+    var deptObj = $("#deptSelect");
+    var deptOffset = $("#deptSelect").offset();
+    //deptContent为部门弹出框的id
+    $("#deptContent").css({
+        left: deptOffset.left + "px",
+        top: deptOffset.top + deptObj.outerHeight() + "px"
     }).slideDown("fast");
 
     $("body").bind("mousedown", onBodyDown);
@@ -89,9 +77,18 @@ SysUserInfoDlg.showInfoDeptSelectTree = function () {
  * 隐藏部门选择的树
  */
 SysUserInfoDlg.hideDeptSelectTree = function () {
-    $("#menuContent").fadeOut("fast");
+    //deptContent为部门弹出框的id
+    $("#deptContent").fadeOut("fast");
     $("body").unbind("mousedown", onBodyDown);// mousedown当鼠标按下就可以触发，不用弹起
 };
+
+function onBodyDown(event) {
+    //menuContent为部门弹出框deptContent的class样式
+    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(
+            event.target).parents("#menuContent").length > 0)) {
+        SysUserInfoDlg.hideDeptSelectTree();
+    }
+}
 
 /**
  * 收集数据
@@ -177,13 +174,6 @@ SysUserInfoDlg.chPwd = function () {
     ajax.start();
 
 };
-
-function onBodyDown(event) {
-    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(
-            event.target).parents("#menuContent").length > 0)) {
-        SysUserInfoDlg.hideDeptSelectTree();
-    }
-}
 
 $(function () {
     var ztree = new $ZTree("treeDemo", "/sys-dept/getDeptTree");

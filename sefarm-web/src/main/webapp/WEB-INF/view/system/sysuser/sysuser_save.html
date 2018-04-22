@@ -36,7 +36,7 @@
 
                         <#input id="phone" name="座机电话" underline="true"/>
 
-                        <#input id="citySel" name="部门" underline="true" readonly="readonly" hidden="sysDeptId"
+                        <#input id="deptSelect" name="部门" underline="true" readonly="readonly" hidden="sysDeptId"
                                 clickFun="SysUserInfoDlg.showDeptSelectTree(); return false;"
                                 style="background-color: #ffffff !important;"/>
 
@@ -50,7 +50,7 @@
             </div>
 
             <!-- 这是部门选择的下拉框 -->
-            <div id="menuContent" class="menuContent"
+            <div id="deptContent" class="menuContent"
                  style="display: none; position: absolute; z-index: 200;">
                 <ul id="treeDemo" class="ztree tree-box" style="width: 249px !important;"></ul>
             </div>
