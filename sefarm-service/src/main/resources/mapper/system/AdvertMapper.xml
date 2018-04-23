@@ -43,4 +43,21 @@
     </where>
     ORDER BY ${sortName} ${sortOrder}
   </select>
+
+  <!-- 移动前端调用的分页查询 add by mc 2018-4-23 -->
+  <select id="getAdvertPageList" resultMap="BaseResultMap">
+    SELECT *
+    FROM sefarm_advert
+    <where>
+      status = 'y'
+      AND (
+      (start_time IS NULL AND end_time IS NULL) OR
+      (start_time IS NOT NULL AND end_time IS NULL AND NOW() &gt;= start_time) OR
+      (start_time IS NULL AND end_time IS NOT NULL AND NOW() &lt;= end_time ) OR
+      (start_time IS NOT NULL AND end_time IS NOT NULL AND (NOW() BETWEEN start_time AND end_time))
+      )
+    </where>
+    ORDER BY sort DESC, create_time ASC
+    LIMIT #{pageIndex}, #{pageSize}
+  </select>
 </mapper>

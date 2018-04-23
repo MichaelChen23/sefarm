@@ -24,4 +24,12 @@ public interface AdvertMapper extends SeFarmMapper<AdvertDO> {
      * @return
      */
     List<AdvertDO> getAdvertDOList(@Param("name")String name, @Param("createTimeBegin")String createTimeBegin, @Param("createTimeEnd")String createTimeEnd, @Param("sortName")String sort, @Param("sortOrder")String order);
+
+    /**
+     * 移动前端 分页查询
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    List<AdvertDO> getAdvertPageList(@Param("pageIndex")Integer pageIndex, @Param("pageSize")Integer pageSize);
 }

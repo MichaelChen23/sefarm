@@ -3,6 +3,7 @@ package com.sefarm.controller.system;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
+import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.constant.tips.ErrorTip;
 import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 广告的Controller
@@ -142,6 +144,11 @@ public class AdvertController extends BaseController {
         }
     }
 
+    /**
+     * 删除 广告
+     * @param advertId
+     * @return
+     */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
     public Tip remove(@RequestParam Long advertId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
@@ -160,6 +167,24 @@ public class AdvertController extends BaseController {
         } catch (Exception e) {
             logger.error("advert delete fail(删除失败)--"+advertId+":{}", e.getMessage());
             return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 移动前端 分页查询
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(value = "/getPageList", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<List<AdvertDO>> getAdvertPageList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
+        try {
+            List<AdvertDO> list = advertService.getAdvertPageList(pageIndex, pageSize);
+            return new BaseResponse<>(list);
+        } catch (Exception e) {
+            logger.error("advert get page list (获取广告分页list失败)-- :{}", e.getMessage());
+            return null;
         }
     }
 

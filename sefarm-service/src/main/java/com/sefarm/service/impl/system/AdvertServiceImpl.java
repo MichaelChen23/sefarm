@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseServiceImpl;
+import com.sefarm.common.util.PageKit;
 import com.sefarm.common.util.StrKit;
 import com.sefarm.dao.system.AdvertMapper;
 import com.sefarm.model.system.AdvertDO;
@@ -29,4 +30,11 @@ public class AdvertServiceImpl extends BaseServiceImpl<AdvertMapper, AdvertDO> i
         PageInfo<AdvertDO> page = new PageInfo<>(list);
         return page;
     }
+
+    @Override
+    public List<AdvertDO> getAdvertPageList(Integer pageIndex, Integer pageSize) {
+        Integer[] offsetArray = PageKit.transToPageOffset(pageIndex, pageSize);
+        return getMapper().getAdvertPageList(offsetArray[0], offsetArray[1]);
+    }
+
 }

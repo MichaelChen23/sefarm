@@ -3,6 +3,8 @@ package com.sefarm.controller.common;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.google.code.kaptcha.Constants;
 import com.sefarm.common.Constant;
+import com.sefarm.common.exception.BizExceptionEnum;
+import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.exception.InvalidKaptchaException;
 import com.sefarm.common.node.MenuNode;
 import com.sefarm.model.system.SysUserDO;
@@ -12,6 +14,7 @@ import com.sefarm.util.ToolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -37,8 +40,8 @@ public class LoginController extends BaseController {
     /**
      * 跳转到主页
      */
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String index(Model model) {
+    @RequestMapping(value = "/admin/{sysRoleId}", method = RequestMethod.GET)
+    public String index(@PathVariable Long sysRoleId, Model model) {
         //获取菜单列表
 //        List<Integer> roleList = ShiroKit.getUser().getRoleList();
 //        if(roleList == null || roleList.size() == 0){
@@ -46,6 +49,10 @@ public class LoginController extends BaseController {
 //        model.addAttribute("tips", "该用户没有角色，无法登陆");
 //        return "/login.html";
 //        }
+
+        if (ToolUtil.isEmpty(sysRoleId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
 
         List<MenuNode> menus = sysMenuService.getMenusByRoleId(88L);
         List<MenuNode> titles = MenuNode.buildTitle(menus);
@@ -119,7 +126,7 @@ public class LoginController extends BaseController {
 //            userDO.setLastLoginTime(new Date());
 //            //更新最新登录时间
 //            sysUserService.updateByObj(userDO);
-            return REDIRECT + "/admin";
+            return REDIRECT + "/admin/" + userDO.getSysRoleId();
         } else {
             return "/login.html";
         }

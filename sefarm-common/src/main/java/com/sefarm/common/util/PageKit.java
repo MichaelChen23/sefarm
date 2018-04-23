@@ -1,5 +1,7 @@
 package com.sefarm.common.util;
 
+import com.sefarm.common.Constant;
+
 /**
  * 分页工具类
  *
@@ -53,5 +55,33 @@ public class PageKit {
 		}
 		return totalCount % numPerPage == 0 ? (totalCount / numPerPage)
 				: (totalCount / numPerPage + 1);
+	}
+
+	/**
+	 * 根据页数和页码转化为数据库sql的limit的offset, row，
+	 * add by mc 2018-4-23
+	 * 例如：<br>
+	 * 页码：1，每页10 -> [0, 10]<br>
+	 * 页码：2，每页10 -> [10, 20]<br>
+	 *
+	 * @param pageIndex 页数 默认第1页
+	 * @param pageSize 页码，每页多少行，默认10行
+	 * @return 第一个数为开始位置offset，第二个数为接下去的第几行row
+	 */
+	public static Integer[] transToPageOffset(Integer pageIndex, Integer pageSize) {
+		if (pageIndex < 1) {
+			//默认为第一页
+			pageIndex = Constant.DEFAULT_PAGE_INDEX;
+		}
+
+		if (pageSize < 1) {
+			//默认为每页10行
+			pageSize = Constant.DEFAULT_ROWS;
+		}
+
+		Integer offset = (pageIndex - 1) * pageSize;
+		Integer row = pageSize;
+
+		return new Integer[] { offset, row };
 	}
 }
