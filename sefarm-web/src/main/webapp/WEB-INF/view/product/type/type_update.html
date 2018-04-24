@@ -20,9 +20,11 @@
                 <div class="col-sm-6">
                     <div id="driverInfoContent">
 
+                        <#image id="image" name="图片" underline="true" imageName="${productTypeVO.image}"/>
+
                         <#input id="description" name="描述" underline="true" value="${productTypeVO.description}"/>
 
-                        <#select id="status" name="状态" underline="true">
+                        <#select id="status" name="状态">
                             <option value="y">开启</option>
                             <option value="n">停用</option>
                         </#select>

@@ -39,7 +39,7 @@ public class ProductCommentController extends BaseController {
 
     private static String PREFIX = "/product/comment/";
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public IProductCommentService productCommentService;
 
     /**
@@ -166,6 +166,29 @@ public class ProductCommentController extends BaseController {
             return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
         }
     }
+
+    /**
+     * 移动前端——根据产品id、订单id、星级数 分页获取 产品评论 列表
+     * @param pageIndex
+     * @param pageSize
+     * @param productId
+     * @param orderId
+     * @param stars
+     * @return
+     */
+    @RequestMapping(value = "/getPageList", method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo<ProductCommentDO> getProductCommentPageDOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize,
+                                                                  @RequestParam(required = false) Long productId, @RequestParam(required = false) Long orderId, @RequestParam(required = false) Integer stars) {
+        try {
+            PageInfo<ProductCommentDO> result = productCommentService.getProductCommentPageDOList(pageIndex, pageSize, productId, orderId, stars);
+            return result;
+        } catch (Exception e) {
+            logger.error("get prod-comment page list fail(获取 产品评论 分页list 列表失败) -- :{}", e.getMessage());
+            return null;
+        }
+    }
+
 
     @RequestMapping(value = "/removeList", method = RequestMethod.POST)
     public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除

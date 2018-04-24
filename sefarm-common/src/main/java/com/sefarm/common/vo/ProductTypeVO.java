@@ -31,6 +31,11 @@ public class ProductTypeVO implements Serializable {
     private String productCatalogName;
 
     /**
+     * 产品类型图片
+     */
+    private String image;
+
+    /**
      * 排序号，1最小，默认为1
      */
     private Integer sort;
@@ -97,6 +102,14 @@ public class ProductTypeVO implements Serializable {
         this.productCatalogName = productCatalogName;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public Integer getSort() {
         return sort;
     }
@@ -160,6 +173,7 @@ public class ProductTypeVO implements Serializable {
                 ", name='" + name + '\'' +
                 ", productCatalogId=" + productCatalogId +
                 ", productCatalogName='" + productCatalogName + '\'' +
+                ", image='" + image + '\'' +
                 ", sort=" + sort +
                 ", status='" + status + '\'' +
                 ", description='" + description + '\'' +

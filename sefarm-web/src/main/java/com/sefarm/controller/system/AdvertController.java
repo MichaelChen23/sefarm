@@ -37,7 +37,7 @@ public class AdvertController extends BaseController {
 
     private static String PREFIX = "/system/advert/";
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public IAdvertService advertService;
 
     /**

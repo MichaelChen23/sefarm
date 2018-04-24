@@ -1,0 +1,84 @@
+########################################################
+### 开发环境配置
+########################################################
+# springboot配置
+spring:
+    # 多环境配置
+    profiles: prod
+    # Mysql DataSource
+    datasource:
+        # 主数据源，默认的
+        main: master
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/sefarm_db?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=round&allowMultiQueries=true&autoReconnect=true
+        username: ji_dba
+        password: $mcdll886
+        # Keep the connection alive if idle for a long time (needed in production)
+        testWhileIdle: true
+        validationQuery: SELECT 1
+        # 初始化大小，最小，最大
+        initialSize: 5
+        minIdle: 5
+        maxActive: 20
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        #配置一个连接在池中最小生存的时间，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，‘wall‘用于防火墙
+        filters: stat,wall,slf4j
+        # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+        # 合并多个DruidDataSource的监控数据
+        useGlobalDataSourceStat: true
+    #dubbo配置
+    dubbo:
+        application:
+            name: sefarm-service
+        registry:
+            # zookeeper注册中心的地址
+            address: zookeeper://172.17.120.48:2181
+            timeout: 40000
+        protocol:
+            name: dubbo
+            port: 20880
+        # dubbo服务发布者所在的包
+        scan: com.sefarm.service
+
+########################################################
+### mybatis 配置
+########################################################
+mybatis:
+      type-aliases-package: com.sefarm.model
+      mapper-locations: classpath*:mapper/*/*.xml
+
+mapper:
+      mappers: com.sefarm.common.base.SeFarmMapper
+      not-empty: true
+      identity: select uuid()
+      order: before
+
+pagehelper:
+      helperDialect: mysql
+      reasonable: true
+      supportMethodsArguments: true
+      params: count=countSql
+
+########################################################
+### server 配置
+########################################################
+server:
+      port: 8088
+
+logging: # 与 logback.xml配置任选其一，如果两者存在，优先xml配置文件
+      level:  #控制台输出——日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出。
+          root: info # logging.level.root=WARN：root日志以WARN级别输出
+          tk.mybatis: info # logging.level.com.ji=DEBUG：com.ji包下所有class以DEBUG级别输出
+          com.sefarm: info
+      path: /sefarm/service/log # 设置目录，会在该目录下创建spring.log文件，并写入日志内容
+      file: sefarm_server.log

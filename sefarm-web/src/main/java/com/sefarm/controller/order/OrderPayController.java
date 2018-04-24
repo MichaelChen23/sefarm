@@ -38,7 +38,7 @@ public class OrderPayController extends BaseController {
 
     private static String PREFIX = "/order/pay/";
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public IOrderPayService orderPayService;
 
     /**

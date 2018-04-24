@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.IBaseService;
 import com.sefarm.model.product.ProductCatalogDO;
 
+import java.util.List;
+
 /**
  * 产品目录的服务接口
  *
@@ -24,4 +26,10 @@ public interface IProductCatalogService extends IBaseService<ProductCatalogDO> {
      * @return
      */
     PageInfo<ProductCatalogDO> getProductCatalogDOList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, String name, String createTimeBegin, String createTimeEnd);
+
+    /**
+     * 移动前端 获取所有产品目录
+     * @return
+     */
+    List<ProductCatalogDO> getAllProductCatalogList();
 }

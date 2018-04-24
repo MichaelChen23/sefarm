@@ -37,4 +37,9 @@ public abstract class Constant {
 	 * 系统用户默认密码
 	 */
 	public static final String DEFAULT_SYS_USER_PWD = "888888";
+
+	/**
+	 * DUBBO接口的timeout时间 add mc 2018-4-24
+	 */
+	public static final int DUBBO_TIME_OUT = 100000;
 }

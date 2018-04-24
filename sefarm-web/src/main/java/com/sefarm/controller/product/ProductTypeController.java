@@ -39,7 +39,7 @@ public class ProductTypeController extends BaseController {
 
     private static String PREFIX = "/product/type/";
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public IProductTypeService productTypeService;
 
     /**
@@ -170,6 +170,10 @@ public class ProductTypeController extends BaseController {
         }
     }
 
+    /**
+     * 获取所有的产品类型list 后台select使用
+     * @return
+     */
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @ResponseBody
     public BaseResponse<List<ProductTypeDO>> getAll() {
@@ -181,6 +185,25 @@ public class ProductTypeController extends BaseController {
             return null;
         }
     }
+
+    /**
+     * 移动前端——根据产品目录id获取全部的产品类型
+     * add by mc 2018-4-24
+     * @param catalogId 产品目录id
+     * @return
+     */
+    @RequestMapping(value = "/getAllListByCatalogId", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<List<ProductTypeDO>> getAllProductTypeListByCatalogId(@RequestParam Long catalogId) {
+        try {
+            List<ProductTypeDO> list = productTypeService.getProductTypeListByCatalogId(catalogId);
+            return new BaseResponse<>(list);
+        } catch (Exception e) {
+            logger.error("prod-type get all list by catalogid (获取全部产品类型list失败)-- :{}", e.getMessage());
+            return null;
+        }
+    }
+
 
     @RequestMapping(value = "/removeList", method = RequestMethod.POST)
     public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除

@@ -36,6 +36,11 @@ public class ProductTypeDO extends BaseDO implements Serializable {
     private Long productCatalogId;
 
     /**
+     * 产品类型图片
+     */
+    private String image;
+
+    /**
      * 排序号，1最小，默认为1
      */
     private Integer sort;
@@ -126,6 +131,24 @@ public class ProductTypeDO extends BaseDO implements Serializable {
      */
     public void setProductCatalogId(Long productCatalogId) {
         this.productCatalogId = productCatalogId;
+    }
+
+    /**
+     * 获取产品类型图片
+     *
+     * @return image - 产品类型图片
+     */
+    public String getImage() {
+        return image;
+    }
+
+    /**
+     * 设置产品类型图片
+     *
+     * @param image 产品类型图片
+     */
+    public void setImage(String image) {
+        this.image = image;
     }
 
     /**
@@ -260,6 +283,7 @@ public class ProductTypeDO extends BaseDO implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", productCatalogId=" + productCatalogId +
+                ", image='" + image + '\'' +
                 ", sort=" + sort +
                 ", status='" + status + '\'' +
                 ", description='" + description + '\'' +

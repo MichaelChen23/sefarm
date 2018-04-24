@@ -96,6 +96,10 @@ $(function() {
     $("#newFlag").val($("#newFlagValue").val());
     $("#saleFlag").val($("#saleFlagValue").val());
 
+    // 初始化小图片上传
+    var pictureUp = new $WebUpload("picture");
+    pictureUp.init();
+
     //获取所有的产品类型
     $.ajax({
         url: '/prod-type/getAll',

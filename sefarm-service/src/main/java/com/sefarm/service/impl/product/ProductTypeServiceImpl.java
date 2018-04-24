@@ -3,12 +3,14 @@ package com.sefarm.service.impl.product;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseServiceImpl;
 import com.sefarm.common.util.StrKit;
 import com.sefarm.common.vo.ProductTypeVO;
 import com.sefarm.dao.product.ProductTypeMapper;
 import com.sefarm.model.product.ProductTypeDO;
 import com.sefarm.service.product.IProductTypeService;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -34,5 +36,16 @@ public class ProductTypeServiceImpl extends BaseServiceImpl<ProductTypeMapper, P
     @Override
     public ProductTypeVO getProductTypeVO(Long prodTypeId) {
         return getMapper().getProductTypeVO(prodTypeId);
+    }
+
+    @Override
+    public List<ProductTypeDO> getProductTypeListByCatalogId(Long catalogId) {
+        Example example = new Example(ProductTypeDO.class);
+        //根据产品目录id查询相应产品类型list，并且是开启状态的
+        example.createCriteria().andEqualTo("productCatalogId", catalogId).andEqualTo("status", Constant.STATUS_UNLOCK);
+        //按照sort值最大的为先顺序排序
+        example.orderBy("sort").desc();
+        List<ProductTypeDO> list = getMapper().selectByExample(example);
+        return list;
     }
 }

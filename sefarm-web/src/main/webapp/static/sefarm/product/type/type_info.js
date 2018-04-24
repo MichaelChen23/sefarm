@@ -44,7 +44,7 @@ ProdTypeInfoDlg.close = function () {
  * 收集数据
  */
 ProdTypeInfoDlg.collectData = function() {
-    this.set('id').set('name').set('productCatalogId').set('sort').set('description').set('status');
+    this.set('id').set('name').set('productCatalogId').set('image').set('sort').set('description').set('status');
 };
 
 /**
@@ -91,6 +91,10 @@ $(function() {
 
     //初始化状态选项
     $("#status").val($("#statusValue").val());
+
+    // 初始化图片上传
+    var imageUp = new $WebUpload("image");
+    imageUp.init();
 
     //获取所有的产品目录
     $.ajax({

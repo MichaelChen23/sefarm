@@ -41,7 +41,7 @@ public class SysDeptController extends BaseController {
      */
     private static String PREFIX = "/system/sysdept/";
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public ISysDeptService sysDeptService;
 
     /**

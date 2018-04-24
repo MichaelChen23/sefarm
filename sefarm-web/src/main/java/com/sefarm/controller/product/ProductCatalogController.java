@@ -38,7 +38,7 @@ public class ProductCatalogController extends BaseController {
 
     private static String PREFIX = "/product/catalog/";
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public IProductCatalogService productCatalogService;
 
     /**
@@ -168,6 +168,23 @@ public class ProductCatalogController extends BaseController {
         } catch (Exception e) {
             logger.error("prod-cata delete fail(删除失败)--"+catalogId+":{}", e.getMessage());
             return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 移动前端——获取全部产品目录
+     * add by mc 2018-4-24
+     * @return
+     */
+    @RequestMapping(value = "/getAllList", method = RequestMethod.GET)
+    @ResponseBody
+    public BaseResponse<List<ProductCatalogDO>> getAllProductCatalogList() {
+        try {
+            List<ProductCatalogDO> list = productCatalogService.getAllProductCatalogList();
+            return new BaseResponse<>(list);
+        } catch (Exception e) {
+            logger.error("prod-cata get all list (获取所有产品目录list失败)-- :{}", e.getMessage());
+            return null;
         }
     }
 

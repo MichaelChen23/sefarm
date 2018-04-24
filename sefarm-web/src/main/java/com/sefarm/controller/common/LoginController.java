@@ -31,10 +31,10 @@ import java.util.List;
 @Controller
 public class LoginController extends BaseController {
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public ISysUserService sysUserService;
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public ISysMenuService sysMenuService;
 
     /**

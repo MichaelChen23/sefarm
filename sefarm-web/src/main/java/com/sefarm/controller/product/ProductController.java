@@ -39,7 +39,7 @@ public class ProductController extends BaseController {
 
     private static String PREFIX = "/product/base/";
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public IProductService productService;
 
     /**
@@ -73,13 +73,13 @@ public class ProductController extends BaseController {
     }
 
     /**
-     * 按照查询条件查询 产品 列表
+     * 后台 + 移动前端（用于首页搜索，产品页搜索，可根据各种条件排序） 按照查询条件查询 产品 列表
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
-    public PageInfo<ProductVO> getProductVOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
-                                                        @RequestParam(required = false) String name, @RequestParam(required = false) Long productTypeId, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
+    public PageInfo<ProductVO> getProductVOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam String sortStr, @RequestParam String orderStr,
+                                                @RequestParam(required = false) String name, @RequestParam(required = false) Long productTypeId, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
         try {
             PageInfo<ProductVO> result = productService.getProductVOList(pageIndex, pageSize, sortStr, orderStr, name, productTypeId, createTimeBegin, createTimeEnd);
             return result;
@@ -169,6 +169,27 @@ public class ProductController extends BaseController {
             return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
         }
     }
+
+    /**
+     * 移动前端——根据产品类型id获取全部的产品List
+     * add by mc 2018-4-24
+     * @param typeId 产品类型id
+     * @return
+     */
+    @RequestMapping(value = "/getAllListByTypeId", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<List<ProductDO>> getAllProductListByTypeId(@RequestParam Long typeId) {
+        try {
+            List<ProductDO> list = productService.getProductListByTypeId(typeId);
+            return new BaseResponse<>(list);
+        } catch (Exception e) {
+            logger.error("product get all list by typeId (获取全部产品list失败)-- :{}", e.getMessage());
+            return null;
+        }
+    }
+
+
+
 
     @RequestMapping(value = "/removeList", method = RequestMethod.POST)
     public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除

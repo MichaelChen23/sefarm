@@ -17,4 +17,15 @@ public interface IProductCommentService extends IBaseService<ProductCommentDO> {
 
     ProductCommentVO getProductCommentVO(Long commentId);
 
+    /**
+     * 移动前端——根据产品id、订单id、星级数 分页获取 产品评论 列表
+     * @param pageIndex
+     * @param pageSize
+     * @param productId
+     * @param orderId
+     * @param stars
+     * @return
+     */
+    PageInfo<ProductCommentDO> getProductCommentPageDOList(Integer pageIndex, Integer pageSize, Long productId, Long orderId, Integer stars);
+
 }

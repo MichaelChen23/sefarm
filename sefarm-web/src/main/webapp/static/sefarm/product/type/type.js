@@ -17,6 +17,7 @@ ProdType.initColumn = function () {
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
         {title: '类型名', field: 'name', align: 'center', valign: 'middle', sortable: true},
         {title: '产品目录', field: 'productCatalogName', align: 'center', valign: 'middle', sortable: true},
+        {title: '图片', field: 'image', align: 'center', valign: 'middle', sortable: true},
         {title: '排序号', field: 'sort', align: 'center', valign: 'middle', sortable: true},
         {title: '描述', field: 'description', align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'status', align: 'center', valign: 'middle', sortable: true, formatter: statusFormatter},

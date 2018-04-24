@@ -5,6 +5,7 @@ import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.util.DateUtil;
 import com.sefarm.common.util.FileUtil;
+import com.sefarm.common.util.StrKit;
 import com.sefarm.config.properties.SeFarmProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,9 @@ public class ImageController {
     @RequestMapping( path = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public String upload(@RequestPart("file") MultipartFile picture) {
-        String pictureName = "image_" + DateUtil.getAllTime() + ".jpg";
+        //在上传的图片名切分出后缀+时间，作为保存在数据库的image名字
+        String imageName = StrKit.split(picture.getOriginalFilename(),'.').get(0);
+        String pictureName = imageName + "_" + DateUtil.getAllTime() + ".jpg";
         try {
             String fileSavePath = seFarmProperties.getFileUploadPath();
             picture.transferTo(new File(fileSavePath + pictureName));

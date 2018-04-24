@@ -39,7 +39,7 @@ public class SysMenuController extends BaseController {
 
     private static String PREFIX = "/system/sysmenu/";
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public ISysMenuService sysMenuService;
 
     /**

@@ -3,6 +3,7 @@ package com.sefarm.controller.user;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
 import com.sefarm.model.user.UserAddressDO;
 import com.sefarm.service.user.IUserAddressService;
@@ -27,7 +28,7 @@ public class UserAddressController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserAddressController.class);
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public IUserAddressService userAddressService;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)

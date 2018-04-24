@@ -3,6 +3,7 @@ package com.sefarm.controller.system;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
 import com.sefarm.model.system.SysRoleResourceDO;
 import com.sefarm.service.system.ISysRoleResourceService;
@@ -27,7 +28,7 @@ public class SysRoleResourceController {
 
     private static final Logger logger = LoggerFactory.getLogger(SysRoleResourceController.class);
 
-    @Reference(version = "1.0.0", timeout = 10000)
+    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public ISysRoleResourceService sysRoleResourceService;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
