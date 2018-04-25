@@ -11,6 +11,7 @@ import com.sefarm.common.vo.ProductVO;
 import com.sefarm.dao.product.ProductMapper;
 import com.sefarm.model.product.ProductDO;
 import com.sefarm.service.product.IProductService;
+import org.apache.commons.lang3.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -50,5 +51,28 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, ProductDO
         example.orderBy("sort").desc();
         List<ProductDO> list = getMapper().selectByExample(example);
         return list;
+    }
+
+    @Override
+    public PageInfo<ProductDO> searchProductDOPageList(Integer pageIndex, Integer pageSize, String name) {
+        Example example = new Example(ProductDO.class);
+        Example.Criteria criteria = example.createCriteria();
+        //根据产品name查询相应产品list
+        if (StringUtils.isNotBlank(name)) {
+            criteria.andLike("name", "%"+name+"%");
+        } else {
+            criteria.orEqualTo("saleFlag", Constant.STATUS_UNLOCK);
+            criteria.orEqualTo("newFlag", Constant.STATUS_UNLOCK);
+        }
+        //状态排除 已下架off和已删除del
+        criteria.andNotEqualTo("status", ProductStatus.OFF.getCode())
+                .andNotEqualTo("status", ProductStatus.DEL.getCode());
+        example.setOrderByClause("sale_flag desc, new_flag desc, sort desc");
+        if (pageIndex != null && pageIndex > 0 && pageSize != null && pageSize > 0) {
+            PageHelper.startPage(pageIndex, pageSize);
+        }
+        List<ProductDO> list = getMapper().selectByExample(example);
+        PageInfo<ProductDO> page = new PageInfo<>(list);
+        return page;
     }
 }

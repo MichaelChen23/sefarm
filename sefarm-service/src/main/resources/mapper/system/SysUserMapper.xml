@@ -38,6 +38,7 @@
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="sys_role_id" jdbcType="BIGINT" property="sysRoleId" />
     <result column="sys_role_name" jdbcType="VARCHAR" property="sysRoleName" />
     <result column="sys_dept_id" jdbcType="BIGINT" property="sysDeptId" />
     <result column="sys_dept_name" jdbcType="VARCHAR" property="sysDeptName" />
@@ -56,7 +57,7 @@
 
   <sql id="selectSysUserVOALL">
     SELECT ssu.id, ssu.username, ssu.password, ssu.salt, ssu.avatar, ssu.name, ssu.sex, DATE_FORMAT(ssu.birthday, '%Y-%m-%d') AS birthday,
-    ssu.phone, ssu.mobile, ssu.email, ssr.name AS sys_role_name, ssu.sys_dept_id, ssd.name AS sys_dept_name,
+    ssu.phone, ssu.mobile, ssu.email, sys_role_id, ssr.name AS sys_role_name, ssu.sys_dept_id, ssd.name AS sys_dept_name,
     ssu.status, ssu.create_by, DATE_FORMAT(ssu.create_time, '%Y-%m-%d %T') AS create_time, ssu.update_by, DATE_FORMAT(ssu.update_time, '%Y-%m-%d %T') AS update_time, ssu.remark
     FROM sefarm_sys_user ssu
     LEFT JOIN sefarm_sys_role ssr ON ssr.id = ssu.sys_role_id

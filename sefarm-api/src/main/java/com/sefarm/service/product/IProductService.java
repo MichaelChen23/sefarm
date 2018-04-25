@@ -25,4 +25,13 @@ public interface IProductService extends IBaseService<ProductDO> {
      * @return
      */
     List<ProductDO> getProductListByTypeId(Long typeId);
+
+    /**
+     * 移动前端——根据name产品名来搜索相关产品分页列表
+     * @param pageIndex
+     * @param pageSize
+     * @param name
+     * @return
+     */
+    PageInfo<ProductDO> searchProductDOPageList(Integer pageIndex, Integer pageSize, String name);
 }

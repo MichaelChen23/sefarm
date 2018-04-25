@@ -188,6 +188,22 @@ public class ProductController extends BaseController {
         }
     }
 
+    /**
+     * 移动前端——（用于首页搜索，获取热门产品） 分页获取产品列表
+     * @return
+     */
+    @RequestMapping(value = "/searchPageList", method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo<ProductDO> searchProductPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize,
+                                                    @RequestParam(required = false) String name) {
+        try {
+            PageInfo<ProductDO> result = productService.searchProductDOPageList(pageIndex, pageSize, name);
+            return result;
+        } catch (Exception e) {
+            logger.error("search prod page list fail(搜索 产品 列表失败) -- :{}", e.getMessage());
+            return null;
+        }
+    }
 
 
 

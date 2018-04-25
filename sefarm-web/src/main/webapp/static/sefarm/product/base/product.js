@@ -139,7 +139,7 @@ Product.openSaveProduct = function () {
     var index = layer.open({
         type: 2,
         title: '添加产品',
-        area: ['800px', '700px'], //宽高
+        area: ['800px', '600px'], //宽高
         fix: false, //不固定
         maxmin: true,
         content: Feng.ctxPath + '/prod/product_save'
@@ -156,7 +156,7 @@ Product.openUpdateProduct = function () {
         var index = layer.open({
             type: 2,
             title: '编辑产品',
-            area: ['800px', '700px'], //宽高
+            area: ['800px', '600px'], //宽高
             fix: false, //不固定
             maxmin: true,
             content: Feng.ctxPath + '/prod/product_update/' + this.seItem.id

@@ -25,7 +25,7 @@ spring:
 ### server 配置
 ########################################################
 server:
-    port: 8188
+    port: 80
     context-path: /
 #    tomcat:
 #        uri-encoding: utf-8

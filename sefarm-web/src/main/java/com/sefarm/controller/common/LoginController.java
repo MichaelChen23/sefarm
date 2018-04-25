@@ -7,6 +7,7 @@ import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.exception.InvalidKaptchaException;
 import com.sefarm.common.node.MenuNode;
+import com.sefarm.common.vo.SysUserVO;
 import com.sefarm.model.system.SysUserDO;
 import com.sefarm.service.system.ISysMenuService;
 import com.sefarm.service.system.ISysUserService;
@@ -14,11 +15,9 @@ import com.sefarm.util.ToolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -40,8 +39,8 @@ public class LoginController extends BaseController {
     /**
      * 跳转到主页
      */
-    @RequestMapping(value = "/admin/{sysRoleId}", method = RequestMethod.GET)
-    public String index(@PathVariable Long sysRoleId, Model model) {
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    public String index(Model model) {
         //获取菜单列表
 //        List<Integer> roleList = ShiroKit.getUser().getRoleList();
 //        if(roleList == null || roleList.size() == 0){
@@ -50,13 +49,21 @@ public class LoginController extends BaseController {
 //        return "/login.html";
 //        }
 
-        if (ToolUtil.isEmpty(sysRoleId)) {
+        Long userId = (Long) super.getSession().getAttribute("userId");
+
+        if (ToolUtil.isEmpty(userId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
 
-        List<MenuNode> menus = sysMenuService.getMenusByRoleId(88L);
-        List<MenuNode> titles = MenuNode.buildTitle(menus);
-        model.addAttribute("titles", titles);
+        //获取用户信息
+        SysUserVO sysUserVO = sysUserService.getSysUserVO(userId);
+        if (sysUserVO != null) {
+            model.addAttribute("username", sysUserVO.getUsername());
+            model.addAttribute("rolename", sysUserVO.getSysRoleName());
+
+            List<MenuNode> menus = sysMenuService.getMenusByRoleId(sysUserVO.getSysRoleId());
+            List<MenuNode> titles = MenuNode.buildTitle(menus);
+            model.addAttribute("titles", titles);
 
 //
 //        //获取用户头像
@@ -65,7 +72,10 @@ public class LoginController extends BaseController {
 //        String avatar = user.getAvatar();
 //        model.addAttribute("avatar", avatar);
 //
-        return "/index.html";
+            return "/index.html";
+        } else {
+            return "/login.html";
+        }
 
     }
 
@@ -126,7 +136,8 @@ public class LoginController extends BaseController {
 //            userDO.setLastLoginTime(new Date());
 //            //更新最新登录时间
 //            sysUserService.updateByObj(userDO);
-            return REDIRECT + "/admin/" + userDO.getSysRoleId();
+            super.getSession().setAttribute("userId", userDO.getId());
+            return REDIRECT + "/admin";
         } else {
             return "/login.html";
         }
