@@ -178,14 +178,46 @@ public class ProductCommentController extends BaseController {
      */
     @RequestMapping(value = "/getPageList", method = RequestMethod.POST)
     @ResponseBody
-    public PageInfo<ProductCommentDO> getProductCommentPageDOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize,
+    public BaseResponse<PageInfo<ProductCommentDO>> getProductCommentPageDOList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize,
                                                                   @RequestParam(required = false) Long productId, @RequestParam(required = false) Long orderId, @RequestParam(required = false) Integer stars) {
         try {
             PageInfo<ProductCommentDO> result = productCommentService.getProductCommentPageDOList(pageIndex, pageSize, productId, orderId, stars);
-            return result;
+            return new BaseResponse(result);
         } catch (Exception e) {
             logger.error("get prod-comment page list fail(获取 产品评论 分页list 列表失败) -- :{}", e.getMessage());
-            return null;
+            return new BaseResponse(null);
+        }
+    }
+
+    /**
+     * 移动前端——用户给产品评论评分
+     * add by mc 2018-4-26
+     * @param productId
+     * @param orderId
+     * @param account
+     * @param name
+     * @param content
+     * @param star
+     * @return
+     */
+    @RequestMapping(value = "/saveProductComment", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<Boolean> saveProductCommentDO(@RequestParam Long productId, @RequestParam Long orderId, @RequestParam String account,
+                                                      @RequestParam String name, @RequestParam String content, @RequestParam Integer star) {
+        try {
+            ProductCommentDO productCommentDO = new ProductCommentDO();
+            productCommentDO.setProductId(productId);
+            productCommentDO.setOrderId(orderId);
+            productCommentDO.setAccount(account);
+            productCommentDO.setName(name);
+            productCommentDO.setContent(content);
+            productCommentDO.setStar(star);
+            productCommentDO.setCreateTime(new Date());
+            Boolean res = productCommentService.saveByObj(productCommentDO);
+            return BaseResponse.getRespByResultBool(res);
+        } catch (Exception e) {
+            logger.error("prod-comment save fail(保存失败)--"+productId+"--"+orderId+"--"+account+"--"+name+"--"+content+"--"+star+":{}", e.getMessage());
+            return new BaseResponse(null);
         }
     }
 

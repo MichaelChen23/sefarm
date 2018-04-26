@@ -39,7 +39,18 @@ public abstract class Constant {
 	public static final String DEFAULT_SYS_USER_PWD = "888888";
 
 	/**
-	 * DUBBO接口的timeout时间 add mc 2018-4-24
+	 * DUBBO接口的timeout时间 add by mc 2018-4-24
 	 */
 	public static final int DUBBO_TIME_OUT = 100000;
+
+	/**
+	 * 产品的条件查询的默认查询排序字段 add by mc 2018-4-26
+	 */
+	public static final String PRODUCT_DEFAULT_QUERY_SORT = "sellCount";
+
+	/**
+	 * 产品的条件查询的默认查询排序升降幂 add by mc 2018-4-26
+	 */
+	public static final String PRODUCT_DEFAULT_QUERY_ORDER = "desc";
+
 }

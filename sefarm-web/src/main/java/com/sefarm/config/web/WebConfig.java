@@ -8,16 +8,23 @@ import com.alibaba.druid.support.spring.stat.DruidStatInterceptor;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import com.sefarm.common.util.xss.XssFilter;
+import com.sefarm.config.properties.SeFarmProperties;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import javax.annotation.Resource;
 import java.util.Properties;
 
 /**
@@ -27,7 +34,13 @@ import java.util.Properties;
  * @date 2018-3-30
  */
 @Configuration
-public class WebConfig {
+public class WebConfig extends WebMvcConfigurerAdapter {
+
+    @Resource
+    private SeFarmProperties seFarmProperties;
+
+    @Autowired
+    private Environment env;
 
     /**
      * druidServlet注册
@@ -139,5 +152,30 @@ public class WebConfig {
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
         defaultKaptcha.setConfig(config);
         return defaultKaptcha;
+    }
+
+    /**
+     * 注册本地磁盘到tomcat虚拟目录，隐藏实际文件存储的路径
+     * add by mc 2018-4-26
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String fileSavePath = seFarmProperties.getFileUploadPath();
+        //设置网页/images/的路径，就可以获取实际路径下的图片文件
+        registry.addResourceHandler("/images/**").addResourceLocations("file:" + fileSavePath);
+        super.addResourceHandlers(registry);
+    }
+
+    /**
+     * 前后端分离的项目来说，如果前端项目与后端项目部署在两个不同的域下，那么势必会引起跨域问题的出现
+     * H5中的新特性：Cross-Origin Resource Sharing（跨域资源共享）
+     * 通过cors协议解决跨域问题 springmvc4.2版本增加了对cors的支持
+     * add by mc 2018-4-26
+     * @param registry
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
     }
 }

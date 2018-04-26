@@ -75,4 +75,44 @@ public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, ProductDO
         PageInfo<ProductDO> page = new PageInfo<>(list);
         return page;
     }
+
+    @Override
+    public PageInfo<ProductDO> getProductDOPageList(Integer pageIndex, Integer pageSize, Long typeId, String name, String newFlag, String saleFlag, String sortStr, String orderStr) {
+        Example example = new Example(ProductDO.class);
+        Example.Criteria criteria = example.createCriteria();
+        String sort = Constant.PRODUCT_DEFAULT_QUERY_SORT;
+        String order = Constant.PRODUCT_DEFAULT_QUERY_ORDER;
+        if (typeId != null && typeId > 0) {
+            criteria.andEqualTo("productTypeId", typeId);
+        }
+        if (StringUtils.isNotBlank(name)) {
+            criteria.andLike("name", "%"+name+"%");
+        }
+        if (StringUtils.isNotBlank(newFlag)) {
+            criteria.andEqualTo("newFlag", Constant.STATUS_UNLOCK);
+        }
+        if (StringUtils.isNotBlank(saleFlag)) {
+            criteria.andEqualTo("saleFlag", Constant.STATUS_UNLOCK);
+        }
+        //排除些下架和删除的产品
+        criteria.andNotEqualTo("status", ProductStatus.OFF.getCode())
+                .andNotEqualTo("status", ProductStatus.DEL.getCode());
+        if (StringUtils.isNotBlank(sortStr)) {
+            sort = sortStr;
+        }
+        if (StringUtils.isNotBlank(orderStr)) {
+            order = orderStr;
+        }
+        if (Constant.ORDER_DESC.equals(order)) {
+            example.orderBy(sort).desc();
+        } else if (Constant.ORDER_ASC.equals(order)) {
+            example.orderBy(sort).asc();
+        }
+        if (pageIndex != null && pageIndex > 0 && pageSize != null && pageSize > 0) {
+            PageHelper.startPage(pageIndex, pageSize);
+        }
+        List<ProductDO> list = getMapper().selectByExample(example);
+        PageInfo<ProductDO> page = new PageInfo<>(list);
+        return page;
+    }
 }

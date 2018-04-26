@@ -205,6 +205,24 @@ public class ProductController extends BaseController {
         }
     }
 
+    /**
+     * 移动前端—— 产品查询列表 按条件分页获取产品列表
+     * add by mc 2018-4-26
+     * @return
+     */
+    @RequestMapping(value = "/getPageList", method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo<ProductDO> getProductPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam(required = false) Long typeId, @RequestParam(required = false) String name,
+                                                  @RequestParam(required = false) String newFlag, @RequestParam(required = false) String saleFlag, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr) {
+        try {
+            PageInfo<ProductDO> result = productService.getProductDOPageList(pageIndex, pageSize, typeId, name, newFlag, saleFlag, sortStr, orderStr);
+            return result;
+        } catch (Exception e) {
+            logger.error("get prod page list fail(按条件查询 产品 列表失败) -- :{}", e.getMessage());
+            return null;
+        }
+    }
+
 
 
     @RequestMapping(value = "/removeList", method = RequestMethod.POST)

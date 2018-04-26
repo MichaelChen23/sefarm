@@ -19,6 +19,7 @@
     <result column="sell_count" jdbcType="BIGINT" property="sellCount" />
     <result column="stock" jdbcType="BIGINT" property="stock" />
     <result column="reply_hit" jdbcType="BIGINT" property="replyHit" />
+    <result column="good_hit" jdbcType="BIGINT" property="goodHit" />
     <result column="search_word" jdbcType="VARCHAR" property="searchWord" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -47,6 +48,7 @@
     <result column="sell_count" jdbcType="BIGINT" property="sellCount" />
     <result column="stock" jdbcType="BIGINT" property="stock" />
     <result column="reply_hit" jdbcType="BIGINT" property="replyHit" />
+    <result column="good_hit" jdbcType="BIGINT" property="goodHit" />
     <result column="search_word" jdbcType="VARCHAR" property="searchWord" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -63,7 +65,7 @@
 
   <sql id="selectProductVOALL">
     SELECT
-    sp.id, sp.name, sp.introduce, sp.price, sp.now_price, sp.picture, sp.new_flag, sp.sale_flag, sp.unit, sp.sort, sp.sell_count, sp.stock, sp.reply_hit,
+    sp.id, sp.name, sp.introduce, sp.price, sp.now_price, sp.picture, sp.new_flag, sp.sale_flag, sp.unit, sp.sort, sp.sell_count, sp.stock, sp.reply_hit, sp.good_hit,
     sp.search_word, sp.title, sp.remark, sp.product_type_id, spt.name AS product_type_name, sp.product_html, sp.images, sp.description,
     sp.status, sp.create_by, DATE_FORMAT(sp.create_time, '%Y-%m-%d %T') AS create_time, sp.update_by, DATE_FORMAT(sp.update_time, '%Y-%m-%d %T') AS update_time
     FROM sefarm_product sp

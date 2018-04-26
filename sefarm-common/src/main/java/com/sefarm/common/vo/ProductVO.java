@@ -82,6 +82,11 @@ public class ProductVO implements Serializable {
     private Long replyHit;
 
     /**
+     * 好评量：默认为0
+     */
+    private Long goodHit;
+
+    /**
      * 搜索关键词
      */
     private String searchWord;
@@ -253,6 +258,14 @@ public class ProductVO implements Serializable {
         this.replyHit = replyHit;
     }
 
+    public Long getGoodHit() {
+        return goodHit;
+    }
+
+    public void setGoodHit(Long goodHit) {
+        this.goodHit = goodHit;
+    }
+
     public String getSearchWord() {
         return searchWord;
     }
@@ -366,6 +379,7 @@ public class ProductVO implements Serializable {
                 ", sellCount=" + sellCount +
                 ", stock=" + stock +
                 ", replyHit=" + replyHit +
+                ", goodHit=" + goodHit +
                 ", searchWord='" + searchWord + '\'' +
                 ", title='" + title + '\'' +
                 ", remark='" + remark + '\'' +

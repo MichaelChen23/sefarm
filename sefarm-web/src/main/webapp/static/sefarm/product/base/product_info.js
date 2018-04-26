@@ -45,8 +45,8 @@ ProductInfoDlg.close = function () {
  */
 ProductInfoDlg.collectData = function() {
     this.set('id').set('name').set('introduce').set('price').set('nowPrice').set('picture').set('newFlag').set('saleFlag')
-        .set('unit').set('sort').set('status').set('sellCount').set('stock').set('replyHit').set('searchWord').set('title')
-        .set('remark').set('productTypeId').set('productHtml').set('images').set('description');
+        .set('unit').set('sort').set('status').set('sellCount').set('stock').set('replyHit').set('goodHit').set('searchWord')
+        .set('title').set('remark').set('productTypeId').set('productHtml').set('images').set('description');
 };
 
 /**

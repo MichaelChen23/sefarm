@@ -34,4 +34,18 @@ public interface IProductService extends IBaseService<ProductDO> {
      * @return
      */
     PageInfo<ProductDO> searchProductDOPageList(Integer pageIndex, Integer pageSize, String name);
+
+    /**
+     * 移动前端——根据条件筛选出符合要求的产品list
+     * @param pageIndex
+     * @param pageSize
+     * @param typeId
+     * @param name
+     * @param newFlag
+     * @param saleFlag
+     * @param sortStr
+     * @param orderStr
+     * @return
+     */
+    PageInfo<ProductDO> getProductDOPageList(Integer pageIndex, Integer pageSize, Long typeId, String name, String newFlag, String saleFlag, String sortStr, String orderStr);
 }

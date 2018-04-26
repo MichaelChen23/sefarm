@@ -96,6 +96,12 @@ public class ProductDO extends BaseDO implements Serializable {
     private Long replyHit;
 
     /**
+     * 好评量：默认为0
+     */
+    @Column(name = "good_hit")
+    private Long goodHit;
+
+    /**
      * 搜索关键词
      */
     @Column(name = "search_word")
@@ -410,6 +416,24 @@ public class ProductDO extends BaseDO implements Serializable {
     }
 
     /**
+     * 获取好评量：默认为0
+     *
+     * @return good_hit - 好评量：默认为0
+     */
+    public Long getGoodHit() {
+        return goodHit;
+    }
+
+    /**
+     * 设置好评量：默认为0
+     *
+     * @param goodHit 好评量：默认为0
+     */
+    public void setGoodHit(Long goodHit) {
+        this.goodHit = goodHit;
+    }
+
+    /**
      * 获取搜索关键词
      *
      * @return search_word - 搜索关键词
@@ -624,6 +648,7 @@ public class ProductDO extends BaseDO implements Serializable {
                 ", sellCount=" + sellCount +
                 ", stock=" + stock +
                 ", replyHit=" + replyHit +
+                ", goodHit=" + goodHit +
                 ", searchWord='" + searchWord + '\'' +
                 ", title='" + title + '\'' +
                 ", remark='" + remark + '\'' +

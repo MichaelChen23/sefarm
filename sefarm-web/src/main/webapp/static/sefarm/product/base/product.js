@@ -27,6 +27,7 @@ Product.initColumn = function () {
         {title: '销量', field: 'sellCount', align: 'center', valign: 'middle', sortable: true},
         {title: '库存', field: 'stock', align: 'center', valign: 'middle', sortable: true},
         {title: '评价量', field: 'replyHit', align: 'center', valign: 'middle', sortable: true},
+        {title: '好评量', field: 'goodHit', align: 'center', valign: 'middle', sortable: true},
         {title: '搜索关键词', field: 'searchWord', align: 'center', valign: 'middle', sortable: true},
         {title: '备注', field: 'remark', align: 'center', valign: 'middle', sortable: true},
         {title: '产品类型', field: 'productTypeName', align: 'center', valign: 'middle', sortable: true},
