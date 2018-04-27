@@ -9,7 +9,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="full_name" jdbcType="VARCHAR" property="fullName" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="pid" jdbcType="BIGINT" property="pid" />
     <result column="pids" jdbcType="VARCHAR" property="pids" />
     <result column="status" jdbcType="VARCHAR" property="status" />
@@ -24,7 +24,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="full_name" jdbcType="VARCHAR" property="fullName" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="pid" jdbcType="BIGINT" property="pid" />
     <result column="p_name" jdbcType="VARCHAR" property="pName" />
     <result column="pids" jdbcType="VARCHAR" property="pids" />
@@ -50,7 +50,7 @@
 
   <sql id="selectSysDeptVOALL">
     SELECT
-    ssd.id, ssd.name, ssd.full_name, ssd.sort, ssd.description, ssd.pid,
+    ssd.id, ssd.name, ssd.full_name, ssd.sort, ssd.detail, ssd.pid,
     pssd.name AS p_name, ssd.pids,
     ssd.status, ssd.create_by, DATE_FORMAT(ssd.create_time, '%Y-%m-%d %T') AS create_time, ssd.update_by, DATE_FORMAT(ssd.update_time, '%Y-%m-%d %T') AS update_time
     FROM sefarm_sys_dept ssd

@@ -44,7 +44,7 @@ ProdTypeInfoDlg.close = function () {
  * 收集数据
  */
 ProdTypeInfoDlg.collectData = function() {
-    this.set('id').set('name').set('productCatalogId').set('image').set('sort').set('description').set('status');
+    this.set('id').set('name').set('productCatalogId').set('image').set('sort').set('detail').set('status');
 };
 
 /**
@@ -56,7 +56,7 @@ ProdTypeInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/prod-type/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/prod-type/save", function(data){
         Feng.success("添加成功!");
         window.parent.ProdType.table.refresh();
         ProdTypeInfoDlg.close();
@@ -76,7 +76,7 @@ ProdTypeInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/prod-type/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/prod-type/update", function(data){
         Feng.success("修改成功!");
         window.parent.ProdType.table.refresh();
         ProdTypeInfoDlg.close();
@@ -98,7 +98,7 @@ $(function() {
 
     //获取所有的产品目录
     $.ajax({
-        url: '/prod-cata/getAll',
+        url: '/api/prod-cata/getAll',
         async: false,
         type: "GET",
         data: {},

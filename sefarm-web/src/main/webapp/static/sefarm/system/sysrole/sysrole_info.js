@@ -156,7 +156,7 @@ SysRoleInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/sys-role/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/sys-role/save", function(data){
         Feng.success("添加成功!");
         window.parent.SysRole.table.refresh();
         SysRoleInfoDlg.close();
@@ -176,7 +176,7 @@ SysRoleInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/sys-role/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/sys-role/update", function(data){
         Feng.success("修改成功!");
         window.parent.SysRole.table.refresh();
         SysRoleInfoDlg.close();
@@ -188,12 +188,12 @@ SysRoleInfoDlg.editSubmit = function() {
 };
 
 $(function() {
-    var deptTree = new $ZTree("deptTree", "/sys-dept/getDeptTree");
+    var deptTree = new $ZTree("deptTree", "/api/sys-dept/getDeptTree");
     deptTree.bindOnClick(SysRoleInfoDlg.onClickDept);
     deptTree.init();
     SysRoleInfoDlg.deptZtree = deptTree;
 
-    var pNameTree = new $ZTree("pNameTree", "/sys-role/sysRoleTree");
+    var pNameTree = new $ZTree("pNameTree", "/api/sys-role/sysRoleTree");
     pNameTree.bindOnClick(SysRoleInfoDlg.onClickPName);
     pNameTree.init();
     SysRoleInfoDlg.pNameZtree = pNameTree;

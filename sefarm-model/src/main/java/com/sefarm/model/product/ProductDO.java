@@ -159,9 +159,9 @@ public class ProductDO extends BaseDO implements Serializable {
     private String images;
 
     /**
-     * 产品详情页面描述
+     * 产品详情页面详述
      */
-    private String description;
+    private String detail;
 
     /**
      * 获取产品ID
@@ -614,21 +614,21 @@ public class ProductDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取产品详情页面描述
+     * 获取产品详情页面详述
      *
-     * @return description - 产品详情页面描述
+     * @return detail - 产品详情页面详述
      */
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
 
     /**
-     * 设置产品详情页面描述
+     * 设置产品详情页面详述
      *
-     * @param description 产品详情页面描述
+     * @param detail 产品详情页面详述
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     @Override
@@ -659,7 +659,7 @@ public class ProductDO extends BaseDO implements Serializable {
                 ", updateTime=" + updateTime +
                 ", productHtml='" + productHtml + '\'' +
                 ", images='" + images + '\'' +
-                ", description='" + description + '\'' +
+                ", detail='" + detail + '\'' +
                 '}';
     }
 }

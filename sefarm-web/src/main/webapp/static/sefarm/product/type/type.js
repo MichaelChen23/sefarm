@@ -19,7 +19,7 @@ ProdType.initColumn = function () {
         {title: '产品目录', field: 'productCatalogName', align: 'center', valign: 'middle', sortable: true},
         {title: '图片', field: 'image', align: 'center', valign: 'middle', sortable: true},
         {title: '排序号', field: 'sort', align: 'center', valign: 'middle', sortable: true},
-        {title: '描述', field: 'description', align: 'center', valign: 'middle', sortable: true},
+        {title: '详述', field: 'detail', align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'status', align: 'center', valign: 'middle', sortable: true, formatter: statusFormatter},
         {title: '创建人', field: 'createBy', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '创建时间', field: 'createTime', visible: false, align: 'center', valign: 'middle', sortable: true},
@@ -75,7 +75,7 @@ ProdType.openSaveProdType = function () {
         area: ['800px', '500px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/prod-type/type_save'
+        content: Feng.ctxPath + '/api/prod-type/type_save'
     });
     this.layerIndex = index;
 };
@@ -92,7 +92,7 @@ ProdType.openUpdateProdType = function () {
             area: ['800px', '500px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/prod-type/type_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/prod-type/type_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -106,7 +106,7 @@ ProdType.delProdType = function () {
 
         var operation = function(){
             var typeId = ProdType.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/prod-type/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/prod-type/remove", function () {
                 Feng.success("删除成功!");
                 ProdType.table.refresh();
             }, function (data) {
@@ -122,13 +122,13 @@ ProdType.delProdType = function () {
 
 $(function () {
     var defaultColunms = ProdType.initColumn();
-    var table = new BSTable("prodTypeTable", "/prod-type/type_list", defaultColunms);
+    var table = new BSTable("prodTypeTable", "/api/prod-type/type_list", defaultColunms);
     table.setPaginationType("server");
     ProdType.table = table.init();
 
     //获取所有的产品目录
     $.ajax({
-        url: '/prod-cata/getAll',
+        url: '/api/prod-cata/getAll',
         async: false,
         type: "GET",
         data: {},

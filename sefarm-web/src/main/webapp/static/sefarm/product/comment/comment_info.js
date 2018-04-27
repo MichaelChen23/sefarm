@@ -57,7 +57,7 @@ ProductCommentInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/prod-comment/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/prod-comment/save", function(data){
         Feng.success("添加成功!");
         window.parent.ProductComment.table.refresh();
         ProductCommentInfoDlg.close();
@@ -77,7 +77,7 @@ ProductCommentInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/prod-comment/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/prod-comment/update", function(data){
         Feng.success("修改成功!");
         window.parent.ProductComment.table.refresh();
         ProductCommentInfoDlg.close();

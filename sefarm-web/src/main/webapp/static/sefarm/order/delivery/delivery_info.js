@@ -56,7 +56,7 @@ OrderDeliveryInfoDlg.onClickDept = function (e, treeId, treeNode) {
     $("#sysUserId").empty();
     //获取所选部门下的所有系统用户
     $.ajax({
-        url: '/sys-user/list_by_deptid',
+        url: '/api/sys-user/list_by_deptid',
         async: false,
         type: "POST",
         data: {
@@ -122,7 +122,7 @@ OrderDeliveryInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/order-dely/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/order-dely/save", function(data){
         Feng.success("添加成功!");
         window.parent.OrderDelivery.table.refresh();
         OrderDeliveryInfoDlg.close();
@@ -142,7 +142,7 @@ OrderDeliveryInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/order-dely/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/order-dely/update", function(data){
         Feng.success("修改成功!");
         window.parent.OrderDelivery.table.refresh();
         OrderDeliveryInfoDlg.close();
@@ -155,7 +155,7 @@ OrderDeliveryInfoDlg.editSubmit = function() {
 
 $(function() {
     //初始化 部门树
-    var ztree = new $ZTree("deptTree", "/sys-dept/getDeptTree");
+    var ztree = new $ZTree("deptTree", "/api/sys-dept/getDeptTree");
     ztree.bindOnClick(OrderDeliveryInfoDlg.onClickDept);
     ztree.init();
     instance = ztree;
@@ -165,7 +165,7 @@ $(function() {
 
     //获取所选部门下的所有系统用户
     $.ajax({
-        url: '/sys-user/list_by_deptid',
+        url: '/api/sys-user/list_by_deptid',
         async: false,
         type: "POST",
         data: {

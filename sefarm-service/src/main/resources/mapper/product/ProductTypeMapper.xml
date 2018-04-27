@@ -11,7 +11,7 @@
     <result column="image" jdbcType="VARCHAR" property="image" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
@@ -26,7 +26,7 @@
     <result column="image" jdbcType="VARCHAR" property="image" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
     <result column="create_time" jdbcType="VARCHAR" property="createTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
@@ -36,7 +36,7 @@
   <sql id="selectProductTypeVOALL">
     SELECT
     spt.id, spt.name, spt.product_catalog_id, spt.image,
-    spc.name AS product_catalog_name, spt.sort, spt.description,
+    spc.name AS product_catalog_name, spt.sort, spt.detail,
     spt.status, spt.create_by, DATE_FORMAT(spt.create_time, '%Y-%m-%d %T') AS create_time, spt.update_by, DATE_FORMAT(spt.update_time, '%Y-%m-%d %T') AS update_time
     FROM sefarm_product_type spt
     LEFT JOIN sefarm_product_catalog spc ON spc.id = spt.product_catalog_id

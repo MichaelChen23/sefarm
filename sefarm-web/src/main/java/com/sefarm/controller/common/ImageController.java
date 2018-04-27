@@ -24,7 +24,7 @@ import java.io.IOException;
  * @date 2018-4-23
  */
 @Controller
-@RequestMapping("/image")
+@RequestMapping("/api/image")
 public class ImageController {
 
     @Resource

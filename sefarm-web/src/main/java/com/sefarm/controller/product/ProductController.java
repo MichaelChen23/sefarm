@@ -32,7 +32,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/prod")
+@RequestMapping("/api/prod")
 public class ProductController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
@@ -73,7 +73,7 @@ public class ProductController extends BaseController {
     }
 
     /**
-     * 后台 + 移动前端（用于首页搜索，产品页搜索，可根据各种条件排序） 按照查询条件查询 产品 列表
+     * 后台（用于首页搜索，产品页搜索，可根据各种条件排序） 按照查询条件查询 产品 列表
      * @return
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST)
@@ -184,7 +184,7 @@ public class ProductController extends BaseController {
             return new BaseResponse<>(list);
         } catch (Exception e) {
             logger.error("product get all list by typeId (获取全部产品list失败)-- :{}", e.getMessage());
-            return null;
+            return new BaseResponse<>(null);
         }
     }
 
@@ -194,14 +194,14 @@ public class ProductController extends BaseController {
      */
     @RequestMapping(value = "/searchPageList", method = RequestMethod.POST)
     @ResponseBody
-    public PageInfo<ProductDO> searchProductPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize,
+    public BaseResponse<PageInfo<ProductDO>> searchProductPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize,
                                                     @RequestParam(required = false) String name) {
         try {
             PageInfo<ProductDO> result = productService.searchProductDOPageList(pageIndex, pageSize, name);
-            return result;
+            return new BaseResponse<>(result);
         } catch (Exception e) {
             logger.error("search prod page list fail(搜索 产品 列表失败) -- :{}", e.getMessage());
-            return null;
+            return new BaseResponse<>(null);
         }
     }
 
@@ -212,14 +212,14 @@ public class ProductController extends BaseController {
      */
     @RequestMapping(value = "/getPageList", method = RequestMethod.POST)
     @ResponseBody
-    public PageInfo<ProductDO> getProductPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam(required = false) Long typeId, @RequestParam(required = false) String name,
+    public BaseResponse<PageInfo<ProductDO>> getProductPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam(required = false) Long typeId, @RequestParam(required = false) String name,
                                                   @RequestParam(required = false) String newFlag, @RequestParam(required = false) String saleFlag, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr) {
         try {
             PageInfo<ProductDO> result = productService.getProductDOPageList(pageIndex, pageSize, typeId, name, newFlag, saleFlag, sortStr, orderStr);
-            return result;
+            return new BaseResponse<>(result);
         } catch (Exception e) {
             logger.error("get prod page list fail(按条件查询 产品 列表失败) -- :{}", e.getMessage());
-            return null;
+            return new BaseResponse<>(null);
         }
     }
 

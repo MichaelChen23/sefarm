@@ -57,7 +57,7 @@ OrderPayInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/order-pay/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/order-pay/save", function(data){
         Feng.success("添加成功!");
         window.parent.OrderPay.table.refresh();
         OrderPayInfoDlg.close();
@@ -77,7 +77,7 @@ OrderPayInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/order-pay/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/order-pay/update", function(data){
         Feng.success("修改成功!");
         window.parent.OrderPay.table.refresh();
         OrderPayInfoDlg.close();

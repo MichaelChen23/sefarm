@@ -33,7 +33,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/sys-role")
+@RequestMapping("/api/sys-role")
 public class SysRoleController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(SysRoleController.class);

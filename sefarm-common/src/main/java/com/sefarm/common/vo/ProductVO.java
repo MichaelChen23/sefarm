@@ -142,9 +142,9 @@ public class ProductVO implements Serializable {
     private String images;
 
     /**
-     * 产品详情页面描述
+     * 产品详情页面详述
      */
-    private String description;
+    private String detail;
 
     public Long getId() {
         return id;
@@ -354,12 +354,12 @@ public class ProductVO implements Serializable {
         this.images = images;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     @Override
@@ -391,7 +391,7 @@ public class ProductVO implements Serializable {
                 ", updateTime='" + updateTime + '\'' +
                 ", productHtml='" + productHtml + '\'' +
                 ", images='" + images + '\'' +
-                ", description='" + description + '\'' +
+                ", detail='" + detail + '\'' +
                 '}';
     }
 }

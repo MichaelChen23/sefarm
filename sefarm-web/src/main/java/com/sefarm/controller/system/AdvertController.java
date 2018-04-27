@@ -30,7 +30,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/advert")
+@RequestMapping("/api/advert")
 public class AdvertController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdvertController.class);
@@ -184,7 +184,7 @@ public class AdvertController extends BaseController {
             return new BaseResponse<>(list);
         } catch (Exception e) {
             logger.error("advert get page list (获取广告分页list失败)-- :{}", e.getMessage());
-            return null;
+            return new BaseResponse<>(null);
         }
     }
 

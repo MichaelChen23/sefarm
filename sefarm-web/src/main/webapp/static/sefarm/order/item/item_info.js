@@ -57,7 +57,7 @@ OrderItemInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/order-item/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/order-item/save", function(data){
         Feng.success("添加成功!");
         window.parent.OrderItem.table.refresh();
         OrderItemInfoDlg.close();
@@ -77,7 +77,7 @@ OrderItemInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/order-item/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/order-item/update", function(data){
         Feng.success("修改成功!");
         window.parent.OrderItem.table.refresh();
         OrderItemInfoDlg.close();

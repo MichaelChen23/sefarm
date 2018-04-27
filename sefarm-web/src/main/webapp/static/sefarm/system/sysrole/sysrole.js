@@ -73,7 +73,7 @@ SysRole.openSaveSysRole = function () {
         area: ['800px', '600px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/sys-role/sysrole_save'
+        content: Feng.ctxPath + '/api/sys-role/sysrole_save'
     });
     this.layerIndex = index;
 };
@@ -90,7 +90,7 @@ SysRole.openUpdateSysRole = function () {
             area: ['800px', '500px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/sys-role/sysrole_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/sys-role/sysrole_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -104,7 +104,7 @@ SysRole.delSysRole = function () {
 
         var operation = function(){
             var roleId = SysRole.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/sys-role/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/sys-role/remove", function () {
                 Feng.success("删除成功!");
                 SysRole.table.refresh();
             }, function (data) {
@@ -129,7 +129,7 @@ SysRole.assignAuth = function () {
             area: ['300px', '450px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/sys-role/sysrole_assignauth/' + this.seItem.id
+            content: Feng.ctxPath + '/api/sys-role/sysrole_assignauth/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -137,7 +137,7 @@ SysRole.assignAuth = function () {
 
 $(function () {
     var defaultColunms = SysRole.initColumn();
-    var table = new BSTable("sysRoleTable", "/sys-role/sysrole_list", defaultColunms);
+    var table = new BSTable("sysRoleTable", "/api/sys-role/sysrole_list", defaultColunms);
     table.setPaginationType("server");
     SysRole.table = table.init();
 });

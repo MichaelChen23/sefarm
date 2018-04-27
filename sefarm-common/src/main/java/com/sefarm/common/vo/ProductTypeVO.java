@@ -46,9 +46,9 @@ public class ProductTypeVO implements Serializable {
     private String status;
 
     /**
-     * 描述
+     * 详述 , 之前使用描述description，该字段与前端js冲突，使得sort排序不行，所以就改为detail，坑！坑！坑！
      */
-    private String description;
+    private String detail;
 
     /**
      * 创建人
@@ -126,12 +126,12 @@ public class ProductTypeVO implements Serializable {
         this.status = status;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public String getCreateBy() {
@@ -176,7 +176,7 @@ public class ProductTypeVO implements Serializable {
                 ", image='" + image + '\'' +
                 ", sort=" + sort +
                 ", status='" + status + '\'' +
-                ", description='" + description + '\'' +
+                ", detail='" + detail + '\'' +
                 ", createBy='" + createBy + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", updateBy='" + updateBy + '\'' +

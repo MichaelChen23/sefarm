@@ -44,7 +44,7 @@ ProdCatalogInfoDlg.close = function () {
  * 收集数据
  */
 ProdCatalogInfoDlg.collectData = function() {
-    this.set('id').set('name').set('sort').set('description').set('status');
+    this.set('id').set('name').set('sort').set('detail').set('status');
 };
 
 /**
@@ -56,7 +56,7 @@ ProdCatalogInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/prod-cata/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/prod-cata/save", function(data){
         Feng.success("添加成功!");
         window.parent.ProdCatalog.table.refresh();
         ProdCatalogInfoDlg.close();
@@ -76,7 +76,7 @@ ProdCatalogInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/prod-cata/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/prod-cata/update", function(data){
         Feng.success("修改成功!");
         window.parent.ProdCatalog.table.refresh();
         ProdCatalogInfoDlg.close();

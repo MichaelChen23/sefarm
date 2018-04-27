@@ -31,7 +31,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/prod-cata")
+@RequestMapping("/api/prod-cata")
 public class ProductCatalogController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductCatalogController.class);
@@ -184,7 +184,7 @@ public class ProductCatalogController extends BaseController {
             return new BaseResponse<>(list);
         } catch (Exception e) {
             logger.error("prod-cata get all list (获取所有产品目录list失败)-- :{}", e.getMessage());
-            return null;
+            return new BaseResponse<>(null);
         }
     }
 

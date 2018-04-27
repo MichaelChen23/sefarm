@@ -114,7 +114,7 @@ OrderDelivery.openSaveOrderDelivery = function () {
         area: ['800px', '680px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/order-dely/delivery_save'
+        content: Feng.ctxPath + '/api/order-dely/delivery_save'
     });
     this.layerIndex = index;
 };
@@ -131,7 +131,7 @@ OrderDelivery.openUpdateOrderDelivery = function () {
             area: ['800px', '680px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/order-dely/delivery_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/order-dely/delivery_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -145,7 +145,7 @@ OrderDelivery.delOrderDelivery = function () {
 
         var operation = function(){
             var deliveryId = OrderDelivery.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/order-dely/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/order-dely/remove", function () {
                 Feng.success("删除成功!");
                 OrderDelivery.table.refresh();
             }, function (data) {
@@ -165,7 +165,7 @@ OrderDelivery.delOrderDelivery = function () {
 OrderDelivery.readyOrder = function () {
     if (this.check()) {
         var deliveryId = OrderDelivery.seItem.id;
-        var ajax = new $ax(Feng.ctxPath + "/order-dely/ready", function () {
+        var ajax = new $ax(Feng.ctxPath + "/api/order-dely/ready", function () {
             Feng.success("待发货成功!");
             OrderDelivery.table.refresh();
         }, function (data) {
@@ -182,7 +182,7 @@ OrderDelivery.readyOrder = function () {
 OrderDelivery.deliveryOrder = function () {
     if (this.check()) {
         var deliveryId = OrderDelivery.seItem.id;
-        var ajax = new $ax(Feng.ctxPath + "/order-dely/delivery", function () {
+        var ajax = new $ax(Feng.ctxPath + "/api/order-dely/delivery", function () {
             Feng.success("发货成功!");
             OrderDelivery.table.refresh();
         }, function (data) {
@@ -199,7 +199,7 @@ OrderDelivery.deliveryOrder = function () {
 OrderDelivery.receiveOrder = function () {
     if (this.check()) {
         var deliveryId = OrderDelivery.seItem.id;
-        var ajax = new $ax(Feng.ctxPath + "/order-dely/receive", function () {
+        var ajax = new $ax(Feng.ctxPath + "/api/order-dely/receive", function () {
             Feng.success("接收成功!");
             OrderDelivery.table.refresh();
         }, function (data) {
@@ -212,7 +212,7 @@ OrderDelivery.receiveOrder = function () {
 
 $(function () {
     var defaultColunms = OrderDelivery.initColumn();
-    var table = new BSTable("orderDeliveryTable", "/order-dely/delivery_list", defaultColunms);
+    var table = new BSTable("orderDeliveryTable", "/api/order-dely/delivery_list", defaultColunms);
     table.setPaginationType("server");
     OrderDelivery.table = table.init();
 

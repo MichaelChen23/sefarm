@@ -34,7 +34,7 @@ Product.initColumn = function () {
         {title: '详情标题', field: 'title', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '详情Html', field: 'productHtml', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '详情images', field: 'images', visible: false, align: 'center', valign: 'middle', sortable: true},
-        {title: '详情描述', field: 'description', visible: false, align: 'center', valign: 'middle', sortable: true},
+        {title: '详情描述', field: 'detail', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'status', align: 'center', valign: 'middle', sortable: true, formatter: prodStatusFormatter},
         {title: '创建人', field: 'createBy', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '创建时间', field: 'createTime', visible: false, align: 'center', valign: 'middle', sortable: true},
@@ -143,7 +143,7 @@ Product.openSaveProduct = function () {
         area: ['800px', '600px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/prod/product_save'
+        content: Feng.ctxPath + '/api/prod/product_save'
     });
     this.layerIndex = index;
 };
@@ -160,7 +160,7 @@ Product.openUpdateProduct = function () {
             area: ['800px', '600px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/prod/product_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/prod/product_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -174,7 +174,7 @@ Product.delProduct = function () {
 
         var operation = function(){
             var prodId = Product.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/prod/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/prod/remove", function () {
                 Feng.success("删除成功!");
                 Product.table.refresh();
             }, function (data) {
@@ -190,13 +190,13 @@ Product.delProduct = function () {
 
 $(function () {
     var defaultColunms = Product.initColumn();
-    var table = new BSTable("productTable", "/prod/list", defaultColunms);
+    var table = new BSTable("productTable", "/api/prod/list", defaultColunms);
     table.setPaginationType("server");
     Product.table = table.init();
 
     //获取所有的产品类型
     $.ajax({
-        url: '/prod-type/getAll',
+        url: '/api/prod-type/getAll',
         async: false,
         type: "GET",
         data: {},

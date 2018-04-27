@@ -79,7 +79,7 @@ OrderPay.openSaveOrderPay = function () {
         area: ['800px', '680px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/order-pay/pay_save'
+        content: Feng.ctxPath + '/api/order-pay/pay_save'
     });
     this.layerIndex = index;
 };
@@ -96,7 +96,7 @@ OrderPay.openUpdateOrderPay = function () {
             area: ['800px', '680px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/order-pay/pay_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/order-pay/pay_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -110,7 +110,7 @@ OrderPay.delOrderPay = function () {
 
         var operation = function(){
             var payId = OrderPay.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/order-pay/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/order-pay/remove", function () {
                 Feng.success("删除成功!");
                 OrderPay.table.refresh();
             }, function (data) {
@@ -126,7 +126,7 @@ OrderPay.delOrderPay = function () {
 
 $(function () {
     var defaultColunms = OrderPay.initColumn();
-    var table = new BSTable("orderPayTable", "/order-pay/pay_list", defaultColunms);
+    var table = new BSTable("orderPayTable", "/api/order-pay/pay_list", defaultColunms);
     table.setPaginationType("server");
     OrderPay.table = table.init();
 

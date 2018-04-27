@@ -41,9 +41,9 @@ public class SysMenuTreeVO implements Serializable {
     private Integer sort;
 
     /**
-     * 描述
+     * 详述
      */
-    private String description;
+    private String detail;
 
     /**
      * 是否菜单：1-是；0-不是
@@ -128,12 +128,12 @@ public class SysMenuTreeVO implements Serializable {
         this.sort = sort;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public String getIsMenu() {
@@ -201,7 +201,7 @@ public class SysMenuTreeVO implements Serializable {
                 ", icon='" + icon + '\'' +
                 ", url='" + url + '\'' +
                 ", sort=" + sort +
-                ", description='" + description + '\'' +
+                ", detail='" + detail + '\'' +
                 ", isMenu='" + isMenu + '\'' +
                 ", levels=" + levels +
                 ", pcode='" + pcode + '\'' +

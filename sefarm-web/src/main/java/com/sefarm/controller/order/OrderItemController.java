@@ -32,7 +32,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/order-item")
+@RequestMapping("/api/order-item")
 public class OrderItemController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderItemController.class);

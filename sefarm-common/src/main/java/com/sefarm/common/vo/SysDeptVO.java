@@ -31,9 +31,9 @@ public class SysDeptVO implements Serializable {
     private Integer sort;
 
     /**
-     * 描述
+     * 详述
      */
-    private String description;
+    private String detail;
 
     /**
      * 上级部门id
@@ -107,12 +107,12 @@ public class SysDeptVO implements Serializable {
         this.sort = sort;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public Long getPid() {
@@ -186,7 +186,7 @@ public class SysDeptVO implements Serializable {
                 ", name='" + name + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", sort=" + sort +
-                ", description='" + description + '\'' +
+                ", detail='" + detail + '\'' +
                 ", pid=" + pid +
                 ", pName='" + pName + '\'' +
                 ", pids='" + pids + '\'' +

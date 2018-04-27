@@ -18,7 +18,7 @@ SysDept.initColumn = function () {
         {title: '部门名', field: 'name', align: 'center', valign: 'middle', sortable: true},
         {title: '部门全称', field: 'fullName', align: 'center', valign: 'middle', sortable: true},
         {title: '排序号', field: 'sort', align: 'center', valign: 'middle', sortable: true},
-        {title: '描述', field: 'description', align: 'center', valign: 'middle', sortable: true},
+        {title: '详述', field: 'detail', align: 'center', valign: 'middle', sortable: true},
         {title: '上级部门', field: 'pName', align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'status', align: 'center', valign: 'middle', sortable: true, formatter: statusFormatter},
         {title: '创建人', field: 'createBy', visible: false, align: 'center', valign: 'middle', sortable: true},
@@ -72,7 +72,7 @@ SysDept.openSaveSysDept = function () {
         area: ['800px', '600px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/sys-dept/sysdept_save'
+        content: Feng.ctxPath + '/api/sys-dept/sysdept_save'
     });
     this.layerIndex = index;
 };
@@ -89,7 +89,7 @@ SysDept.openUpdateSysDept = function () {
             area: ['800px', '500px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/sys-dept/sysdept_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/sys-dept/sysdept_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -103,7 +103,7 @@ SysDept.delSysDept = function () {
 
         var operation = function(){
             var deptId = SysDept.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/sys-dept/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/sys-dept/remove", function () {
                 Feng.success("删除成功!");
                 SysDept.table.refresh();
             }, function (data) {
@@ -119,7 +119,7 @@ SysDept.delSysDept = function () {
 
 $(function () {
     var defaultColunms = SysDept.initColumn();
-    var table = new BSTable("sysDeptTable", "/sys-dept/sysdept_list", defaultColunms);
+    var table = new BSTable("sysDeptTable", "/api/sys-dept/sysdept_list", defaultColunms);
     table.setPaginationType("server");
     SysDept.table = table.init();
 });

@@ -100,7 +100,7 @@ SysUser.openSaveSysUser = function () {
         area: ['800px', '600px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/sys-user/sysuser_save'
+        content: Feng.ctxPath + '/api/sys-user/sysuser_save'
     });
     this.layerIndex = index;
 };
@@ -117,7 +117,7 @@ SysUser.openChangeUser = function () {
             area: ['800px', '500px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/sys-user/sysuser_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/sys-user/sysuser_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -131,7 +131,7 @@ SysUser.delSysUser = function () {
 
         var operation = function(){
             var userId = SysUser.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/sys-user/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/sys-user/remove", function () {
                 Feng.success("删除成功!");
                 SysUser.table.refresh();
             }, function (data) {
@@ -155,7 +155,7 @@ SysUser.resetPwd = function () {
             btn: ['确定', '取消'],
             shade: false //不显示遮罩
         }, function () {
-            var ajax = new $ax(Feng.ctxPath + "/sys-user/reset", function (data) {
+            var ajax = new $ax(Feng.ctxPath + "/api/sys-user/reset", function (data) {
                 Feng.success("重置密码成功!");
                 SysUser.table.refresh();
             }, function (data) {
@@ -179,7 +179,7 @@ SysUser.roleAssign = function () {
             area: ['300px', '400px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/sys-user/role_assign/' + this.seItem.id
+            content: Feng.ctxPath + '/api/sys-user/role_assign/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -187,10 +187,10 @@ SysUser.roleAssign = function () {
 
 $(function () {
     var defaultColunms = SysUser.initColumn();
-    var table = new BSTable("sysUserTable", "/sys-user/sysuser_list", defaultColunms);
+    var table = new BSTable("sysUserTable", "/api/sys-user/sysuser_list", defaultColunms);
     table.setPaginationType("server");
     SysUser.table = table.init();
-    var ztree = new $ZTree("deptTree", "/sys-dept/getDeptTree");
+    var ztree = new $ZTree("deptTree", "/api/sys-dept/getDeptTree");
     ztree.bindOnClick(SysUser.onClickDept);
     ztree.init();
 });

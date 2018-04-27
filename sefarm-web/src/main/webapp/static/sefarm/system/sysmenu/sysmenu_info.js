@@ -94,7 +94,7 @@ function onpNameBodyDown(event) {
  * 收集数据
  */
 SysMenuInfoDlg.collectData = function() {
-    this.set('id').set('name').set('code').set('icon').set('url').set('sort').set('description').set('isMenu').set('levels')
+    this.set('id').set('name').set('code').set('icon').set('url').set('sort').set('detail').set('isMenu').set('levels')
         .set('pcode').set('isOpen').set('status');
 };
 
@@ -107,7 +107,7 @@ SysMenuInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/sys-menu/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/sys-menu/save", function(data){
         Feng.success("添加成功!");
         window.parent.SysMenu.table.refresh();
         SysMenuInfoDlg.close();
@@ -127,7 +127,7 @@ SysMenuInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/sys-menu/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/sys-menu/update", function(data){
         Feng.success("修改成功!");
         window.parent.SysMenu.table.refresh();
         SysMenuInfoDlg.close();
@@ -140,7 +140,7 @@ SysMenuInfoDlg.editSubmit = function() {
 
 $(function() {
 
-    var pNameTree = new $ZTree("pNameTree", "/sys-menu/getAllMenuTree");
+    var pNameTree = new $ZTree("pNameTree", "/api/sys-menu/getAllMenuTree");
     pNameTree.bindOnClick(SysMenuInfoDlg.onClickPName);
     pNameTree.init();
     SysMenuInfoDlg.pNameZtree = pNameTree;

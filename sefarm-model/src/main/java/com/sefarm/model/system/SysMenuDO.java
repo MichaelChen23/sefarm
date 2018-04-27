@@ -50,9 +50,10 @@ public class SysMenuDO extends BaseDO implements Serializable {
     private Integer sort;
 
     /**
-     * 描述
+     * 详述 前端beetl框架对description字段处理有问题，所以改为detail字段
+     * modify by mc 2018-4-27
      */
-    private String description;
+    private String detail;
 
     /**
      * 是否菜单：1-是；0-不是
@@ -219,21 +220,21 @@ public class SysMenuDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取描述
+     * 获取详述
      *
-     * @return description - 描述
+     * @return detail - 详述
      */
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
 
     /**
-     * 设置描述
+     * 设置详述
      *
-     * @param description 描述
+     * @param detail 详述
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     /**
@@ -425,7 +426,7 @@ public class SysMenuDO extends BaseDO implements Serializable {
                 ", icon='" + icon + '\'' +
                 ", url='" + url + '\'' +
                 ", sort=" + sort +
-                ", description='" + description + '\'' +
+                ", detail='" + detail + '\'' +
                 ", isMenu=" + isMenu +
                 ", levels=" + levels +
                 ", pcode='" + pcode + '\'' +

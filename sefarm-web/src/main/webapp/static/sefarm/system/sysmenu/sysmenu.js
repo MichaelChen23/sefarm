@@ -25,7 +25,7 @@ SysMenu.initColumn = function () {
         {title: '上级菜单编号', field: 'pcode', align: 'center', valign: 'middle', sortable: true},
         {title: '是否打开', field: 'isOpen', align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'status', align: 'center', valign: 'middle', sortable: true},
-        {title: '描述', field: 'description', align: 'center', valign: 'middle', sortable: true}
+        {title: '详述', field: 'detail', align: 'center', valign: 'middle', sortable: true}
     ];
     return columns;
 };
@@ -75,7 +75,7 @@ SysMenu.openSaveSysMenu = function () {
         area: ['800px', '600px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/sys-menu/sysmenu_save'
+        content: Feng.ctxPath + '/api/sys-menu/sysmenu_save'
     });
     this.layerIndex = index;
 };
@@ -92,7 +92,7 @@ SysMenu.openUpdateSysMenu = function () {
             area: ['800px', '500px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/sys-menu/sysmenu_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/sys-menu/sysmenu_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -106,7 +106,7 @@ SysMenu.delSysMenu = function () {
 
         var operation = function(){
             var menuId = SysMenu.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/sys-menu/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/sys-menu/remove", function () {
                 Feng.success("删除成功!");
                 SysMenu.table.refresh();
             }, function (data) {
@@ -122,7 +122,7 @@ SysMenu.delSysMenu = function () {
 
 $(function () {
     var defaultColunms = SysMenu.initColumn();
-    var table = new BSTreeTable(SysMenu.id, "/sys-menu/all_list", defaultColunms);
+    var table = new BSTreeTable(SysMenu.id, "/api/sys-menu/all_list", defaultColunms);
     //设置层级展开
     table.setExpandColumn(2);
     table.setIdField("id");

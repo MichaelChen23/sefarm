@@ -78,7 +78,7 @@ Advert.openSaveAdvert = function () {
         area: ['800px', '600px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/advert/advert_save'
+        content: Feng.ctxPath + '/api/advert/advert_save'
     });
     this.layerIndex = index;
 };
@@ -95,7 +95,7 @@ Advert.openUpdateAdvert = function () {
             area: ['800px', '600px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/advert/advert_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/advert/advert_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -109,7 +109,7 @@ Advert.delAdvert = function () {
 
         var operation = function(){
             var advertId = Advert.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/advert/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/advert/remove", function () {
                 Feng.success("删除成功!");
                 Advert.table.refresh();
             }, function (data) {
@@ -125,7 +125,7 @@ Advert.delAdvert = function () {
 
 $(function () {
     var defaultColunms = Advert.initColumn();
-    var table = new BSTable("advertTable", "/advert/advert_list", defaultColunms);
+    var table = new BSTable("advertTable", "/api/advert/advert_list", defaultColunms);
     table.setPaginationType("server");
     Advert.table = table.init();
 });

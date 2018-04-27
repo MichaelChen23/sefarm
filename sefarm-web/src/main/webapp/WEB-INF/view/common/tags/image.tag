@@ -11,7 +11,7 @@
                 @if(isEmpty(imageName)){
                       src="${ctxPath}/static/img/webuploader.png"></div>
                 @}else{
-                      src="${ctxPath}/image/${imageName}"></div>
+                      src="${ctxPath}/api/image/${imageName}"></div>
                 @}
         </div>
     </div>

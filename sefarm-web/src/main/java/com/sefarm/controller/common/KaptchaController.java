@@ -21,7 +21,7 @@ import java.io.IOException;
  * @date 2018-3-30
  */
 @Controller
-@RequestMapping("/kaptcha")
+@RequestMapping("/api/kaptcha")
 public class KaptchaController {
 
     /**

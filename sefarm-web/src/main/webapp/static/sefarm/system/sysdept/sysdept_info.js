@@ -93,7 +93,7 @@ function onpNameBodyDown(event) {
  * 收集数据
  */
 SysDeptInfoDlg.collectData = function() {
-    this.set('id').set('name').set('fullName').set('sort').set('description').set('pid').set('status');
+    this.set('id').set('name').set('fullName').set('sort').set('detail').set('pid').set('status');
 };
 
 /**
@@ -105,7 +105,7 @@ SysDeptInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/sys-dept/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/sys-dept/save", function(data){
         Feng.success("添加成功!");
         window.parent.SysDept.table.refresh();
         SysDeptInfoDlg.close();
@@ -125,7 +125,7 @@ SysDeptInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/sys-dept/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/sys-dept/update", function(data){
         Feng.success("修改成功!");
         window.parent.SysDept.table.refresh();
         SysDeptInfoDlg.close();
@@ -138,7 +138,7 @@ SysDeptInfoDlg.editSubmit = function() {
 
 $(function() {
 
-    var pNameTree = new $ZTree("pNameTree", "/sys-dept/getDeptTree");
+    var pNameTree = new $ZTree("pNameTree", "/api/sys-dept/getDeptTree");
     pNameTree.bindOnClick(SysDeptInfoDlg.onClickPName);
     pNameTree.init();
     SysDeptInfoDlg.pNameZtree = pNameTree;

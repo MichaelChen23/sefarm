@@ -32,7 +32,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/prod-type")
+@RequestMapping("/api/prod-type")
 public class ProductTypeController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductTypeController.class);
@@ -200,7 +200,7 @@ public class ProductTypeController extends BaseController {
             return new BaseResponse<>(list);
         } catch (Exception e) {
             logger.error("prod-type get all list by catalogid (获取全部产品类型list失败)-- :{}", e.getMessage());
-            return null;
+            return new BaseResponse<>(null);
         }
     }
 

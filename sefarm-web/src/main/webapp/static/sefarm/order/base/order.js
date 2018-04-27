@@ -97,7 +97,7 @@ Order.openSaveOrder = function () {
         area: ['800px', '600px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/order/order_save'
+        content: Feng.ctxPath + '/api/order/order_save'
     });
     this.layerIndex = index;
 };
@@ -114,7 +114,7 @@ Order.openUpdateOrder = function () {
             area: ['800px', '600px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/order/order_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/order/order_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -128,7 +128,7 @@ Order.delOrder = function () {
 
         var operation = function(){
             var orderId = Order.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/order/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/order/remove", function () {
                 Feng.success("删除成功!");
                 Order.table.refresh();
             }, function (data) {
@@ -144,7 +144,7 @@ Order.delOrder = function () {
 
 $(function () {
     var defaultColunms = Order.initColumn();
-    var table = new BSTable("orderTable", "/order/list", defaultColunms);
+    var table = new BSTable("orderTable", "/api/order/list", defaultColunms);
     table.setPaginationType("server");
     Order.table = table.init();
 });

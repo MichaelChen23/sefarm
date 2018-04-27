@@ -11,7 +11,7 @@
 
         $("#btn_save").bind("click", function () {
             var ids = Feng.zTreeCheckedNodes("zTree");
-            var ajax = new $ax(Feng.ctxPath + "/sys-role/set_authority", function (data) {
+            var ajax = new $ax(Feng.ctxPath + "/api/sys-role/set_authority", function (data) {
                 Feng.success("角色分配权限成功!");
                 window.parent.SysRole.table.refresh();
                 parent.layer.close(index);
@@ -39,7 +39,7 @@
             }
         };
 
-        var ztree = new $ZTree("zTree", "/sys-menu/getMenuTreeByRoleId/" + "${roleId}");
+        var ztree = new $ZTree("zTree", "/api/sys-menu/getMenuTreeByRoleId/" + "${roleId}");
         ztree.setSettings(setting);
         ztree.init();
     }

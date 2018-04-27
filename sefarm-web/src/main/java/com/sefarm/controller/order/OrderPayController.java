@@ -31,7 +31,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/order-pay")
+@RequestMapping("/api/order-pay")
 public class OrderPayController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderPayController.class);

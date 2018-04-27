@@ -11,7 +11,7 @@
     <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="is_menu" jdbcType="INTEGER" property="isMenu" />
     <result column="levels" jdbcType="INTEGER" property="levels" />
     <result column="pcode" jdbcType="CHAR" property="pcode" />
@@ -31,7 +31,7 @@
     <result column="icon" jdbcType="VARCHAR" property="icon" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="is_menu" jdbcType="INTEGER" property="isMenu" />
     <result column="levels" jdbcType="INTEGER" property="levels" />
     <result column="pcode" jdbcType="CHAR" property="pcode" />
@@ -158,7 +158,7 @@
 
   <sql id="selectSysMenuDOALL">
     SELECT
-    ssm.id, ssm.name, ssm.code, ssm.icon, ssm.url, ssm.sort, ssm.description, ssm.is_menu,
+    ssm.id, ssm.name, ssm.code, ssm.icon, ssm.url, ssm.sort, ssm.detail, ssm.is_menu,
     ssm.levels, ssm.pcode, ssm.pcodes, ssm.is_open,
     ssm.status, ssm.create_by, ssm.create_time, ssm.update_by, ssm.update_time
     FROM sefarm_sys_menu ssm
@@ -166,7 +166,7 @@
 
   <select id="getSysMenuDOAllList" resultType="com.sefarm.common.vo.SysMenuTreeVO">
     SELECT
-    ssm.id, ssm.name, ssm.code, ssm.icon, ssm.url, ssm.sort, ssm.description,
+    ssm.id, ssm.name, ssm.code, ssm.icon, ssm.url, ssm.sort, ssm.detail,
     (
       CASE
       WHEN ssm.is_menu = 1 THEN
@@ -218,7 +218,7 @@
 
   <sql id="selectSysMenuVOALL">
     SELECT
-    ssm.id, ssm.name, ssm.code, ssm.icon, ssm.url, ssm.sort, ssm.description, ssm.is_menu,
+    ssm.id, ssm.name, ssm.code, ssm.icon, ssm.url, ssm.sort, ssm.detail, ssm.is_menu,
     ssm.levels, ssm.pcode, pssm.name AS p_name, ssm.pcodes, ssm.is_open,
     ssm.status, ssm.create_by, DATE_FORMAT(ssm.create_time, '%Y-%m-%d %T') AS create_time, ssm.update_by, DATE_FORMAT(ssm.update_time, '%Y-%m-%d %T') AS update_time
     FROM sefarm_sys_menu ssm

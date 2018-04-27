@@ -46,7 +46,7 @@ ProductInfoDlg.close = function () {
 ProductInfoDlg.collectData = function() {
     this.set('id').set('name').set('introduce').set('price').set('nowPrice').set('picture').set('newFlag').set('saleFlag')
         .set('unit').set('sort').set('status').set('sellCount').set('stock').set('replyHit').set('goodHit').set('searchWord')
-        .set('title').set('remark').set('productTypeId').set('productHtml').set('images').set('description');
+        .set('title').set('remark').set('productTypeId').set('productHtml').set('images').set('detail');
 };
 
 /**
@@ -58,7 +58,7 @@ ProductInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/prod/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/prod/save", function(data){
         Feng.success("添加成功!");
         window.parent.Product.table.refresh();
         ProductInfoDlg.close();
@@ -78,7 +78,7 @@ ProductInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/prod/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/prod/update", function(data){
         Feng.success("修改成功!");
         window.parent.Product.table.refresh();
         ProductInfoDlg.close();
@@ -102,7 +102,7 @@ $(function() {
 
     //获取所有的产品类型
     $.ajax({
-        url: '/prod-type/getAll',
+        url: '/api/prod-type/getAll',
         async: false,
         type: "GET",
         data: {},

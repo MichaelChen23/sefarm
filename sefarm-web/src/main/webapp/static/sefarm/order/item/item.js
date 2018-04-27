@@ -99,7 +99,7 @@ OrderItem.openSaveOrderItem = function () {
         area: ['800px', '600px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/order-item/item_save'
+        content: Feng.ctxPath + '/api/order-item/item_save'
     });
     this.layerIndex = index;
 };
@@ -116,7 +116,7 @@ OrderItem.openUpdateOrderItem = function () {
             area: ['800px', '600px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/order-item/item_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/order-item/item_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -130,7 +130,7 @@ OrderItem.delOrderItem = function () {
 
         var operation = function(){
             var itemId = OrderItem.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/order-item/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/order-item/remove", function () {
                 Feng.success("删除成功!");
                 OrderItem.table.refresh();
             }, function (data) {
@@ -146,7 +146,7 @@ OrderItem.delOrderItem = function () {
 
 $(function () {
     var defaultColunms = OrderItem.initColumn();
-    var table = new BSTable("orderItemTable", "/order-item/item_list", defaultColunms);
+    var table = new BSTable("orderItemTable", "/api/order-item/item_list", defaultColunms);
     table.setPaginationType("server");
     OrderItem.table = table.init();
 });

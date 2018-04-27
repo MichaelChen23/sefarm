@@ -31,7 +31,7 @@ import java.util.List;
  * @date 2018-4-4
  */
 @Controller
-@RequestMapping("/sys-dept")
+@RequestMapping("/api/sys-dept")
 public class SysDeptController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(SysDeptController.class);

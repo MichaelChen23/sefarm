@@ -33,7 +33,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/order-dely")
+@RequestMapping("/api/order-dely")
 public class OrderDeliveryController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderDeliveryController.class);

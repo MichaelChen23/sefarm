@@ -126,7 +126,7 @@ SysUserInfoDlg.addSubmit = function () {
     }
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/sys-user/save", function (data) {
+    var ajax = new $ax(Feng.ctxPath + "/api/sys-user/save", function (data) {
         Feng.success("添加成功!");
         window.parent.SysUser.table.refresh();
         SysUserInfoDlg.close();
@@ -146,7 +146,7 @@ SysUserInfoDlg.editSubmit = function () {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/sys-user/update", function (data) {
+    var ajax = new $ax(Feng.ctxPath + "/api/sys-user/update", function (data) {
         Feng.success("修改成功!");
         if(window.parent.SysUser != undefined){
             window.parent.SysUser.table.refresh();
@@ -163,7 +163,7 @@ SysUserInfoDlg.editSubmit = function () {
  * 修改密码
  */
 SysUserInfoDlg.chPwd = function () {
-    var ajax = new $ax(Feng.ctxPath + "/sys-user/changePwd", function (data) {
+    var ajax = new $ax(Feng.ctxPath + "/api/sys-user/changePwd", function (data) {
         Feng.success("修改成功!");
     }, function (data) {
         Feng.error("修改失败!" + data.responseJSON.message + "!");
@@ -176,7 +176,7 @@ SysUserInfoDlg.chPwd = function () {
 };
 
 $(function () {
-    var ztree = new $ZTree("treeDemo", "/sys-dept/getDeptTree");
+    var ztree = new $ZTree("treeDemo", "/api/sys-dept/getDeptTree");
     ztree.bindOnClick(SysUserInfoDlg.onClickDept);
     ztree.init();
     instance = ztree;

@@ -17,7 +17,7 @@ ProdCatalog.initColumn = function () {
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
         {title: '目录名', field: 'name', align: 'center', valign: 'middle', sortable: true},
         {title: '排序号', field: 'sort', align: 'center', valign: 'middle', sortable: true},
-        {title: '描述', field: 'description', align: 'center', valign: 'middle', sortable: true},
+        {title: '详述', field: 'detail', align: 'center', valign: 'middle', sortable: true},
         {title: '状态', field: 'status', align: 'center', valign: 'middle', sortable: true, formatter: statusFormatter},
         {title: '创建人', field: 'createBy', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '创建时间', field: 'createTime', visible: false, align: 'center', valign: 'middle', sortable: true, formatter: timeFormatter},
@@ -71,7 +71,7 @@ ProdCatalog.openSaveProdCatalog = function () {
         area: ['800px', '500px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/prod-cata/catalog_save'
+        content: Feng.ctxPath + '/api/prod-cata/catalog_save'
     });
     this.layerIndex = index;
 };
@@ -88,7 +88,7 @@ ProdCatalog.openUpdateProdCatalog = function () {
             area: ['800px', '500px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/prod-cata/catalog_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/prod-cata/catalog_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -102,7 +102,7 @@ ProdCatalog.delProdCatalog = function () {
 
         var operation = function(){
             var catalogId = ProdCatalog.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/prod-cata/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/prod-cata/remove", function () {
                 Feng.success("删除成功!");
                 ProdCatalog.table.refresh();
             }, function (data) {
@@ -118,7 +118,7 @@ ProdCatalog.delProdCatalog = function () {
 
 $(function () {
     var defaultColunms = ProdCatalog.initColumn();
-    var table = new BSTable("prodCatalogTable", "/prod-cata/catalog_list", defaultColunms);
+    var table = new BSTable("prodCatalogTable", "/api/prod-cata/catalog_list", defaultColunms);
     table.setPaginationType("server");
     ProdCatalog.table = table.init();
 });

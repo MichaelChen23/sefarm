@@ -57,7 +57,7 @@ AdvertInfoDlg.addSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/advert/save", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/advert/save", function(data){
         Feng.success("添加成功!");
         window.parent.Advert.table.refresh();
         AdvertInfoDlg.close();
@@ -77,7 +77,7 @@ AdvertInfoDlg.editSubmit = function() {
     this.collectData();
 
     //提交信息
-    var ajax = new $ax(Feng.ctxPath + "/advert/update", function(data){
+    var ajax = new $ax(Feng.ctxPath + "/api/advert/update", function(data){
         Feng.success("修改成功!");
         if(window.parent.Advert != undefined) {
             window.parent.Advert.table.refresh();

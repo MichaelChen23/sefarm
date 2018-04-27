@@ -82,7 +82,7 @@ ProductComment.openSaveProductComment = function () {
         area: ['800px', '680px'], //宽高
         fix: false, //不固定
         maxmin: true,
-        content: Feng.ctxPath + '/prod-comment/comment_save'
+        content: Feng.ctxPath + '/api/prod-comment/comment_save'
     });
     this.layerIndex = index;
 };
@@ -99,7 +99,7 @@ ProductComment.openUpdateProductComment = function () {
             area: ['800px', '680px'], //宽高
             fix: false, //不固定
             maxmin: true,
-            content: Feng.ctxPath + '/prod-comment/comment_update/' + this.seItem.id
+            content: Feng.ctxPath + '/api/prod-comment/comment_update/' + this.seItem.id
         });
         this.layerIndex = index;
     }
@@ -113,7 +113,7 @@ ProductComment.delProductComment = function () {
 
         var operation = function(){
             var commentId = ProductComment.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/prod-comment/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/prod-comment/remove", function () {
                 Feng.success("删除成功!");
                 ProductComment.table.refresh();
             }, function (data) {
@@ -129,7 +129,7 @@ ProductComment.delProductComment = function () {
 
 $(function () {
     var defaultColunms = ProductComment.initColumn();
-    var table = new BSTable("productCommentTable", "/prod-comment/list", defaultColunms);
+    var table = new BSTable("productCommentTable", "/api/prod-comment/list", defaultColunms);
     table.setPaginationType("server");
     ProductComment.table = table.init();
 

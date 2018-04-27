@@ -9,7 +9,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />

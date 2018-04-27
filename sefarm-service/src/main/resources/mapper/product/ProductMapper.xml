@@ -30,7 +30,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="product_html" jdbcType="LONGVARCHAR" property="productHtml" />
     <result column="images" jdbcType="LONGVARCHAR" property="images" />
-    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+    <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
   </resultMap>
 
   <resultMap id="ProductVOResultMap" type="com.sefarm.common.vo.ProductVO">
@@ -60,13 +60,13 @@
     <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
     <result column="product_html" jdbcType="LONGVARCHAR" property="productHtml" />
     <result column="images" jdbcType="LONGVARCHAR" property="images" />
-    <result column="description" jdbcType="LONGVARCHAR" property="description" />
+    <result column="detail" jdbcType="LONGVARCHAR" property="detail" />
   </resultMap>
 
   <sql id="selectProductVOALL">
     SELECT
     sp.id, sp.name, sp.introduce, sp.price, sp.now_price, sp.picture, sp.new_flag, sp.sale_flag, sp.unit, sp.sort, sp.sell_count, sp.stock, sp.reply_hit, sp.good_hit,
-    sp.search_word, sp.title, sp.remark, sp.product_type_id, spt.name AS product_type_name, sp.product_html, sp.images, sp.description,
+    sp.search_word, sp.title, sp.remark, sp.product_type_id, spt.name AS product_type_name, sp.product_html, sp.images, sp.detail,
     sp.status, sp.create_by, DATE_FORMAT(sp.create_time, '%Y-%m-%d %T') AS create_time, sp.update_by, DATE_FORMAT(sp.update_time, '%Y-%m-%d %T') AS update_time
     FROM sefarm_product sp
     LEFT JOIN sefarm_product_type spt ON spt.id = sp.product_type_id

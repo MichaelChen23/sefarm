@@ -32,7 +32,7 @@ import java.util.List;
  * @date 2018-4-12
  */
 @Controller
-@RequestMapping("/sys-menu")
+@RequestMapping("/api/sys-menu")
 public class SysMenuController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(SysMenuController.class);

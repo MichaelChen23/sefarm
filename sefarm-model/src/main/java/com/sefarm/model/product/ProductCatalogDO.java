@@ -40,9 +40,9 @@ public class ProductCatalogDO extends BaseDO implements Serializable {
     private String status;
 
     /**
-     * 描述
+     * 详述
      */
-    private String description;
+    private String detail;
 
     /**
      * 创建人
@@ -141,21 +141,21 @@ public class ProductCatalogDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取描述
+     * 获取详述
      *
-     * @return description - 描述
+     * @return detail - 详述
      */
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
 
     /**
-     * 设置描述
+     * 设置详述
      *
-     * @param description 描述
+     * @param detail 详述
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     /**
@@ -237,7 +237,7 @@ public class ProductCatalogDO extends BaseDO implements Serializable {
                 ", name='" + name + '\'' +
                 ", sort=" + sort +
                 ", status='" + status + '\'' +
-                ", description='" + description + '\'' +
+                ", detail='" + detail + '\'' +
                 ", createBy='" + createBy + '\'' +
                 ", createTime=" + createTime +
                 ", updateBy='" + updateBy + '\'' +

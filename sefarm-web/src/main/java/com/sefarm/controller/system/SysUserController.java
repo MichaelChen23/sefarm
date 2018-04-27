@@ -34,7 +34,7 @@ import java.util.List;
  * controller对应beetl模版链接，restcontroller对应所有接口以restful方式返回结果，如果不用restController则要对每个接口使用@ResponseBody，两者只能选其一
  */
 @Controller
-@RequestMapping("/sys-user")
+@RequestMapping("/api/sys-user")
 public class SysUserController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(SysUserController.class);
