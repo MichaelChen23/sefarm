@@ -26,4 +26,8 @@ public interface IOrderService extends IBaseService<OrderDO> {
      * @return
      */
     PageInfo<OrderDO> getOrderDOList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, String name, String orderNo, String status, String createTimeBegin, String createTimeEnd);
+
+    Integer saveOrderByObj(OrderDO orderDO);
+
+    Long placeOrderByObj(OrderDO orderDO);
 }

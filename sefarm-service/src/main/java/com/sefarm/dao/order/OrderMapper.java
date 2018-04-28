@@ -26,4 +26,6 @@ public interface OrderMapper extends SeFarmMapper<OrderDO> {
      * @return
      */
     List<OrderDO> getOrderDOList(@Param("name")String name, @Param("orderNo")String orderNo, @Param("status")String status, @Param("createTimeBegin")String createTimeBegin, @Param("createTimeEnd")String createTimeEnd, @Param("sortName")String sort, @Param("sortOrder")String order);
+
+    Integer saveOrderByObj(OrderDO orderDO);
 }

@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单的Controller
@@ -165,6 +167,29 @@ public class OrderController extends BaseController {
         } catch (Exception e) {
             logger.error("order delete fail(删除失败)--"+orderId+":{}", e.getMessage());
             return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    @RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<String> placeOrder(@RequestParam String account, @RequestParam(required = false) String requirement) {
+        Map<Long, Integer> productMaps = new HashMap<>();
+        try {
+            OrderDO orderDO = new OrderDO();
+            orderDO.setOrderNo("111");
+            orderDO.setAccount(account);
+            orderDO.setRequirement(requirement);
+            orderDO.setCreateTime(new Date());
+            //下订单 返回订单id
+            Long id = orderService.placeOrderByObj(orderDO);
+            if (id > 0) {
+                return new BaseResponse("111");
+            } else {
+                return new BaseResponse(null);
+            }
+        } catch (Exception e) {
+            logger.error("place order fail(下订单失败)--"+account+"--"+productMaps.toString()+":{}", e.getMessage());
+            return new BaseResponse(null);
         }
     }
 

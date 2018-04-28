@@ -49,4 +49,9 @@
     </where>
     ORDER BY ${sortName} ${sortOrder}
   </select>
+
+  <insert id="saveOrderByObj" parameterType="com.sefarm.model.order.OrderDO" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO sefarm_order (order_no, account, pay_type, carry, carry_fee_total, quantity, product_total, amount, exchange_score, requirement, remark, status, create_time, update_by, update_time)
+    VALUES(#{orderNo}, #{account}, #{payType}, #{carry}, #{carryFeeTotal}, #{quantity}, #{productTotal}, #{amount}, #{exchangeScore}, #{requirement}, #{remark}, #{status}, #{createTime}, #{updateBy}, #{updateTime})
+  </insert>
 </mapper>
