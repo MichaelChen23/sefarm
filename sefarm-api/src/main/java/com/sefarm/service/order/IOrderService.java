@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.IBaseService;
 import com.sefarm.model.order.OrderDO;
 
+import java.util.Map;
+
 /**
  * 订单的服务接口
  *
@@ -27,7 +29,21 @@ public interface IOrderService extends IBaseService<OrderDO> {
      */
     PageInfo<OrderDO> getOrderDOList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, String name, String orderNo, String status, String createTimeBegin, String createTimeEnd);
 
-    Integer saveOrderByObj(OrderDO orderDO);
+    /**
+     * 移动前端——下订单
+     * add by mc 2018-4-29
+     * @param orderDO
+     * @param productMaps
+     * @return
+     */
+    Long placeOrderByObj(OrderDO orderDO, Map<String, Integer> productMaps);
 
-    Long placeOrderByObj(OrderDO orderDO);
+    /**
+     * 移动前端——查询订单列表
+     * @param pageIndex
+     * @param pageSize
+     * @param account
+     * @return
+     */
+    PageInfo<OrderDO> getOrderDOPageList(Integer pageIndex, Integer pageSize, String account);
 }

@@ -1,6 +1,5 @@
 package com.sefarm.service.impl.order;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseServiceImpl;
@@ -9,6 +8,7 @@ import com.sefarm.common.vo.OrderPayVO;
 import com.sefarm.dao.order.OrderPayMapper;
 import com.sefarm.model.order.OrderPayDO;
 import com.sefarm.service.order.IOrderPayService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@Service(version = "1.0.0")
+@Service("orderPayService")
 public class OrderPayServiceImpl extends BaseServiceImpl<OrderPayMapper, OrderPayDO> implements IOrderPayService {
 
     @Override

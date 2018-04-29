@@ -36,19 +36,19 @@ spring:
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
         # 合并多个DruidDataSource的监控数据
         useGlobalDataSourceStat: true
-    #dubbo配置
-    dubbo:
-        application:
-            name: sefarm-service
-        registry:
-            # zookeeper注册中心的地址
-            address: zookeeper://172.17.120.48:2181
-            timeout: 40000
-        protocol:
-            name: dubbo
-            port: 20880
-        # dubbo服务发布者所在的包
-        scan: com.sefarm.service
+#dubbo配置
+dubbo:
+    application:
+        name: sefarm-service
+    registry:
+        # zookeeper注册中心的地址
+        address: zookeeper://172.17.120.48:2181
+        timeout: 40000
+    protocol:
+        name: dubbo
+        port: 20880
+    # dubbo服务发布者所在的包
+    scan: com.sefarm.service
 
 ########################################################
 ### mybatis 配置

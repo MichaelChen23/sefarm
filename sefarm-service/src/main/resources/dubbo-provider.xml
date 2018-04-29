@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="sefarm-service"  />
+
+    <!-- 注册中心服务地址 -->
+    <dubbo:registry id="zookeeper" protocol="zookeeper" address="${dubbo.registry.address}" />
+
+    <!-- 设定dubbo的协议和端口 -->
+    <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}" />
+
+    <!-- 声明需要暴露的服务接口 -->
+    <!--system-dubbo-api-->
+    <dubbo:service interface="com.sefarm.service.system.ISysUserService" ref="sysUserService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.system.ISysRoleService" ref="sysRoleService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.system.ISysMenuService" ref="sysMenuService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.system.ISysRoleMenuService" ref="sysRoleMenuService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.system.ISysDeptService" ref="sysDeptService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.system.IAdvertService" ref="advertService" version="1.0" registry="zookeeper"/>
+
+    <!--product-dubbo-api-->
+    <dubbo:service interface="com.sefarm.service.product.IProductCatalogService" ref="productCatalogService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.product.IProductTypeService" ref="productTypeService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.product.IProductService" ref="productService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.product.IProductCommentService" ref="productCommentService" version="1.0" registry="zookeeper"/>
+
+    <!--order-dubbo-api-->
+    <dubbo:service interface="com.sefarm.service.order.IOrderService" ref="orderService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.order.IOrderItemService" ref="orderItemService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.order.IOrderPayService" ref="orderPayService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.order.IOrderDeliveryService" ref="orderDeliveryService" version="1.0" registry="zookeeper"/>
+
+    <!-- 具体服务接口的实现 -->
+    <!--<bean id="computeService" class="cn.ctoedu.service.impl.ComputeServiceImpl" />-->
+
+</beans>

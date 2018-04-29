@@ -53,4 +53,9 @@ public abstract class Constant {
 	 */
 	public static final String PRODUCT_DEFAULT_QUERY_ORDER = "desc";
 
+	/**
+	 * 事务默认timeout值，add by mc 2018-4-29
+	 */
+	public static final int DEFAULT_TRANSACTION_TIMEOUT = 36000;
+
 }

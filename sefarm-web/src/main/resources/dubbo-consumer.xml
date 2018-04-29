@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 消费方应用名 -->
+    <dubbo:application name="sefarm-web"  />
+
+    <!-- 注册中心服务地址 -->
+    <dubbo:registry id="zookeeper" protocol="zookeeper" address="${dubbo.registry.address}" />
+
+    <!-- 引用Dubbo-Service服务-->
+    <!--system-dubbo-service-->
+    <dubbo:reference id="sysUserService" interface="com.sefarm.service.system.ISysUserService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="sysRoleService" interface="com.sefarm.service.system.ISysRoleService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="sysMenuService" interface="com.sefarm.service.system.ISysMenuService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="sysRoleMenuService" interface="com.sefarm.service.system.ISysRoleMenuService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="sysDeptService" interface="com.sefarm.service.system.ISysDeptService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="advertService" interface="com.sefarm.service.system.IAdvertService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+
+    <!--product-dubbo-service-->
+    <dubbo:reference id="productCatalogService" interface="com.sefarm.service.product.IProductCatalogService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="productTypeService" interface="com.sefarm.service.product.IProductTypeService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="productService" interface="com.sefarm.service.product.IProductService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="productCommentService" interface="com.sefarm.service.product.IProductCommentService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+
+    <!--order-dubbo-service-->
+    <dubbo:reference id="orderService" interface="com.sefarm.service.order.IOrderService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="orderItemService" interface="com.sefarm.service.order.IOrderItemService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="orderPayService" interface="com.sefarm.service.order.IOrderPayService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+    <dubbo:reference id="orderDeliveryService" interface="com.sefarm.service.order.IOrderDeliveryService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="15000"/>
+
+</beans>

@@ -1,9 +1,7 @@
 package com.sefarm.controller.user;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
 import com.sefarm.model.user.UserDO;
 import com.sefarm.service.user.IUserService;
@@ -28,7 +26,7 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
+//    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
     public IUserService userService;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)

@@ -1,6 +1,5 @@
 package com.sefarm.service.impl.system;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseServiceImpl;
@@ -13,6 +12,7 @@ import com.sefarm.model.system.SysRoleDO;
 import com.sefarm.model.system.SysRoleMenuDO;
 import com.sefarm.service.system.ISysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@Service(version = "1.0.0")
+@Service("sysRoleService")
 public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleDO> implements ISysRoleService {
 
     @Autowired

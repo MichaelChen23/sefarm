@@ -1,6 +1,5 @@
 package com.sefarm.controller.product;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
@@ -15,6 +14,7 @@ import com.sefarm.service.product.IProductCatalogService;
 import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,7 +38,7 @@ public class ProductCatalogController extends BaseController {
 
     private static String PREFIX = "/product/catalog/";
 
-    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
+    @Autowired
     public IProductCatalogService productCatalogService;
 
     /**

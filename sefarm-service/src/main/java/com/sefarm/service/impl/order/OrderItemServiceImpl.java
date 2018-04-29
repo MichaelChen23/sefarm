@@ -1,6 +1,5 @@
 package com.sefarm.service.impl.order;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseServiceImpl;
@@ -9,6 +8,8 @@ import com.sefarm.common.vo.OrderItemVO;
 import com.sefarm.dao.order.OrderItemMapper;
 import com.sefarm.model.order.OrderItemDO;
 import com.sefarm.service.order.IOrderItemService;
+import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@Service(version = "1.0.0")
+@Service("orderItemService")
 public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, OrderItemDO> implements IOrderItemService {
 
     @Override
@@ -34,5 +35,15 @@ public class OrderItemServiceImpl extends BaseServiceImpl<OrderItemMapper, Order
     @Override
     public OrderItemVO getOrderItemVO(Long itemId) {
         return getMapper().getOrderItemVO(itemId);
+    }
+
+    @Override
+    public List<OrderItemDO> getOrderItemDOAllListByOrderId(Long orderId) {
+        Example example = new Example(OrderItemDO.class);
+        example.createCriteria().andEqualTo("orderId", orderId);
+        //把产品数量由大到小排列
+        example.orderBy("number").desc();
+        List<OrderItemDO> list = getMapper().selectByExample(example);
+        return list;
     }
 }

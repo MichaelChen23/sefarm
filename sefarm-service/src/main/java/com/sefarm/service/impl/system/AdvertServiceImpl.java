@@ -1,6 +1,5 @@
 package com.sefarm.service.impl.system;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseServiceImpl;
@@ -9,6 +8,7 @@ import com.sefarm.common.util.StrKit;
 import com.sefarm.dao.system.AdvertMapper;
 import com.sefarm.model.system.AdvertDO;
 import com.sefarm.service.system.IAdvertService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@Service(version = "1.0.0")
+@Service("advertService")
 public class AdvertServiceImpl extends BaseServiceImpl<AdvertMapper, AdvertDO> implements IAdvertService {
 
     @Override

@@ -1,6 +1,5 @@
 package com.sefarm.service.impl.system;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.sefarm.common.base.BaseServiceImpl;
 import com.sefarm.common.node.MenuNode;
 import com.sefarm.common.node.ZTreeNode;
@@ -9,6 +8,7 @@ import com.sefarm.common.vo.SysMenuVO;
 import com.sefarm.dao.system.SysMenuMapper;
 import com.sefarm.model.system.SysMenuDO;
 import com.sefarm.service.system.ISysMenuService;
+import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@Service(version = "1.0.0")
+@Service("sysMenuService")
 public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuDO> implements ISysMenuService {
 
     @Override

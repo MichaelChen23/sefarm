@@ -1,6 +1,5 @@
 package com.sefarm.service.impl.product;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
@@ -12,6 +11,7 @@ import com.sefarm.dao.product.ProductMapper;
 import com.sefarm.model.product.ProductDO;
 import com.sefarm.service.product.IProductService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@Service(version = "1.0.0")
+@Service("productService")
 public class ProductServiceImpl extends BaseServiceImpl<ProductMapper, ProductDO> implements IProductService {
 
     @Override

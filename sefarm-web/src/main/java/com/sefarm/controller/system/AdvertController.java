@@ -1,6 +1,5 @@
 package com.sefarm.controller.system;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
@@ -14,6 +13,7 @@ import com.sefarm.service.system.IAdvertService;
 import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,7 +37,7 @@ public class AdvertController extends BaseController {
 
     private static String PREFIX = "/system/advert/";
 
-    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
+    @Autowired
     public IAdvertService advertService;
 
     /**

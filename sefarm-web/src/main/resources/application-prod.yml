@@ -5,14 +5,6 @@
 spring:
     # 多环境配置
     profiles: prod
-    # dubbo
-    dubbo:
-        application:
-            name: sefarm-web
-        registry:
-            address: zookeeper://172.17.120.48:2181
-            timeout: 40000
-        scan: com.sefarm
     # srping mvc
     mvc:
         static-path-pattern: /static/**
@@ -20,12 +12,20 @@ spring:
             prefix: /WEB-INF/view
 #            suffix: .html
 
+# dubbo
+dubbo:
+    application:
+        name: sefarm-web
+    registry:
+        address: zookeeper://172.17.120.48:2181
+        timeout: 40000
+    scan: com.sefarm
 
 ########################################################
 ### server 配置
 ########################################################
 server:
-    port: 8188
+    port: 80
     context-path: /
 #    tomcat:
 #        uri-encoding: utf-8
@@ -33,9 +33,9 @@ server:
 ###################  sefarm配置  ###################
 sefarm:
     swagger-open: false #是否开启swagger (true/false)
-    kaptcha-open: false #是否开启登录时验证码 (true/false)
-    session-open: false #是否开启session超时验证（受影响的类SessionTimeoutInterceptor） (true/false)
-    file-upload-path: /sefarm/images  #文件上传目录(不配置的话为java.io.tmpdir目录)
+    kaptcha-open: true #是否开启登录时验证码 (true/false)
+    session-open: true #是否开启session超时验证（受影响的类SessionTimeoutInterceptor） (true/false)
+    file-upload-path: /sefarm/images/  #文件上传目录(不配置的话为java.io.tmpdir目录)
     muti-datasource-open: false #是否开启多数据源(true/false)
     spring-session-open: false #是否开启spring session,如果是多机环境需要开启(true/false)
     session-invalidate-time: 1800 #session失效时间(只在单机环境下生效，多机环境在SpringSessionConfig类中配置) 单位：秒

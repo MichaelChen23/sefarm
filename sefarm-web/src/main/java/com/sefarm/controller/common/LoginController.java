@@ -1,6 +1,5 @@
 package com.sefarm.controller.common;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.google.code.kaptcha.Constants;
 import com.sefarm.common.Constant;
 import com.sefarm.common.exception.BizExceptionEnum;
@@ -13,6 +12,7 @@ import com.sefarm.service.system.ISysMenuService;
 import com.sefarm.service.system.ISysUserService;
 import com.sefarm.util.ToolUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +30,12 @@ import java.util.List;
 @Controller
 public class LoginController extends BaseController {
 
-    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
+//    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT) 注解式导入dubbo服务与事务注解有冲突就不使用了。 modify by mc 2018-4-29
+
+    @Autowired
     public ISysUserService sysUserService;
 
-    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
+    @Autowired
     public ISysMenuService sysMenuService;
 
     /**

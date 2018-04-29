@@ -1,6 +1,5 @@
 package com.sefarm.controller.system;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseResponse;
@@ -27,7 +26,7 @@ public class SmsController {
 
     private static final Logger logger = LoggerFactory.getLogger(SmsController.class);
 
-    @Reference(version = "1.0.0", timeout = 10000)
+//    @Reference(version = "1.0.0", timeout = 10000)
     public ISmsService smsService;
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)

@@ -1,6 +1,5 @@
 package com.sefarm.controller.order;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
@@ -17,6 +16,7 @@ import com.sefarm.service.order.IOrderDeliveryService;
 import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,7 +40,7 @@ public class OrderDeliveryController extends BaseController {
 
     private static String PREFIX = "/order/delivery/";
 
-    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
+    @Autowired
     public IOrderDeliveryService orderDeliveryService;
 
     /**

@@ -1,6 +1,5 @@
 package com.sefarm.service.impl.system;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseServiceImpl;
@@ -10,6 +9,7 @@ import com.sefarm.common.vo.SysDeptVO;
 import com.sefarm.dao.system.SysDeptMapper;
 import com.sefarm.model.system.SysDeptDO;
 import com.sefarm.service.system.ISysDeptService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@Service(version = "1.0.0")
+@Service("sysDeptService")
 public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptMapper, SysDeptDO> implements ISysDeptService {
 
     @Override

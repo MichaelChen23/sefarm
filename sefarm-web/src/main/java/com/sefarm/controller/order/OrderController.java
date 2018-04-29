@@ -1,6 +1,5 @@
 package com.sefarm.controller.order;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
@@ -9,12 +8,14 @@ import com.sefarm.common.constant.tips.ErrorTip;
 import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
+import com.sefarm.common.util.NumberUtil;
 import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.order.OrderDO;
 import com.sefarm.service.order.IOrderService;
 import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,8 +41,8 @@ public class OrderController extends BaseController {
 
     private static String PREFIX = "/order/base/";
 
-    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
-    public IOrderService orderService;
+    @Autowired
+    IOrderService orderService;
 
     /**
      * 跳转到查看 订单 列表的页面
@@ -170,20 +171,36 @@ public class OrderController extends BaseController {
         }
     }
 
+    /**
+     * 移动前端——下订单
+     * add by mc 2018-4-29
+     * @param account
+     * @param name
+     * @param mobile
+     * @param address
+     * @param productJsonStr
+     * @param requirement
+     * @return 返回orderNo订单编号
+     */
     @RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<String> placeOrder(@RequestParam String account, @RequestParam(required = false) String requirement) {
-        Map<Long, Integer> productMaps = new HashMap<>();
+    public BaseResponse<String> placeOrder(@RequestParam String account, @RequestParam String name, @RequestParam String mobile, @RequestParam String address, @RequestParam String productJsonStr, @RequestParam(required = false) String requirement) {
+        Map<String, Integer> productMaps = new HashMap<>();
         try {
+            //解析所选产品jsonStr为map
+            productMaps = (Map<String, Integer>) JSON.parse(productJsonStr);
             OrderDO orderDO = new OrderDO();
-            orderDO.setOrderNo("111");
+            //获取唯一的订单号，线程安全
+            String orderNo = NumberUtil.getUniqueOrderNo();
+            orderDO.setOrderNo(orderNo);
             orderDO.setAccount(account);
             orderDO.setRequirement(requirement);
             orderDO.setCreateTime(new Date());
             //下订单 返回订单id
-            Long id = orderService.placeOrderByObj(orderDO);
+            Long id = orderService.placeOrderByObj(orderDO, productMaps);
             if (id > 0) {
-                return new BaseResponse("111");
+                //返回订单号给前端，去支付
+                return new BaseResponse(orderNo);
             } else {
                 return new BaseResponse(null);
             }
@@ -192,6 +209,27 @@ public class OrderController extends BaseController {
             return new BaseResponse(null);
         }
     }
+
+    /**
+     * 移动前端——分页查询订单
+     * @param pageIndex
+     * @param pageSize
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "/getPageList", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<PageInfo<OrderDO>> getOrderPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam String account) {
+        try {
+            PageInfo<OrderDO> result = orderService.getOrderDOPageList(pageIndex, pageSize, account);
+            return new BaseResponse<>(result);
+        } catch (Exception e) {
+            logger.error("get order page list fail(按条件查询 订单 列表失败) -- :{}", e.getMessage());
+            return new BaseResponse<>(null);
+        }
+    }
+
+
 
     @RequestMapping(value = "/removeList", method = RequestMethod.POST)
     public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除

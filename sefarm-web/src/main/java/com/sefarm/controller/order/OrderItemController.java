@@ -1,6 +1,5 @@
 package com.sefarm.controller.order;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
@@ -16,6 +15,7 @@ import com.sefarm.service.order.IOrderItemService;
 import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,7 +39,7 @@ public class OrderItemController extends BaseController {
 
     private static String PREFIX = "/order/item/";
 
-    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
+    @Autowired
     public IOrderItemService orderItemService;
 
     /**
@@ -165,6 +165,24 @@ public class OrderItemController extends BaseController {
         } catch (Exception e) {
             logger.error("order-item delete fail(删除失败)--"+itemId+":{}", e.getMessage());
             return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 移动前端——根据订单id查找所有订单项
+     * add by mc 2018-4-29
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/getAllListByOrderId", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<List<OrderItemDO>> getOrderItemAllListByOrderId(@RequestParam Long orderId) {
+        try {
+            List<OrderItemDO> list = orderItemService.getOrderItemDOAllListByOrderId(orderId);
+            return new BaseResponse<>(list);
+        } catch (Exception e) {
+            logger.error("order-item get all list by orderId (获取全部订单项list失败)-- :{}", e.getMessage());
+            return new BaseResponse<>(null);
         }
     }
 
