@@ -19,6 +19,7 @@ Advert.initColumn = function () {
         {title: '图片', field: 'image', align: 'center', valign: 'middle', sortable: true},
         {title: '内容', field: 'content', align: 'center', valign: 'middle', sortable: true},
         {title: '链接', field: 'url', align: 'center', valign: 'middle', sortable: true},
+        {title: '产品id', field: 'productId', align: 'center', valign: 'middle', sortable: true},
         {title: '上架时间', field: 'startTime', align: 'center', valign: 'middle', sortable: true, formatter: timeFormatter},
         {title: '下架时间', field: 'endTime', align: 'center', valign: 'middle', sortable: true, formatter: timeFormatter},
         {title: '排序号', field: 'sort', align: 'center', valign: 'middle', sortable: true},

@@ -44,8 +44,8 @@ AdvertInfoDlg.close = function () {
  * 收集数据
  */
 AdvertInfoDlg.collectData = function() {
-    this.set('id').set('title').set('image').set('content').set('url').set('status').set('startTime')
-        .set('endTime').set('sort').set('type').set('remark').set('html');
+    this.set('id').set('title').set('image').set('content').set('url').set('productId').set('status')
+        .set('startTime').set('endTime').set('sort').set('type').set('remark').set('html');
 };
 
 /**

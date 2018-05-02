@@ -10,6 +10,7 @@
     <result column="image" jdbcType="VARCHAR" property="image" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />

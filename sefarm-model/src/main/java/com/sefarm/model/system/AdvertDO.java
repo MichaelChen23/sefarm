@@ -46,6 +46,12 @@ public class AdvertDO extends BaseDO implements Serializable {
     private String url;
 
     /**
+     * 产品id，用于跳转到产品详情页，用于查看产品评论
+     * add by mc 2018-5-2
+     */
+    private Long productId;
+
+    /**
      * 状态：y-启用；n-禁用，默认为y 
      */
     private String status;
@@ -196,6 +202,24 @@ public class AdvertDO extends BaseDO implements Serializable {
      */
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    /**
+     * 获取产品id
+     *
+     * @return productId - 产品id
+     */
+    public Long getProductId() {
+        return productId;
+    }
+
+    /**
+     * 设置产品id
+     *
+     * @param productId 产品id
+     */
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 
     /**
@@ -404,6 +428,7 @@ public class AdvertDO extends BaseDO implements Serializable {
                 ", image='" + image + '\'' +
                 ", content='" + content + '\'' +
                 ", url='" + url + '\'' +
+                ", productId=" + productId +
                 ", status='" + status + '\'' +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +

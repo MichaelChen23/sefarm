@@ -32,6 +32,11 @@ public class CartVO implements Serializable {
     private String productName;
 
     /**
+     * 产品图片
+     */
+    private String productImage;
+
+    /**
      * 现价
      */
     private BigDecimal nowPrice;
@@ -83,6 +88,14 @@ public class CartVO implements Serializable {
         this.productName = productName;
     }
 
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
+    }
+
     public BigDecimal getNowPrice() {
         return nowPrice;
     }
@@ -122,6 +135,7 @@ public class CartVO implements Serializable {
                 ", account='" + account + '\'' +
                 ", productId=" + productId +
                 ", productName='" + productName + '\'' +
+                ", productImage='" + productImage + '\'' +
                 ", nowPrice=" + nowPrice +
                 ", number=" + number +
                 ", createTime='" + createTime + '\'' +

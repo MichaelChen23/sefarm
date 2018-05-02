@@ -16,4 +16,8 @@ import java.util.List;
 public interface CartMapper extends SeFarmMapper<CartDO> {
 
     List<CartVO> getCartVOAllListByAccount(@Param("account")String account);
+
+    List<CartVO> getCartVOList(@Param("account")String account, @Param("createTimeBegin")String createTimeBegin, @Param("createTimeEnd")String createTimeEnd, @Param("sortName")String sort, @Param("sortOrder")String order);
+
+    CartVO getCartVO(@Param("cartId")Long cartId);
 }
