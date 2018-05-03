@@ -1,7 +1,7 @@
 /**
  * 初始化 Tree Table 的封装
  *
- * @author cyf
+ * @author mc
  */
 (function () {
     var BSTreeTable = function (bstableId, url, columns) {

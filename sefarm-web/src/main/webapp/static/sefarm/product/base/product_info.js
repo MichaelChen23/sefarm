@@ -100,6 +100,10 @@ $(function() {
     var pictureUp = new $WebUpload("picture");
     pictureUp.init();
 
+    // 初始化多图片上传
+    var imagesUp = new $ImagesUpload("imageList", "imagePicker", "viewImages", "images");
+    imagesUp.init();
+
     //获取所有的产品类型
     $.ajax({
         url: '/api/prod-type/getAll',
