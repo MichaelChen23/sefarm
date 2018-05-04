@@ -1,10 +1,14 @@
 package com.sefarm.model.user;
 
 import com.sefarm.common.base.BaseDO;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * 用户地址的实体类
@@ -18,7 +22,7 @@ public class UserAddressDO extends BaseDO implements Serializable {
      * 用户地址ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
+    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     /**
@@ -74,14 +78,9 @@ public class UserAddressDO extends BaseDO implements Serializable {
     private String defaultFlag;
 
     /**
-     * 创建人
-     */
-    @Column(name = "create_by")
-    private String createBy;
-
-    /**
      * 创建时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "create_time")
     private Date createTime;
 
@@ -94,6 +93,7 @@ public class UserAddressDO extends BaseDO implements Serializable {
     /**
      * 更新时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "update_time")
     private Date updateTime;
 
@@ -300,24 +300,6 @@ public class UserAddressDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取创建人
-     *
-     * @return create_by - 创建人
-     */
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    /**
-     * 设置创建人
-     *
-     * @param createBy 创建人
-     */
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
-    /**
      * 获取创建时间
      *
      * @return create_time - 创建时间
@@ -385,7 +367,6 @@ public class UserAddressDO extends BaseDO implements Serializable {
                 ", phone='" + phone + '\'' +
                 ", mobile='" + mobile + '\'' +
                 ", defaultFlag='" + defaultFlag + '\'' +
-                ", createBy='" + createBy + '\'' +
                 ", createTime=" + createTime +
                 ", updateBy='" + updateBy + '\'' +
                 ", updateTime=" + updateTime +

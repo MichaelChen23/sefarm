@@ -141,7 +141,7 @@ function statusFormatter(value, row, index) {
  * @returns {string}
  */
 function timeFormatter(value, row, index) {
-    if (value != null) {
+    if (value != null && value.replace(/(^s*)|(s*$)/g, "").length !=0) {
         var date = new Date(value);
         var year = date.getFullYear();
         var month = fixFormatter(date.getMonth() + 1);
@@ -150,8 +150,11 @@ function timeFormatter(value, row, index) {
         var minute = fixFormatter(date.getMinutes());
         var second = fixFormatter(date.getSeconds());
         return year + '-' + month + '-' + day + " " + hour + ":" + minute + ":" + second;
+    } else {
+        return "";
     }
-};
+}
+;
 
 /**
  * fix 0 before format 不满10补0函数

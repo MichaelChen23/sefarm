@@ -44,6 +44,16 @@ public abstract class Constant {
 	public static final int DUBBO_TIME_OUT = 100000;
 
 	/**
+	 * 共用条件查询的默认查询排序字段 add by mc 2018-5-3
+	 */
+	public static final String DEFAULT_QUERY_SORT = "createTime";
+
+	/**
+	 * 共用条件查询的默认查询排序升降幂 add by mc 2018-5-3
+	 */
+	public static final String DEFAULT_QUERY_ORDER = "desc";
+
+	/**
 	 * 产品的条件查询的默认查询排序字段 add by mc 2018-4-26
 	 */
 	public static final String PRODUCT_DEFAULT_QUERY_SORT = "sellCount";

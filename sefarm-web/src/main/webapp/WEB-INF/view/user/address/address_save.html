@@ -1,0 +1,56 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+
+                    <#input id="account" name="用户帐号" underline="true"/>
+
+                    <#input id="province" name="省份" underline="true"/>
+
+                    <#input id="area" name="区域" underline="true"/>
+
+                    <#input id="zip" name="邮编" underline="true"/>
+
+                    <#input id="mobile" name="手机号码" underline="true"/>
+
+                    <#input id="createTime" name="创建时间"
+                            clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
+
+                </div>
+                <div class="col-sm-6">
+                    <div id="driverInfoContent">
+
+                        <#input id="name" name="收货人" underline="true"/>
+
+                        <#input id="city" name="城市" underline="true"/>
+
+                        <#input id="address" name="详细地址" underline="true"/>
+
+                        <#input id="phone" name="电话/座机号码" underline="true"/>
+
+                        <#select id="defaultFlag" name="是否默认地址">
+                            <option value="y">是</option>
+                            <option value="n">否</option>
+                        </#select>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="AddressInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="AddressInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/user/address/address_info.js"></script>
+@}

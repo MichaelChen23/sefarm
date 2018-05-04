@@ -50,4 +50,8 @@
     <dubbo:reference id="cartService" interface="com.sefarm.service.common.ICartService"
                      check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="${dubbo.registry.timeout}"/>
 
+    <!--user-dubbo-service-->
+    <dubbo:reference id="userAddressService" interface="com.sefarm.service.user.IUserAddressService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="${dubbo.registry.timeout}"/>
+
 </beans>

@@ -1,17 +1,26 @@
 package com.sefarm.controller.user;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.constant.tips.ErrorTip;
+import com.sefarm.common.constant.tips.Tip;
+import com.sefarm.common.exception.BizExceptionEnum;
+import com.sefarm.common.exception.BussinessException;
+import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.user.UserAddressDO;
 import com.sefarm.service.user.IUserAddressService;
+import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,18 +29,174 @@ import java.util.List;
  * @author mc
  * @date 2018-3-24
  */
-@RestController
-@RequestMapping("/user-adr")
-public class UserAddressController {
+@Controller
+@RequestMapping("/api/user-adr")
+public class UserAddressController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserAddressController.class);
 
-//    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT)
-    public IUserAddressService userAddressService;
+    private static String PREFIX = "/user/address/";
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public BaseResponse<Boolean> save(@RequestBody UserAddressDO userAddressDO) {
+    @Autowired
+    IUserAddressService userAddressService;
+
+    /**
+     * 跳转到查看 用户地址列表的页面
+     */
+    @RequestMapping("")
+    public String index() {
+        return PREFIX + "address.html";
+    }
+
+    /**
+     * 跳转到新增 用户地址列表的页面
+     */
+    @RequestMapping("/address_save")
+    public String saveView() {
+        return PREFIX + "address_save.html";
+    }
+
+    /**
+     * 跳转到修改 用户地址列表的页面
+     */
+    @RequestMapping("/address_update/{addressId}")
+    public String updateView(@PathVariable Long addressId, Model model) {
+        if(ToolUtil.isEmpty(addressId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        UserAddressDO query = new UserAddressDO();
+        query.setId(addressId);
+        UserAddressDO userAddressDO = userAddressService.getOneByObj(query);
+        model.addAttribute(userAddressDO);
+        return PREFIX + "address_update.html";
+    }
+
+    /**
+     * 按照查询条件查询 用户地址 列表
+     * @return
+     */
+    @RequestMapping(value = "/address_list", method = RequestMethod.POST)
+    @ResponseBody
+    public PageInfo<UserAddressDO> getUserAddressDOPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
+                                                            @RequestParam(required = false) String account, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
         try {
+            PageInfo<UserAddressDO> result = userAddressService.getUserAddressDOPageList(pageIndex, pageSize, sortStr, orderStr, account, createTimeBegin, createTimeEnd);
+            return result;
+        } catch (Exception e) {
+            logger.error("get user-adr page list fail(获取 用户地址 分页 列表失败) -- :{}", e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * 添加新增 用户地址
+     * @param userAddressDO
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/saveAddress", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip saveAddress(@Valid UserAddressDO userAddressDO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            Boolean res = userAddressService.saveByObj(userAddressDO);
+            if (res) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("user-adr save fail(保存失败)--"+userAddressDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 更新 用户地址
+     * @param userAddressDO
+     * @param result
+     * @return
+     */
+    @RequestMapping(value = "/updateAddress", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip updateAddress(@Valid UserAddressDO userAddressDO, BindingResult result) {
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            if (userAddressDO != null) {
+                Boolean res = userAddressService.updateByObj(userAddressDO);
+                if (res) {
+                    return SUCCESS_TIP;
+                }
+            }
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        } catch (Exception e) {
+            logger.error("user-adr update fail(更新失败)--"+userAddressDO.toString()+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+    /**
+     * 删除 用户地址
+     * @param addressId
+     * @return
+     */
+    @RequestMapping(value = "/removeAddress", method = RequestMethod.POST)
+    @ResponseBody
+    public Tip removeAddress(@RequestParam Long addressId) {
+        if (ToolUtil.isEmpty(addressId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
+        try {
+            UserAddressDO userAddressDO = new UserAddressDO();
+            userAddressDO.setId(addressId);
+            Boolean result = userAddressService.removeByObj(userAddressDO);
+            if (result) {
+                return SUCCESS_TIP;
+            } else {
+                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            }
+        } catch (Exception e) {
+            logger.error("user-adr delete fail(删除失败)--"+addressId+":{}", e.getMessage());
+            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+        }
+    }
+
+
+    /**
+     * 移动前端——新增保存用户地址
+     * @param account
+     * @param name
+     * @param province
+     * @param city
+     * @param area
+     * @param address
+     * @param zip
+     * @param phone
+     * @param mobile
+     * @param defaultFlag
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<Boolean> save(@RequestParam String account, @RequestParam String name, @RequestParam(required = false) String province, @RequestParam(required = false) String city,  @RequestParam(required = false) String area,
+                                      @RequestParam String address, @RequestParam(required = false) String zip, @RequestParam(required = false) String phone, @RequestParam String mobile, @RequestParam(required = false) String defaultFlag) {
+        UserAddressDO userAddressDO = new UserAddressDO();
+        try {
+            userAddressDO.setAccount(account);
+            userAddressDO.setName(name);
+            userAddressDO.setProvince(province);
+            userAddressDO.setCity(city);
+            userAddressDO.setArea(area);
+            userAddressDO.setAddress(address);
+            userAddressDO.setZip(zip);
+            userAddressDO.setPhone(phone);
+            userAddressDO.setMobile(mobile);
+            userAddressDO.setDefaultFlag(defaultFlag);
+            userAddressDO.setCreateTime(new Date());
             Boolean result = userAddressService.saveByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
@@ -40,32 +205,59 @@ public class UserAddressController {
         }
     }
 
+    /**
+     * 移动前端——删除用户地址
+     * @param userAddressId
+     * @return
+     */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
-    public BaseResponse<Boolean> remove(@RequestBody UserAddressDO userAddressDO) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+    @ResponseBody
+    public BaseResponse<Boolean> remove(@RequestParam Long userAddressId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
         try {
+            UserAddressDO userAddressDO = new UserAddressDO();
+            userAddressDO.setId(userAddressId);
             Boolean result = userAddressService.removeByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            logger.error("user-adr delete fail(删除失败)--"+userAddressDO.toString()+":{}", e.getMessage());
+            logger.error("user-adr delete fail(删除失败)--"+userAddressId+":{}", e.getMessage());
             return BaseResponse.getRespByResultBool(false);
         }
     }
 
-    @RequestMapping(value = "/removeList", method = RequestMethod.POST)
-    public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除
-        try {
-            List<String> list = JSON.parseArray(ids, String.class);
-            Boolean result = userAddressService.batchRemoveByIds(list);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("user-adr batch delete fail(批量删除失败)--"+ids+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
-    }
-
+    /**
+     * 移动前端——更新编辑用户地址
+     * @param id
+     * @param account
+     * @param name
+     * @param province
+     * @param city
+     * @param area
+     * @param address
+     * @param zip
+     * @param phone
+     * @param mobile
+     * @param defaultFlag
+     * @return
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public BaseResponse<Boolean> update(@RequestBody UserAddressDO userAddressDO) {//一定要通过id来修改
+    @ResponseBody
+    public BaseResponse<Boolean> update(@RequestParam Long id, @RequestParam String account, @RequestParam String name, @RequestParam(required = false) String province, @RequestParam(required = false) String city,  @RequestParam(required = false) String area,
+                                        @RequestParam String address, @RequestParam(required = false) String zip, @RequestParam(required = false) String phone, @RequestParam String mobile, @RequestParam(required = false) String defaultFlag) {//一定要通过id来修改
+        UserAddressDO userAddressDO = new UserAddressDO();
         try {
+            userAddressDO.setId(id);
+            userAddressDO.setAccount(account);
+            userAddressDO.setName(name);
+            userAddressDO.setProvince(province);
+            userAddressDO.setCity(city);
+            userAddressDO.setArea(area);
+            userAddressDO.setAddress(address);
+            userAddressDO.setZip(zip);
+            userAddressDO.setPhone(phone);
+            userAddressDO.setMobile(mobile);
+            userAddressDO.setDefaultFlag(defaultFlag);
+            userAddressDO.setUpdateBy(account);
+            userAddressDO.setUpdateTime(new Date());
             Boolean result = userAddressService.updateByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
@@ -74,66 +266,23 @@ public class UserAddressController {
         }
     }
 
-    @RequestMapping(value = "/get", method = RequestMethod.POST)
-    public BaseResponse<UserAddressDO> get(@RequestBody UserAddressDO userAddressDO) {//可以通过id来查找，也可以同唯一性的条件来查找出唯一的数据，例如username是不相同，唯一的，就可以定位到唯一的数据
-        UserAddressDO result = null;
+    /**
+     * 移动前端——根据用户帐号和是否默认地址标签 获取所有的用户地址
+     * @param account
+     * @param defaultFlag
+     * @return
+     */
+    @RequestMapping(value = "/getAllListByAccountAndFlag", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<List<UserAddressDO>> getUserAddressDOAllListByAccountAndFlag(@RequestParam String account, @RequestParam(required = false) String defaultFlag) {
         try {
-            result = (UserAddressDO) userAddressService.getOneByObj(userAddressDO);
-            return new BaseResponse<UserAddressDO>(result);
-        } catch (Exception e) {
-            logger.error("user-adr get fail(获取失败)--"+userAddressDO.toString()+":{}", e.getMessage());
-            return new BaseResponse(result);
-        }
-    }
-
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public PageInfo<UserAddressDO> getList(@RequestBody UserAddressDO userAddressDO) {//通过输入page页数和rows每页查询的行数来查询lsit，如果不输入，默认值查询第一页；如果改用select（Obj）方法输入唯一性字段来查询会查到相关唯一的记录。
-        try {
-            List<UserAddressDO> list = userAddressService.getListByObj(userAddressDO);
-            return new PageInfo<UserAddressDO>(list);
-        } catch (Exception e) {
-            logger.error("user-adr get list fail(获取列表失败)--"+userAddressDO.toString()+":{}", e.getMessage());
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public BaseResponse<List<UserAddressDO>> getAll() {
-        try {
-            List<UserAddressDO> list = userAddressService.getALL();
+            List<UserAddressDO> list = userAddressService.getUserAddressDOAllListByAccountAndFlag(account, defaultFlag);
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            logger.error("user-adr get all(获取所有数据失败)-- :{}", e.getMessage());
-            return null;
+            logger.error("user-adr get all by account & defaultFlag (根据用户帐号和是否默认地址标签 获取所有的用户地址 数据失败)-- :{}", e.getMessage());
+            return new BaseResponse(null);
         }
     }
 
-    @RequestMapping(value = "/count", method = RequestMethod.POST)
-    public Integer getCount(@RequestBody UserAddressDO userAddressDO) {//输入为null，查询全部的数量，输入唯一性的字段，根据该字段数值查询唯一，数量为1
-        try {
-            Integer count = userAddressService.getCount(userAddressDO);
-            return count;
-        } catch (Exception e) {
-            logger.error("user-adr count fail(统计数目失败)--"+userAddressDO.toString()+":{}", e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * 根据输入字段和值，进行模糊查询
-     * @param userAddressDO
-     * @return
-     * searchKey-查询的字段，searchValue-查询字段的值
-     */
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public PageInfo<UserAddressDO> searchList(@RequestBody UserAddressDO userAddressDO) {
-        try {
-            List<UserAddressDO> list = userAddressService.searchListByKV(userAddressDO);
-            return new PageInfo<UserAddressDO>(list);
-        } catch (Exception e) {
-            logger.error("user-adr search query fail(搜索查询失败)--"+userAddressDO.toString()+":{}", e.getMessage());
-            return null;
-        }
-    }
 
 }

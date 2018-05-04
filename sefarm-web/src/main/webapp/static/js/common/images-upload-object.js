@@ -9,13 +9,6 @@
  */
 (function() {
 
-    // var $ = jQuery,
-    // $list = $('#imageList'),
-    // ratio = window.devicePixelRatio || 1,
-    // thumbnailWidth = 100 * ratio,
-    // thumbnailHeight = 100 * ratio,
-    // imagesloader;
-
     var $ImagesUpload = function (imageListId, pickerId, viewImagesId, inputImages) {
         this.imageListId = imageListId;
         this.pickerId = pickerId;
@@ -161,79 +154,4 @@
 
     window.$ImagesUpload = $ImagesUpload;
 
-    // imagesloader = WebUploader.create({
-    //
-    //     auto: true,
-    //     swf : Feng.ctxPath + '/static/css/plugins/webuploader/Uploader.swf',
-    //     server : Feng.ctxPath + '/api/image/upload',
-    //     pick: '#imagePicker',
-    //     accept: {
-    //         title: 'Images',
-    //         extensions: 'gif,jpg,jpeg,bmp,png',
-    //         mimeTypes: 'image/*'
-    //     }
-    // });
-    //
-    // imagesloader.on( 'fileQueued', function( file ) {
-    //     var $li = $(
-    //         '<div id="' + file.id + '" class="file-item thumbnail">' +
-    //         '<img>' +
-    //         '<div class="info">' + file.name + '</div>' +
-    //         '</div>'
-    //         ),
-    //         $img = $li.find('img');
-    //
-    //     $list.append( $li );
-    //
-    //     imagesloader.makeThumb( file, function( error, src ) {
-    //         if ( error ) {
-    //             $img.replaceWith('<span>不能预览</span>');
-    //             return;
-    //         }
-    //
-    //         $img.attr( 'src', src );
-    //     }, thumbnailWidth, thumbnailHeight );
-    // });
-    //
-    // imagesloader.on( 'uploadProgress', function( file, percentage ) {
-    //     var $li = $( '#'+file.id ),
-    //         $percent = $li.find('.progress span');
-    //
-    //     if ( !$percent.length ) {
-    //         $percent = $('<p class="progress"><span></span></p>')
-    //             .appendTo( $li )
-    //             .find('span');
-    //     }
-    //
-    //     $percent.css( 'width', percentage * 100 + '%' );
-    // });
-    //
-    // imagesloader.on( 'uploadSuccess', function( file, response ) {
-    //     $( '#'+file.id ).addClass('upload-state-done');
-    //     Feng.success("上传成功");
-    //     // 获取成功上传文件的路径
-    //     var imageUrl = response._raw;
-    //     var imagesUrl = $("#images").val();
-    //     if (imagesUrl != "") {
-    //         $("#images").val(imagesUrl + "," + imageUrl);
-    //     } else {
-    //         $("#images").val(imageUrl);
-    //     }
-    // });
-    //
-    // imagesloader.on( 'uploadError', function( file ) {
-    //     var $li = $( '#'+file.id ),
-    //         $error = $li.find('div.error');
-    //
-    //
-    //     if ( !$error.length ) {
-    //         $error = $('<div class="error"></div>').appendTo( $li );
-    //     }
-    //
-    //     $error.text('上传失败');
-    // });
-    //
-    // imagesloader.on( 'uploadComplete', function( file ) {
-    //     $( '#'+file.id ).find('.progress').remove();
-    // });
 }());
