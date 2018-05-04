@@ -141,7 +141,7 @@ function statusFormatter(value, row, index) {
  * @returns {string}
  */
 function timeFormatter(value, row, index) {
-    if (value != null && value.replace(/(^s*)|(s*$)/g, "").length !=0) {
+    if (value && value.length !== 0) {
         var date = new Date(value);
         var year = date.getFullYear();
         var month = fixFormatter(date.getMonth() + 1);

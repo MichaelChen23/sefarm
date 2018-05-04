@@ -95,11 +95,7 @@ $(function() {
     //初始化是否默认地址选项
     $("#defaultFlag").val($("#defaultFlagValue").val());
     //初始化时间并转换格式
-    if ($("#createTimeValue").val().replace(/(^s*)|(s*$)/g, "").length !=0) {
-        $("#createTime").val(timeFormatter($("#createTimeValue").val()));
-    }
-    if ($("#updateTimeValue").val().replace(/(^s*)|(s*$)/g, "").length !=0) {
-        $("#updateTime").val(timeFormatter($("#updateTimeValue").val()));
-    }
+    $("#createTime").val(timeFormatter($("#createTimeValue").val()));
+    $("#updateTime").val(timeFormatter($("#updateTimeValue").val()));
 });
 
