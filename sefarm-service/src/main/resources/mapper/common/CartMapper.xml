@@ -21,14 +21,15 @@
     <result column="product_image" jdbcType="VARCHAR" property="productImage" />
     <result column="now_price" jdbcType="DECIMAL" property="nowPrice" />
     <result column="number" jdbcType="INTEGER" property="number" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
     <result column="create_time" jdbcType="VARCHAR" property="createTime" />
     <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
   </resultMap>
 
   <sql id="selectCartVOALL">
     SELECT
-    sc.id, sc.account, sc.product_id, sp.name AS product_name, sp.picture AS product_image, sp.now_price AS now_price,
-    sc.number, DATE_FORMAT(sc.create_time, '%Y-%m-%d %T') AS create_time, DATE_FORMAT(sc.update_time, '%Y-%m-%d %T') AS update_time
+    sc.id, sc.account, sc.product_id, sp.name AS product_name, sp.picture AS product_image, sp.now_price AS now_price, sc.number,
+    sp.unit AS unit, DATE_FORMAT(sc.create_time, '%Y-%m-%d %T') AS create_time, DATE_FORMAT(sc.update_time, '%Y-%m-%d %T') AS update_time
     FROM sefarm_cart sc
     LEFT JOIN sefarm_product sp ON sp.id = sc.product_id
   </sql>

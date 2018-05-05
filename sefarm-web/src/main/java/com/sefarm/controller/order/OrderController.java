@@ -9,10 +9,12 @@ import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.util.NumberUtil;
+import com.sefarm.common.util.StrKit;
 import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.order.OrderDO;
 import com.sefarm.service.order.IOrderService;
 import com.sefarm.util.ToolUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,17 +180,22 @@ public class OrderController extends BaseController {
      * @param name
      * @param mobile
      * @param address
-     * @param productJsonStr
+     * @param cartIds 购物车id用“,”相隔的string
      * @param requirement
      * @return 返回orderNo订单编号
      */
     @RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<String> placeOrder(@RequestParam String account, @RequestParam String name, @RequestParam String mobile, @RequestParam String address, @RequestParam String productJsonStr, @RequestParam(required = false) String requirement) {
-        Map<String, Integer> productMaps = new HashMap<>();
+    public BaseResponse<String> placeOrder(@RequestParam String account, @RequestParam String name, @RequestParam String mobile, @RequestParam String address, @RequestParam String cartIds, @RequestParam(required = false) String requirement) {
+//        Map<String, Integer> productMaps = new HashMap<>();
         try {
-            //解析所选产品jsonStr为map
-            productMaps = (Map<String, Integer>) JSON.parse(productJsonStr);
+            //解析所选产品jsonStr为map jsonStr为{1:8,2:10,3:12}
+            //productMaps = (Map<String, Integer>) JSON.parse(productJsonStr);
+            //把cartIds变成cartIdArray
+            Long [] cartIdArray = StrKit.idsStrToLongArray(cartIds);
+            if (cartIdArray.length == 0) {
+                return new BaseResponse(null);
+            }
             OrderDO orderDO = new OrderDO();
             //获取唯一的订单号，线程安全
             String orderNo = NumberUtil.getUniqueOrderNo();
@@ -197,15 +204,15 @@ public class OrderController extends BaseController {
             orderDO.setRequirement(requirement);
             orderDO.setCreateTime(new Date());
             //下订单 返回订单id
-            Long id = orderService.placeOrderByObj(orderDO, productMaps);
-            if (id > 0) {
+            Long id = orderService.placeOrderByObj(orderDO, cartIdArray);
+            if (id != null && id > 0) {
                 //返回订单号给前端，去支付
                 return new BaseResponse(orderNo);
             } else {
                 return new BaseResponse(null);
             }
         } catch (Exception e) {
-            logger.error("place order fail(下订单失败)--"+account+"--"+productMaps.toString()+":{}", e.getMessage());
+            logger.error("place order fail(下订单失败)--"+account+"--"+cartIds+":{}", e.getMessage());
             return new BaseResponse(null);
         }
     }

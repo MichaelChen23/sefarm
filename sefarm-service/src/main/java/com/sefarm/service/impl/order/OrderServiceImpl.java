@@ -5,10 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseServiceImpl;
 import com.sefarm.common.util.StrKit;
-import com.sefarm.common.vo.ProductVO;
+import com.sefarm.common.vo.CartVO;
+import com.sefarm.dao.common.CartMapper;
 import com.sefarm.dao.order.OrderItemMapper;
 import com.sefarm.dao.order.OrderMapper;
-import com.sefarm.dao.product.ProductMapper;
 import com.sefarm.model.order.OrderDO;
 import com.sefarm.model.order.OrderItemDO;
 import com.sefarm.service.order.IOrderService;
@@ -21,7 +21,6 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 订单的服务接口实现
@@ -33,7 +32,7 @@ import java.util.Map;
 public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, OrderDO> implements IOrderService {
 
     @Autowired
-    ProductMapper productMapper;
+    CartMapper cartMapper;
 
     @Autowired
     OrderItemMapper orderItemMapper;
@@ -52,12 +51,12 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, OrderDO> impl
      * 移动前端——下订单，配置事务
      * add by mc 2018-4-29
      * @param orderDO
-     * @param productMaps
+     * @param cartIdArray
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = Constant.DEFAULT_TRANSACTION_TIMEOUT, rollbackFor = Exception.class)
     @Override
-    public Long placeOrderByObj(OrderDO orderDO, Map<String, Integer> productMaps) {
+    public Long placeOrderByObj(OrderDO orderDO, Long[] cartIdArray) {
         //先初始化订单，获取订单id
         Integer count = getMapper().saveOrderByObj(orderDO);
         Long orderId = orderDO.getId();
@@ -65,30 +64,31 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, OrderDO> impl
         Integer productAllNum = 0;
         //该订单总金额
         BigDecimal orderTotalAmount = new BigDecimal(0);
-        //查询产品信息
-        for (Map.Entry<String, Integer> eachProduct : productMaps.entrySet()) {
-            Long productId = Long.parseLong(eachProduct.getKey());
-            Integer productNum = eachProduct.getValue();
-            //根据产品id查询出产品信息
-            ProductVO productInfo = productMapper.getProductVO(productId);
+        //查询 购物车 产品信息
+        for (int i = 0 ; i < cartIdArray.length ; i++) {
+            Long cartId = cartIdArray[i];
+            //根据购物车id查询出产品消息
+            CartVO cartVO = cartMapper.getCartVO(cartId);
             //插入订单项
             OrderItemDO orderItemDO = new OrderItemDO();
             orderItemDO.setOrderId(orderId);
-            orderItemDO.setProductId(productId);
-            orderItemDO.setProductName(productInfo.getName());
-            orderItemDO.setPrice(productInfo.getPrice());
-            orderItemDO.setNumber(productNum);
+            orderItemDO.setProductId(cartVO.getProductId());
+            orderItemDO.setProductName(cartVO.getProductName());
+            orderItemDO.setPrice(cartVO.getNowPrice());
+            orderItemDO.setNumber(cartVO.getNumber());
             //累加产品总数
-            productAllNum += productNum;
-            orderItemDO.setUnit(productInfo.getUnit());
-            BigDecimal num = new BigDecimal(productNum);
-            BigDecimal total = productInfo.getPrice().multiply(num);
+            productAllNum += cartVO.getNumber();
+            orderItemDO.setUnit(cartVO.getUnit());
+            BigDecimal num = new BigDecimal(cartVO.getNumber());
+            BigDecimal total = cartVO.getNowPrice().multiply(num);
             orderItemDO.setTotal(total);
             //累加订单总金额
             orderTotalAmount = orderTotalAmount.add(total);
             orderItemDO.setAccount(orderDO.getAccount());
             orderItemDO.setCreateTime(orderDO.getCreateTime());
             orderItemMapper.insertSelective(orderItemDO);
+            //删除已经下单成功的购物车产品
+            cartMapper.deleteByPrimaryKey(cartId);
         }
         //更新订单总数总额
         OrderDO order = new OrderDO();

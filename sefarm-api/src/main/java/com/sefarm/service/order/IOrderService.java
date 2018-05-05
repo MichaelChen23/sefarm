@@ -33,10 +33,10 @@ public interface IOrderService extends IBaseService<OrderDO> {
      * 移动前端——下订单
      * add by mc 2018-4-29
      * @param orderDO
-     * @param productMaps
+     * @param cartIdArray
      * @return
      */
-    Long placeOrderByObj(OrderDO orderDO, Map<String, Integer> productMaps);
+    Long placeOrderByObj(OrderDO orderDO, Long[] cartIdArray);
 
     /**
      * 移动前端——查询订单列表

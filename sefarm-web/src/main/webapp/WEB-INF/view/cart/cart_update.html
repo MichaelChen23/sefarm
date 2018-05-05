@@ -27,6 +27,8 @@
 
                         <img id="productImage" src="/images/${cartVO.productImage}" width="168" height="168"/>
 
+                        <#input id="unit" name="产品单位" underline="true" value="${cartVO.unit}" disabled="disabled"/>
+
                         <#input id="updateTime" name="更新时间" value="${cartVO.updateTime}"
                                 clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
 

@@ -1409,7 +1409,7 @@ public class StrKit {
 			String[] array = idsStr.split(",");
 			longArray = new Long[array.length];
 			for (int i = 0 ; i < array.length; i++) {
-				Long each = toLong(array[i], 0L);
+				Long each = Long.parseLong(array[i]);
 				longArray[i] = each;
 			}
 		}

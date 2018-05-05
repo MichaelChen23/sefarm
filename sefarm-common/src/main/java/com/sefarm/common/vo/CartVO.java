@@ -47,6 +47,11 @@ public class CartVO implements Serializable {
     private Integer number;
 
     /**
+     * 产品单位
+     */
+    private String unit;
+
+    /**
      * 创建时间
      */
     private String createTime;
@@ -112,6 +117,14 @@ public class CartVO implements Serializable {
         this.number = number;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public String getCreateTime() {
         return createTime;
     }
@@ -138,6 +151,7 @@ public class CartVO implements Serializable {
                 ", productImage='" + productImage + '\'' +
                 ", nowPrice=" + nowPrice +
                 ", number=" + number +
+                ", unit='" + unit + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 '}';

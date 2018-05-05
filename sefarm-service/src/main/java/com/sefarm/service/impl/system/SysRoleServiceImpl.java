@@ -63,24 +63,26 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleDO
         //批量插入新的权限
         List<SysRoleMenuDO> sysRoleMenuList = new ArrayList<>();
         Long[] menuIdArray = StrKit.idsStrToLongArray(ids);
-        for (int i = 0 ; i < menuIdArray.length ; i++) {
-            if (menuIdArray[i] != null && menuIdArray[i] > 0) {
-                SysRoleMenuDO sysRoleMenuDO = new SysRoleMenuDO();
-                sysRoleMenuDO.setSysRoleId(roleId);
-                sysRoleMenuDO.setSysMenuId(menuIdArray[i]);
-                if (sysRoleMenuDOList != null && sysRoleMenuDOList.size() > 0) {
-                    sysRoleMenuDO.setCreateBy(sysRoleMenuDOList.get(0).getCreateBy());
-                    sysRoleMenuDO.setCreateTime(sysRoleMenuDOList.get(0).getCreateTime());
-                    sysRoleMenuDO.setUpdateBy("sys");
-                    sysRoleMenuDO.setUpdateTime(new Date());
-                } else {
-                    sysRoleMenuDO.setCreateBy("sys");
-                    sysRoleMenuDO.setCreateTime(new Date());
+        if (menuIdArray.length > 0) {
+            for (int i = 0; i < menuIdArray.length; i++) {
+                if (menuIdArray[i] != null && menuIdArray[i] > 0) {
+                    SysRoleMenuDO sysRoleMenuDO = new SysRoleMenuDO();
+                    sysRoleMenuDO.setSysRoleId(roleId);
+                    sysRoleMenuDO.setSysMenuId(menuIdArray[i]);
+                    if (sysRoleMenuDOList != null && sysRoleMenuDOList.size() > 0) {
+                        sysRoleMenuDO.setCreateBy(sysRoleMenuDOList.get(0).getCreateBy());
+                        sysRoleMenuDO.setCreateTime(sysRoleMenuDOList.get(0).getCreateTime());
+                        sysRoleMenuDO.setUpdateBy("sys");
+                        sysRoleMenuDO.setUpdateTime(new Date());
+                    } else {
+                        sysRoleMenuDO.setCreateBy("sys");
+                        sysRoleMenuDO.setCreateTime(new Date());
+                    }
+                    sysRoleMenuList.add(sysRoleMenuDO);
                 }
-                sysRoleMenuList.add(sysRoleMenuDO);
             }
+            sysRoleMenuMapper.insertList(sysRoleMenuList);
         }
-        sysRoleMenuMapper.insertList(sysRoleMenuList);
     }
 
 }

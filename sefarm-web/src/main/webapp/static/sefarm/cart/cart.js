@@ -21,6 +21,7 @@ Cart.initColumn = function () {
         {title: '产品图片', field: 'productImage', align: 'center', valign: 'middle', sortable: true, formatter: imageFormatter},
         {title: '产品现价', field: 'nowPrice', align: 'center', valign: 'middle', sortable: true},
         {title: '产品数量', field: 'number', align: 'center', valign: 'middle', sortable: true},
+        {title: '产品单位', field: 'unit', align: 'center', valign: 'middle', sortable: true},
         {title: '创建时间', field: 'createTime', align: 'center', valign: 'middle', sortable: true},
         {title: '更新时间', field: 'updateTime', visible: false, align: 'center', valign: 'middle', sortable: true}
     ];
