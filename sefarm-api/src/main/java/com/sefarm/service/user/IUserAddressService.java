@@ -34,4 +34,8 @@ public interface IUserAddressService extends IBaseService<UserAddressDO> {
      */
     PageInfo<UserAddressDO> getUserAddressDOPageList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, String account, String createTimeBegin, String createTimeEnd);
 
+
+    Boolean updateAllDefaultFlag(String account);
+
+    Boolean updateOtherDefaultFlagById(Long id, String account);
 }

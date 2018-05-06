@@ -196,6 +196,12 @@ public class UserAddressController extends BaseController {
             userAddressDO.setPhone(phone);
             userAddressDO.setMobile(mobile);
             userAddressDO.setDefaultFlag(defaultFlag);
+            if (defaultFlag.equals(Constant.STATUS_UNLOCK)) {
+                Boolean updateFlag = userAddressService.updateAllDefaultFlag(account);
+                if (!updateFlag) {
+                    return BaseResponse.getRespByResultBool(false);
+                }
+            }
             userAddressDO.setCreateTime(new Date());
             Boolean result = userAddressService.saveByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(result);
@@ -256,6 +262,12 @@ public class UserAddressController extends BaseController {
             userAddressDO.setPhone(phone);
             userAddressDO.setMobile(mobile);
             userAddressDO.setDefaultFlag(defaultFlag);
+            if (defaultFlag.equals(Constant.STATUS_UNLOCK)) {
+                Boolean updateFlag = userAddressService.updateOtherDefaultFlagById(id, account);
+                if (!updateFlag) {
+                    return BaseResponse.getRespByResultBool(false);
+                }
+            }
             userAddressDO.setUpdateBy(account);
             userAddressDO.setUpdateTime(new Date());
             Boolean result = userAddressService.updateByObj(userAddressDO);

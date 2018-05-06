@@ -9,6 +9,9 @@ import com.sefarm.model.user.UserAddressDO;
 import com.sefarm.service.user.IUserAddressService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -74,5 +77,53 @@ public class UserAddressServiceImpl extends BaseServiceImpl<UserAddressMapper, U
         List<UserAddressDO> list = getMapper().selectByExample(example);
         PageInfo<UserAddressDO> page = new PageInfo<>(list);
         return page;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = Constant.DEFAULT_TRANSACTION_TIMEOUT, rollbackFor = Exception.class)
+    @Override
+    public Boolean updateAllDefaultFlag(String account) {
+        Boolean result = false;
+        Example example = new Example(UserAddressDO.class);
+        Example.Criteria criteria = example.createCriteria();
+        //根据用户帐号查询相应的所有用户地址
+        if (StringUtils.isNotBlank(account)) {
+            criteria.andEqualTo("account", account);
+        }
+        List<UserAddressDO> list = getMapper().selectByExample(example);
+        for (int i = 0; i < list.size(); i++) {
+            UserAddressDO userAddressDO = list.get(i);
+            userAddressDO.setDefaultFlag(Constant.STATUS_LOCK);
+            int resultCode = getMapper().updateByPrimaryKeySelective(userAddressDO);
+            if (i == list.size()-1) {
+                result = resultCode > 0 ? true : false;
+            }
+        }
+        return result;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = Constant.DEFAULT_TRANSACTION_TIMEOUT, rollbackFor = Exception.class)
+    @Override
+    public Boolean updateOtherDefaultFlagById(Long id, String account) {
+        Boolean result = false;
+        Example example = new Example(UserAddressDO.class);
+        Example.Criteria criteria = example.createCriteria();
+        //根据用户帐号查询相应的所有用户地址
+        if (StringUtils.isNotBlank(account)) {
+            criteria.andEqualTo("account", account);
+        }
+        List<UserAddressDO> list = getMapper().selectByExample(example);
+        for (int i = 0; i < list.size(); i++) {
+            UserAddressDO userAddressDO = list.get(i);
+            if (id == userAddressDO.getId()) {
+                userAddressDO.setDefaultFlag(Constant.STATUS_UNLOCK);
+            } else {
+                userAddressDO.setDefaultFlag(Constant.STATUS_LOCK);
+            }
+            int resultCode = getMapper().updateByPrimaryKeySelective(userAddressDO);
+            if (i == list.size()-1) {
+                result = resultCode > 0 ? true : false;
+            }
+        }
+        return result;
     }
 }
