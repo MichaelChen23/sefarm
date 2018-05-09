@@ -13,6 +13,8 @@
 
                     <#input id="productName" name="产品名称" underline="true" value="${orderItemVO.productName}"/>
 
+                    <#input id="productImage" name="产品图片" underline="true" value="${orderItemVO.productImage}"/>
+
                     <#input id="number" name="数量" underline="true" value="${orderItemVO.number}"/>
 
                     <#input id="carryFee" name="配送费" underline="true" value="${orderItemVO.carryFee}"/>
@@ -31,6 +33,8 @@
                         <#input id="productId" name="产品id" underline="true" value="${orderItemVO.productId}"/>
 
                         <#input id="price" name="单价" underline="true" value="${orderItemVO.price}"/>
+
+                        <img id="prodImage" src="/images/${orderItemVO.productImage}" width="168" height="168"/>
 
                         <#input id="unit" name="单位" underline="true" value="${orderItemVO.unit}"/>
 

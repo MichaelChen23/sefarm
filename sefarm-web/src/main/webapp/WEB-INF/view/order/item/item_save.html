@@ -20,7 +20,10 @@
                         <option value="n" selected="true">否</option>
                     </#select>
 
-                    <#input id="account" name="用户帐号"/>
+                    <#input id="account" name="用户帐号" underline="true"/>
+
+                    <#input id="createTime" name="创建时间"
+                            clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
 
                 </div>
                 <div class="col-sm-6">
@@ -28,16 +31,15 @@
 
                         <#input id="productId" name="产品id" underline="true"/>
 
+                        <#input id="productImage" name="产品图片" underline="true"/>
+
                         <#input id="price" name="单价" underline="true"/>
 
                         <#input id="unit" name="单位" underline="true"/>
 
                         <#input id="total" name="总金额" underline="true"/>
 
-                        <#input id="remark" name="备注" underline="true"/>
-
-                        <#input id="createTime" name="创建时间"
-                                clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
+                        <#input id="remark" name="备注" />
 
                     </div>
                 </div>

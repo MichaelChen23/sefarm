@@ -4,27 +4,17 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 分页显示 订单项 VO类
+ * 订单项详情 VO类
  *
  * @author mc
- * @date 2018-4-17
+ * @date 2018-5-7
  */
-public class OrderItemVO implements Serializable {
+public class OrderItemDetailVO implements Serializable {
 
     /**
      * 订单项ID
      */
     private Long id;
-
-    /**
-     * 订单id
-     */
-    private Long orderId;
-
-    /**
-     * 订单号
-     */
-    private String orderNo;
 
     /**
      * 产品id
@@ -71,53 +61,12 @@ public class OrderItemVO implements Serializable {
      */
     private String commentFlag;
 
-    /**
-     * 备注
-     */
-    private String remark;
-
-    /**
-     * 用户帐号
-     */
-    private String account;
-
-    /**
-     * 创建时间
-     */
-    private String createTime;
-
-    /**
-     * 更新人
-     */
-    private String updateBy;
-
-    /**
-     * 更新时间
-     */
-    private String updateTime;
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
     }
 
     public Long getProductId() {
@@ -192,52 +141,10 @@ public class OrderItemVO implements Serializable {
         this.commentFlag = commentFlag;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
-
     @Override
     public String toString() {
-        return "OrderItemVO{" +
+        return "OrderItemDetailVO{" +
                 "id=" + id +
-                ", orderId=" + orderId +
-                ", orderNo='" + orderNo + '\'' +
                 ", productId=" + productId +
                 ", productName='" + productName + '\'' +
                 ", productImage='" + productImage + '\'' +
@@ -247,11 +154,6 @@ public class OrderItemVO implements Serializable {
                 ", carryFee=" + carryFee +
                 ", total=" + total +
                 ", commentFlag='" + commentFlag + '\'' +
-                ", remark='" + remark + '\'' +
-                ", account='" + account + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", updateBy='" + updateBy + '\'' +
-                ", updateTime='" + updateTime + '\'' +
                 '}';
     }
 }

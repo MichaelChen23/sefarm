@@ -17,8 +17,11 @@ Address.initColumn = function () {
         {title: 'id', field: 'id', visible: false, align: 'center', valign: 'middle'},
         {title: '用户帐号', field: 'account', align: 'center', valign: 'middle', sortable: true},
         {title: '收货人', field: 'name', align: 'center', valign: 'middle', sortable: true},
+        {title: '省份id', field: 'provinceId', align: 'center', valign: 'middle', sortable: true},
         {title: '省份', field: 'province', align: 'center', valign: 'middle', sortable: true},
+        {title: '城市id', field: 'cityId', align: 'center', valign: 'middle', sortable: true},
         {title: '城市', field: 'city', align: 'center', valign: 'middle', sortable: true},
+        {title: '区域id', field: 'areaId', align: 'center', valign: 'middle', sortable: true},
         {title: '区域', field: 'area', align: 'center', valign: 'middle', sortable: true},
         {title: '详细地址', field: 'address', align: 'center', valign: 'middle', sortable: true},
         {title: '邮编', field: 'zip', align: 'center', valign: 'middle', sortable: true},
@@ -88,7 +91,7 @@ Address.openSaveAddress = function () {
     var index = layer.open({
         type: 2,
         title: '添加用户地址',
-        area: ['800px', '600px'], //宽高
+        area: ['800px', '680px'], //宽高
         fix: false, //不固定
         maxmin: true,
         content: Feng.ctxPath + '/api/user-adr/address_save'
@@ -105,7 +108,7 @@ Address.openUpdateAddress = function () {
         var index = layer.open({
             type: 2,
             title: '编辑用户地址',
-            area: ['800px', '600px'], //宽高
+            area: ['800px', '680px'], //宽高
             fix: false, //不固定
             maxmin: true,
             content: Feng.ctxPath + '/api/user-adr/address_update/' + this.seItem.id

@@ -8,8 +8,11 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="province_id" jdbcType="VARCHAR" property="provinceId" />
     <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city_id" jdbcType="VARCHAR" property="cityId" />
     <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="area_id" jdbcType="VARCHAR" property="areaId" />
     <result column="area" jdbcType="VARCHAR" property="area" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="zip" jdbcType="VARCHAR" property="zip" />

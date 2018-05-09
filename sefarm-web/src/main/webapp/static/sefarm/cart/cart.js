@@ -39,7 +39,7 @@ function imageFormatter(value, row, index){
     if (value != null && value != "") {
         return "<img  src='/images/"+ value + "' width='88' height='88'>";
     }
-}
+};
 
 /**
  * 检查是否选中

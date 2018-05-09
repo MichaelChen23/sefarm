@@ -19,6 +19,7 @@ OrderItem.initColumn = function () {
         {title: '订单号', field: 'orderNo', align: 'center', valign: 'middle', sortable: true},
         {title: '产品id', field: 'productId', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '产品名称', field: 'productName', align: 'center', valign: 'middle', sortable: true},
+        {title: '产品图片', field: 'productImage', align: 'center', valign: 'middle', sortable: true, formatter: imageFormatter},
         {title: '单价', field: 'price', align: 'center', valign: 'middle', sortable: true},
         {title: '数量', field: 'number', align: 'center', valign: 'middle', sortable: true},
         {title: '单位', field: 'unit', align: 'center', valign: 'middle', sortable: true},
@@ -32,6 +33,19 @@ OrderItem.initColumn = function () {
         {title: '更新时间', field: 'updateTime', visible: false, align: 'center', valign: 'middle', sortable: true}
     ];
     return columns;
+};
+
+/**
+ * 获取产品图片展示判断
+ * @param value
+ * @param row
+ * @param index
+ * @returns {string}
+ */
+function imageFormatter(value, row, index){
+    if (value != null && value != "") {
+        return "<img  src='/images/"+ value + "' width='88' height='88'>";
+    }
 };
 
 /**

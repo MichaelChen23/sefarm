@@ -45,6 +45,12 @@ public class OrderItemDO extends BaseDO implements Serializable {
     private String productName;
 
     /**
+     * 产品图片
+     */
+    @Column(name = "product_image")
+    private String productImage;
+
+    /**
      * 产品单价：默认为0
      */
     private BigDecimal price;
@@ -175,6 +181,24 @@ public class OrderItemDO extends BaseDO implements Serializable {
      */
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    /**
+     * 获取产品图片
+     *
+     * @return product_image - 产品图片
+     */
+    public String getProductImage() {
+        return productImage;
+    }
+
+    /**
+     * 设置产品图片
+     *
+     * @param productImage 产品图片
+     */
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 
     /**
@@ -382,6 +406,7 @@ public class OrderItemDO extends BaseDO implements Serializable {
                 ", orderId=" + orderId +
                 ", productId=" + productId +
                 ", productName='" + productName + '\'' +
+                ", productImage='" + productImage + '\'' +
                 ", price=" + price +
                 ", number=" + number +
                 ", unit='" + unit + '\'' +

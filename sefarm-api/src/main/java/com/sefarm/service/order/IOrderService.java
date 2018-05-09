@@ -2,9 +2,9 @@ package com.sefarm.service.order;
 
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.IBaseService;
+import com.sefarm.common.vo.OrderDetailVO;
 import com.sefarm.model.order.OrderDO;
-
-import java.util.Map;
+import com.sefarm.model.user.UserAddressDO;
 
 /**
  * 订单的服务接口
@@ -34,9 +34,18 @@ public interface IOrderService extends IBaseService<OrderDO> {
      * add by mc 2018-4-29
      * @param orderDO
      * @param cartIdArray
+     * @param userAddressDO
      * @return
      */
-    Long placeOrderByObj(OrderDO orderDO, Long[] cartIdArray);
+    Long placeOrderByObj(OrderDO orderDO, Long[] cartIdArray, UserAddressDO userAddressDO);
+
+    /**
+     * 移动前端——根据订单id获取订单详情
+     * add by mc 2018-5-8
+     * @param orderId
+     * @return
+     */
+    OrderDetailVO getOrderDetailByOrderId(Long orderId);
 
     /**
      * 移动前端——查询订单列表

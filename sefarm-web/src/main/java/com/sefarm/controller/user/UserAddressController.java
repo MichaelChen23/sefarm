@@ -182,14 +182,17 @@ public class UserAddressController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<Boolean> save(@RequestParam String account, @RequestParam String name, @RequestParam(required = false) String province, @RequestParam(required = false) String city,  @RequestParam(required = false) String area,
+    public BaseResponse<Boolean> save(@RequestParam String account, @RequestParam String name, @RequestParam(required = false) String provinceId, @RequestParam(required = false) String province, @RequestParam(required = false) String cityId, @RequestParam(required = false) String city, @RequestParam(required = false) String areaId, @RequestParam(required = false) String area,
                                       @RequestParam String address, @RequestParam(required = false) String zip, @RequestParam(required = false) String phone, @RequestParam String mobile, @RequestParam(required = false) String defaultFlag) {
         UserAddressDO userAddressDO = new UserAddressDO();
         try {
             userAddressDO.setAccount(account);
             userAddressDO.setName(name);
+            userAddressDO.setProvinceId(provinceId);
             userAddressDO.setProvince(province);
+            userAddressDO.setCityId(cityId);
             userAddressDO.setCity(city);
+            userAddressDO.setAreaId(areaId);
             userAddressDO.setArea(area);
             userAddressDO.setAddress(address);
             userAddressDO.setZip(zip);
@@ -247,15 +250,18 @@ public class UserAddressController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<Boolean> update(@RequestParam Long id, @RequestParam String account, @RequestParam String name, @RequestParam(required = false) String province, @RequestParam(required = false) String city,  @RequestParam(required = false) String area,
+    public BaseResponse<Boolean> update(@RequestParam Long id, @RequestParam String account, @RequestParam String name, @RequestParam(required = false) String provinceId, @RequestParam(required = false) String province, @RequestParam(required = false) String cityId, @RequestParam(required = false) String city, @RequestParam(required = false) String areaId, @RequestParam(required = false) String area,
                                         @RequestParam String address, @RequestParam(required = false) String zip, @RequestParam(required = false) String phone, @RequestParam String mobile, @RequestParam(required = false) String defaultFlag) {//一定要通过id来修改
         UserAddressDO userAddressDO = new UserAddressDO();
         try {
             userAddressDO.setId(id);
             userAddressDO.setAccount(account);
             userAddressDO.setName(name);
+            userAddressDO.setProvinceId(provinceId);
             userAddressDO.setProvince(province);
+            userAddressDO.setCityId(cityId);
             userAddressDO.setCity(city);
+            userAddressDO.setAreaId(areaId);
             userAddressDO.setArea(area);
             userAddressDO.setAddress(address);
             userAddressDO.setZip(zip);

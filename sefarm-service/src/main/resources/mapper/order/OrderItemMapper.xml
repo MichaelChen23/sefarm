@@ -9,6 +9,7 @@
     <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="product_id" jdbcType="BIGINT" property="productId" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_image" jdbcType="VARCHAR" property="productImage" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="number" jdbcType="INTEGER" property="number" />
     <result column="unit" jdbcType="VARCHAR" property="unit" />
@@ -28,6 +29,7 @@
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="product_id" jdbcType="BIGINT" property="productId" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_image" jdbcType="VARCHAR" property="productImage" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="number" jdbcType="INTEGER" property="number" />
     <result column="unit" jdbcType="VARCHAR" property="unit" />
@@ -43,8 +45,8 @@
 
   <sql id="selectOrderItemVOALL">
     SELECT
-    soi.id, soi.order_id, so.order_no AS order_no, soi.product_id, soi.product_name, soi.price,
-    soi.number, soi.unit, soi.carry_fee, soi.total, soi.comment_flag, soi.remark,
+    soi.id, soi.order_id, so.order_no AS order_no, soi.product_id, soi.product_name, soi.product_image,
+    soi.price, soi.number, soi.unit, soi.carry_fee, soi.total, soi.comment_flag, soi.remark,
     soi.account, DATE_FORMAT(soi.create_time, '%Y-%m-%d %T') AS create_time, soi.update_by, DATE_FORMAT(soi.update_time, '%Y-%m-%d %T') AS update_time
     FROM sefarm_order_item soi
     LEFT JOIN sefarm_order so ON so.id = soi.order_id

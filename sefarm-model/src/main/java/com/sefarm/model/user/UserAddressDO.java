@@ -36,14 +36,32 @@ public class UserAddressDO extends BaseDO implements Serializable {
     private String name;
 
     /**
+     * 省份id
+     */
+    @Column(name = "province_id")
+    private String provinceId;
+
+    /**
      * 省份
      */
     private String province;
 
     /**
+     * 城市id
+     */
+    @Column(name = "city_id")
+    private String cityId;
+
+    /**
      * 城市
      */
     private String city;
+
+    /**
+     * 区域id
+     */
+    @Column(name = "area_id")
+    private String areaId;
 
     /**
      * 区域
@@ -152,6 +170,24 @@ public class UserAddressDO extends BaseDO implements Serializable {
     }
 
     /**
+     * 获取省份id
+     *
+     * @return province_id - 省份id
+     */
+    public String getProvinceId() {
+        return provinceId;
+    }
+
+    /**
+     * 设置省份id
+     *
+     * @param provinceId 省份id
+     */
+    public void setProvinceId(String provinceId) {
+        this.provinceId = provinceId;
+    }
+
+    /**
      * 获取省份
      *
      * @return province - 省份
@@ -170,6 +206,24 @@ public class UserAddressDO extends BaseDO implements Serializable {
     }
 
     /**
+     * 获取城市id
+     *
+     * @return city_id - 城市id
+     */
+    public String getCityId() {
+        return cityId;
+    }
+
+    /**
+     * 设置城市id
+     *
+     * @param cityId 城市id
+     */
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
+
+    /**
      * 获取城市
      *
      * @return city - 城市
@@ -185,6 +239,24 @@ public class UserAddressDO extends BaseDO implements Serializable {
      */
     public void setCity(String city) {
         this.city = city;
+    }
+
+    /**
+     * 获取区域id
+     *
+     * @return area_id - 区域id
+     */
+    public String getAreaId() {
+        return areaId;
+    }
+
+    /**
+     * 设置区域id
+     *
+     * @param areaId 区域id
+     */
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
     }
 
     /**
@@ -359,8 +431,11 @@ public class UserAddressDO extends BaseDO implements Serializable {
                 "id=" + id +
                 ", account='" + account + '\'' +
                 ", name='" + name + '\'' +
+                ", provinceId='" + provinceId + '\'' +
                 ", province='" + province + '\'' +
+                ", cityId='" + cityId + '\'' +
                 ", city='" + city + '\'' +
+                ", areaId='" + areaId + '\'' +
                 ", area='" + area + '\'' +
                 ", address='" + address + '\'' +
                 ", zip='" + zip + '\'' +

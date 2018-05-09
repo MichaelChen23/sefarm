@@ -44,7 +44,7 @@ OrderItemInfoDlg.close = function () {
  * 收集数据
  */
 OrderItemInfoDlg.collectData = function() {
-    this.set('id').set('orderId').set('productId').set('productName').set('price').set('number').set('unit')
+    this.set('id').set('orderId').set('productId').set('productName').set('productImage').set('price').set('number').set('unit')
         .set('carryFee').set('total').set('commentFlag').set('remark').set('account').set('createTime');
 };
 

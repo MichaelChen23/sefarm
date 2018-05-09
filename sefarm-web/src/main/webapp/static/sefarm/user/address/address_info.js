@@ -44,7 +44,7 @@ AddressInfoDlg.close = function () {
  * 收集数据
  */
 AddressInfoDlg.collectData = function() {
-    this.set('id').set('account').set('name').set('province').set('city').set('area').set('address')
+    this.set('id').set('account').set('name').set('provinceId').set('province').set('cityId').set('city').set('areaId').set('area').set('address')
         .set('zip').set('phone').set('mobile').set('defaultFlag').set('createTime').set('updateBy').set('updateTime');
 };
 

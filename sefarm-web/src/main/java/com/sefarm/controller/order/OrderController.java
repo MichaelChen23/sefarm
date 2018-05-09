@@ -10,11 +10,13 @@ import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.util.NumberUtil;
 import com.sefarm.common.util.StrKit;
+import com.sefarm.common.vo.OrderDetailVO;
 import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.order.OrderDO;
+import com.sefarm.model.user.UserAddressDO;
 import com.sefarm.service.order.IOrderService;
+import com.sefarm.service.user.IUserAddressService;
 import com.sefarm.util.ToolUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 订单的Controller
@@ -45,6 +45,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     IOrderService orderService;
+
+    @Autowired
+    IUserAddressService userAddressService;
 
     /**
      * 跳转到查看 订单 列表的页面
@@ -177,20 +180,29 @@ public class OrderController extends BaseController {
      * 移动前端——下订单
      * add by mc 2018-4-29
      * @param account
-     * @param name
-     * @param mobile
-     * @param address
+     * @param userAddressId
      * @param cartIds 购物车id用“,”相隔的string
      * @param requirement
-     * @return 返回orderNo订单编号
+     * @return 返回orderDetailVO订单详情
      */
     @RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<String> placeOrder(@RequestParam String account, @RequestParam String name, @RequestParam String mobile, @RequestParam String address, @RequestParam String cartIds, @RequestParam(required = false) String requirement) {
+    public BaseResponse<OrderDetailVO> placeOrder(@RequestParam String account, @RequestParam Long userAddressId, @RequestParam String cartIds, @RequestParam(required = false) String requirement) {
 //        Map<String, Integer> productMaps = new HashMap<>();
         try {
             //解析所选产品jsonStr为map jsonStr为{1:8,2:10,3:12}
             //productMaps = (Map<String, Integer>) JSON.parse(productJsonStr);
+
+            //获取用户地址
+            UserAddressDO userAddressDO;
+            if (userAddressId != null && userAddressId >0) {
+                UserAddressDO query = new UserAddressDO();
+                query.setId(userAddressId);
+                query.setAccount(account);
+                userAddressDO = userAddressService.getOneByObj(query);
+            } else {
+                return new BaseResponse(null);
+            }
             //把cartIds变成cartIdArray
             Long [] cartIdArray = StrKit.idsStrToLongArray(cartIds);
             if (cartIdArray.length == 0) {
@@ -204,16 +216,39 @@ public class OrderController extends BaseController {
             orderDO.setRequirement(requirement);
             orderDO.setCreateTime(new Date());
             //下订单 返回订单id
-            Long id = orderService.placeOrderByObj(orderDO, cartIdArray);
-            if (id != null && id > 0) {
-                //返回订单号给前端，去支付
-                return new BaseResponse(orderNo);
+            Long orderId = orderService.placeOrderByObj(orderDO, cartIdArray, userAddressDO);
+            if (orderId != null && orderId > 0) {
+                //返回 订单详情 给前端，去支付
+                OrderDetailVO result = orderService.getOrderDetailByOrderId(orderId);
+                return new BaseResponse(result);
             } else {
                 return new BaseResponse(null);
             }
         } catch (Exception e) {
             logger.error("place order fail(下订单失败)--"+account+"--"+cartIds+":{}", e.getMessage());
             return new BaseResponse(null);
+        }
+    }
+
+    /**
+     * 移动前端——根据订单id获取订单详情
+     * add by mc 2018-5-8
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/getOrderDetailByOrderId", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<OrderDetailVO> getOrderDetailByOrderId(@RequestParam Long orderId) {
+        try {
+            if (orderId != null && orderId > 0) {
+                OrderDetailVO result = orderService.getOrderDetailByOrderId(orderId);
+                return new BaseResponse<>(result);
+            } else {
+                return new BaseResponse<>(null);
+            }
+        } catch (Exception e) {
+            logger.error("get order detail fail(查询订单详情 失败) "+ orderId +"-- :{}", e.getMessage());
+            return new BaseResponse<>(null);
         }
     }
 
@@ -235,7 +270,6 @@ public class OrderController extends BaseController {
             return new BaseResponse<>(null);
         }
     }
-
 
 
     @RequestMapping(value = "/removeList", method = RequestMethod.POST)
