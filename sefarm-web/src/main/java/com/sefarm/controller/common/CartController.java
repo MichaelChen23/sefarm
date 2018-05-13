@@ -225,4 +225,24 @@ public class CartController extends BaseController {
             return BaseResponse.getRespByResultBool(false);
         }
     }
+
+    /**
+     * 移动前端——删除购物车产品
+     * add by mc 2018-5-13
+     * @param cartId
+     * @return
+     */
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<Boolean> removeCartDO(@RequestParam Long cartId) {
+        try {
+            CartDO cartDO = new CartDO();
+            cartDO.setId(cartId);
+            Boolean result = cartService.removeByObj(cartDO);
+            return BaseResponse.getRespByResultBool(result);
+        } catch (Exception e) {
+            logger.error("cart remove fail(删除失败)--"+cartId+":{}", e.getMessage());
+            return BaseResponse.getRespByResultBool(false);
+        }
+    }
 }
