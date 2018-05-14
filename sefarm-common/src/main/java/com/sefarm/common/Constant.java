@@ -68,4 +68,34 @@ public abstract class Constant {
 	 */
 	public static final int DEFAULT_TRANSACTION_TIMEOUT = 36000;
 
+	/**
+	 * 微信sefarm appID
+	 */
+	public static final String WECHAT_APPID = "wx354bab194f6ed7a7";
+
+	/**
+	 * 微信sefarm appSecret
+	 */
+	public static final String WECHAT_APPSECRET = "926edb339f554583c72d565665284fe9";
+
+	/**
+	 * 微信获取accessToken url
+	 */
+	public static final String WECHAT_GET_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
+
+	/**
+	 * 微信获取accessToken的grant_type
+	 */
+	public static final String WECHAT_GRANT_TYPE = "authorization_code";
+
+	/**
+	 * 微信根据accessToken 获取userInfo url
+	 */
+	public static final String WECHAT_GET_USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo";
+
+	/**
+	 * 微信获取userInfo的lang
+	 */
+	public static final String WECHAT_LANG_TYPE = "zh_CN";
+
 }
