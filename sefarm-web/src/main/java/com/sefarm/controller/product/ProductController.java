@@ -223,7 +223,25 @@ public class ProductController extends BaseController {
         }
     }
 
-
+    /**
+     * 移动前端——根据id获取产品信息
+     * add by mc 2018-5-14
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "/getProductByProductId", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<ProductDO> getProductByProductId(@RequestParam Long productId) {
+        try {
+            ProductDO productDO = new ProductDO();
+            productDO.setId(productId);
+            ProductDO result = productService.getOneByObj(productDO);
+            return new BaseResponse<>(result);
+        } catch (Exception e) {
+            logger.error("get prod fail(根据id查询 产品信息 失败) -- " + productId + ":{}", e.getMessage());
+            return new BaseResponse<>(null);
+        }
+    }
 
     @RequestMapping(value = "/removeList", method = RequestMethod.POST)
     public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除
