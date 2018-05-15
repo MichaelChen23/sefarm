@@ -1,0 +1,91 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <input type="hidden" id="id" value="${userDO.id}">
+            <input type="hidden" id="sexValue" value="${userDO.sex}">
+            <input type="hidden" id="accountTypeValue" value="${userDO.accountType}">
+            <input type="hidden" id="lockFlagValue" value="${userDO.lockFlag}">
+            <input type="hidden" id="createTimeValue" value="${userDO.createTime}">
+            <input type="hidden" id="updateTimeValue" value="${userDO.updateTime}">
+            <input type="hidden" id="lastLoginTimeValue" value="${userDO.lastLoginTime}">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+
+                    <#input id="name" name="真实姓名" underline="true" value="${userDO.name}"/>
+
+                    <#input id="nickname" name="昵称" underline="true" value="${userDO.nickname}"/>
+
+                    <#select id="sex" name="性别" underline="true">
+                        <option value='1'>男</option>
+                        <option value='2'>女</option>
+                        <option value='0'>未知</option>
+                    </#select>
+
+                    <#input id="country" name="国家" underline="true" value="${userDO.country}"/>
+
+                    <#input id="city" name="城市" underline="true" value="${userDO.city}"/>
+
+                    <#input id="accessToken" name="授权凭证accessToken" underline="true" value="${userDO.accessToken}"/>
+
+                    <#input id="rank" name="用户等级" underline="true" value="${userDO.rank}"/>
+
+                    <#input id="score" name="积分" underline="true" value="${userDO.score}"/>
+
+                    <#input id="createTime" name="创建时间" underline="true"
+                            clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
+
+                    <#input id="lastLoginTime" name="最后登录时间" disabled="disabled"
+                            clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
+
+                </div>
+                <div class="col-sm-6">
+                    <div id="driverInfoContent">
+
+                        <#input id="mobile" name="手机号码" underline="true" value="${userDO.mobile}"/>
+
+                        <#input id="openid" name="openId唯一标识" underline="true" value="${userDO.openid}"/>
+
+                        <img id="headImage" src="${userDO.headimgurl}" width="108" height="108"/>
+
+                        <#input id="headimgurl" name="头像" underline="true" value="${userDO.headimgurl}"/>
+
+                        <#input id="province" name="省份" underline="true" value="${userDO.province}"/>
+
+                        <#input id="language" name="语言" underline="true" value="${userDO.language}"/>
+
+                        <#select id="accountType" name="账号类型" underline="true">
+                            <option value="wechat">微信用户</option>
+                            <option value="mobile">手机号注册用户</option>
+                        </#select>
+
+                        <#input id="amount" name="钱包余额" underline="true" value="${userDO.amount}"/>
+
+                        <#select id="lockFlag" name="是否锁住" underline="true">
+                            <option value="y">是</option>
+                            <option value="n">否</option>
+                        </#select>
+
+                        <#input id="updateBy" name="更新人" underline="true" value="${userDO.updateBy}"/>
+
+                        <#input id="updateTime" name="更新时间"
+                                clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="UserInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="UserInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/user/base/user_info.js"></script>
+@}

@@ -1,17 +1,21 @@
 package com.sefarm.model.user;
 
 import com.sefarm.common.base.BaseDO;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * 用户的实体类
  *
  * @author mc
- * @date 2018-3-24
+ * @date 2018-5-15
  */
 @Table(name = "sefarm_user")
 public class UserDO extends BaseDO implements Serializable {
@@ -19,13 +23,8 @@ public class UserDO extends BaseDO implements Serializable {
      * 用户ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
+    @GeneratedValue(generator = "JDBC")
     private Long id;
-
-    /**
-     * 账号
-     */
-    private String account;
 
     /**
      * 真实姓名
@@ -33,25 +32,61 @@ public class UserDO extends BaseDO implements Serializable {
     private String name;
 
     /**
-     * 昵称
+     * 手机号码
+     */
+    private String mobile;
+
+    /**
+     * 用户昵称
      */
     private String nickname;
 
     /**
-     * 密码：6-18位数字与字母的结合
+     * 用户的唯一标识
      */
-    private String password;
+    private String openid;
 
     /**
-     * 账号类型：默认为手机号用户-mobile
+     * 性别，值为1时是男性，值为2时是女性，值为0时是未知，默认0
+     */
+    private Integer sex;
+
+    /**
+     * 用户头像
+     */
+    private String headimgurl;
+
+    /**
+     * 国家，如中国为CN
+     */
+    private String country;
+
+    /**
+     * 省份
+     */
+    private String province;
+
+    /**
+     * 城市
+     */
+    private String city;
+
+    /**
+     * 语言：zh_CN中文
+     */
+    private String language;
+
+    /**
+     * 微信网页授权接口调用凭证
+     */
+    @Column(name = "access_token")
+    private String accessToken;
+
+    /**
+     * 账号类型：微信用户-wechat，手机号注册用户-mobile，默认：wechat
      */
     @Column(name = "account_type")
     private String accountType;
-
-    /**
-     * 邮箱
-     */
-    private String email;
 
     /**
      * 用户等级，默认R1
@@ -69,40 +104,23 @@ public class UserDO extends BaseDO implements Serializable {
     private BigDecimal score;
 
     /**
-     * 账号是否激活：y-已激活；n-未激活，默认为n 
-     */
-    @Column(name = "active_flag")
-    private String activeFlag;
-
-    /**
      * 账号是否锁住：y-已锁；n-未锁，默认为n
      */
     @Column(name = "lock_flag")
     private String lockFlag;
 
     /**
-     * 账号锁住时间
+     * 账号注册时间/创建时间
      */
-    @Column(name = "lock_start_time")
-    private Date lockStartTime;
-
-    /**
-     * 账号解锁时间
-     */
-    @Column(name = "lock_end_time")
-    private Date lockEndTime;
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @Column(name = "create_time")
+    private Date createTime;
 
     /**
      * 最后登录时间
      */
     @Column(name = "last_login_time")
     private Date lastLoginTime;
-
-    /**
-     * 账号注册时间/创建时间
-     */
-    @Column(name = "create_time")
-    private Date createTime;
 
     /**
      * 更新人
@@ -113,31 +131,9 @@ public class UserDO extends BaseDO implements Serializable {
     /**
      * 更新时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "update_time")
     private Date updateTime;
-
-    /**
-     * 短信验证代码
-     */
-    @Column(name = "sms_code")
-    private String smsCode;
-
-    /**
-     * 发送短信用途
-     */
-    @Column(name = "sms_useful")
-    private String smsUseful;
-
-    /**
-     * 发送短信代码时间
-     */
-    @Column(name = "send_code_time")
-    private Date sendCodeTime;
-
-    /**
-     * 备注
-     */
-    private String remark;
 
     /**
      * 获取用户ID
@@ -155,24 +151,6 @@ public class UserDO extends BaseDO implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * 获取账号
-     *
-     * @return account - 账号
-     */
-    public String getAccount() {
-        return account;
-    }
-
-    /**
-     * 设置账号
-     *
-     * @param account 账号
-     */
-    public void setAccount(String account) {
-        this.account = account;
     }
 
     /**
@@ -194,75 +172,201 @@ public class UserDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取昵称
+     * 获取手机号码
      *
-     * @return nickname - 昵称
+     * @return mobile - 手机号码
+     */
+    public String getMobile() {
+        return mobile;
+    }
+
+    /**
+     * 设置手机号码
+     *
+     * @param mobile 手机号码
+     */
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    /**
+     * 获取用户昵称
+     *
+     * @return nickname - 用户昵称
      */
     public String getNickname() {
         return nickname;
     }
 
     /**
-     * 设置昵称
+     * 设置用户昵称
      *
-     * @param nickname 昵称
+     * @param nickname 用户昵称
      */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
     /**
-     * 获取密码：6-18位数字与字母的结合
+     * 获取用户的唯一标识
      *
-     * @return password - 密码：6-18位数字与字母的结合
+     * @return openid - 用户的唯一标识
      */
-    public String getPassword() {
-        return password;
+    public String getOpenid() {
+        return openid;
     }
 
     /**
-     * 设置密码：6-18位数字与字母的结合
+     * 设置用户的唯一标识
      *
-     * @param password 密码：6-18位数字与字母的结合
+     * @param openid 用户的唯一标识
      */
-    public void setPassword(String password) {
-        this.password = password;
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 
     /**
-     * 获取账号类型：默认为手机号用户-mobile
+     * 获取性别，值为1时是男性，值为2时是女性，值为0时是未知，默认0
      *
-     * @return account_type - 账号类型：默认为手机号用户-mobile
+     * @return sex - 性别，值为1时是男性，值为2时是女性，值为0时是未知，默认0
+     */
+    public Integer getSex() {
+        return sex;
+    }
+
+    /**
+     * 设置性别，值为1时是男性，值为2时是女性，值为0时是未知，默认0
+     *
+     * @param sex 性别，值为1时是男性，值为2时是女性，值为0时是未知，默认0
+     */
+    public void setSex(Integer sex) {
+        this.sex = sex;
+    }
+
+    /**
+     * 获取用户头像
+     *
+     * @return headimgurl - 用户头像
+     */
+    public String getHeadimgurl() {
+        return headimgurl;
+    }
+
+    /**
+     * 设置用户头像
+     *
+     * @param headimgurl 用户头像
+     */
+    public void setHeadimgurl(String headimgurl) {
+        this.headimgurl = headimgurl;
+    }
+
+    /**
+     * 获取国家，如中国为CN
+     *
+     * @return country - 国家，如中国为CN
+     */
+    public String getCountry() {
+        return country;
+    }
+
+    /**
+     * 设置国家，如中国为CN
+     *
+     * @param country 国家，如中国为CN
+     */
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    /**
+     * 获取省份
+     *
+     * @return province - 省份
+     */
+    public String getProvince() {
+        return province;
+    }
+
+    /**
+     * 设置省份
+     *
+     * @param province 省份
+     */
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    /**
+     * 获取城市
+     *
+     * @return city - 城市
+     */
+    public String getCity() {
+        return city;
+    }
+
+    /**
+     * 设置城市
+     *
+     * @param city 城市
+     */
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    /**
+     * 获取语言：zh_CN中文
+     *
+     * @return language - 语言：zh_CN中文
+     */
+    public String getLanguage() {
+        return language;
+    }
+
+    /**
+     * 设置语言：zh_CN中文
+     *
+     * @param language 语言：zh_CN中文
+     */
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    /**
+     * 获取微信网页授权接口调用凭证
+     *
+     * @return access_token - 微信网页授权接口调用凭证
+     */
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    /**
+     * 设置微信网页授权接口调用凭证
+     *
+     * @param accessToken 微信网页授权接口调用凭证
+     */
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    /**
+     * 获取账号类型：微信用户-wechat，手机号注册用户-mobile，默认：wechat
+     *
+     * @return account_type - 账号类型：微信用户-wechat，手机号注册用户-mobile，默认：wechat
      */
     public String getAccountType() {
         return accountType;
     }
 
     /**
-     * 设置账号类型：默认为手机号用户-mobile
+     * 设置账号类型：微信用户-wechat，手机号注册用户-mobile，默认：wechat
      *
-     * @param accountType 账号类型：默认为手机号用户-mobile
+     * @param accountType 账号类型：微信用户-wechat，手机号注册用户-mobile，默认：wechat
      */
     public void setAccountType(String accountType) {
         this.accountType = accountType;
-    }
-
-    /**
-     * 获取邮箱
-     *
-     * @return email - 邮箱
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * 设置邮箱
-     *
-     * @param email 邮箱
-     */
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     /**
@@ -320,24 +424,6 @@ public class UserDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取账号是否激活：y-已激活；n-未激活，默认为n 
-     *
-     * @return active_flag - 账号是否激活：y-已激活；n-未激活，默认为n 
-     */
-    public String getActiveFlag() {
-        return activeFlag;
-    }
-
-    /**
-     * 设置账号是否激活：y-已激活；n-未激活，默认为n 
-     *
-     * @param activeFlag 账号是否激活：y-已激活；n-未激活，默认为n 
-     */
-    public void setActiveFlag(String activeFlag) {
-        this.activeFlag = activeFlag;
-    }
-
-    /**
      * 获取账号是否锁住：y-已锁；n-未锁，默认为n
      *
      * @return lock_flag - 账号是否锁住：y-已锁；n-未锁，默认为n
@@ -356,39 +442,21 @@ public class UserDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取账号锁住时间
+     * 获取账号注册时间/创建时间
      *
-     * @return lock_start_time - 账号锁住时间
+     * @return create_time - 账号注册时间/创建时间
      */
-    public Date getLockStartTime() {
-        return lockStartTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
     /**
-     * 设置账号锁住时间
+     * 设置账号注册时间/创建时间
      *
-     * @param lockStartTime 账号锁住时间
+     * @param createTime 账号注册时间/创建时间
      */
-    public void setLockStartTime(Date lockStartTime) {
-        this.lockStartTime = lockStartTime;
-    }
-
-    /**
-     * 获取账号解锁时间
-     *
-     * @return lock_end_time - 账号解锁时间
-     */
-    public Date getLockEndTime() {
-        return lockEndTime;
-    }
-
-    /**
-     * 设置账号解锁时间
-     *
-     * @param lockEndTime 账号解锁时间
-     */
-    public void setLockEndTime(Date lockEndTime) {
-        this.lockEndTime = lockEndTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     /**
@@ -407,24 +475,6 @@ public class UserDO extends BaseDO implements Serializable {
      */
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
-    }
-
-    /**
-     * 获取账号注册时间/创建时间
-     *
-     * @return create_time - 账号注册时间/创建时间
-     */
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    /**
-     * 设置账号注册时间/创建时间
-     *
-     * @param createTime 账号注册时间/创建时间
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
     }
 
     /**
@@ -463,103 +513,30 @@ public class UserDO extends BaseDO implements Serializable {
         this.updateTime = updateTime;
     }
 
-    /**
-     * 获取短信验证代码
-     *
-     * @return sms_code - 短信验证代码
-     */
-    public String getSmsCode() {
-        return smsCode;
-    }
-
-    /**
-     * 设置短信验证代码
-     *
-     * @param smsCode 短信验证代码
-     */
-    public void setSmsCode(String smsCode) {
-        this.smsCode = smsCode;
-    }
-
-    /**
-     * 获取发送短信用途
-     *
-     * @return sms_useful - 发送短信用途
-     */
-    public String getSmsUseful() {
-        return smsUseful;
-    }
-
-    /**
-     * 设置发送短信用途
-     *
-     * @param smsUseful 发送短信用途
-     */
-    public void setSmsUseful(String smsUseful) {
-        this.smsUseful = smsUseful;
-    }
-
-    /**
-     * 获取发送短信代码时间
-     *
-     * @return send_code_time - 发送短信代码时间
-     */
-    public Date getSendCodeTime() {
-        return sendCodeTime;
-    }
-
-    /**
-     * 设置发送短信代码时间
-     *
-     * @param sendCodeTime 发送短信代码时间
-     */
-    public void setSendCodeTime(Date sendCodeTime) {
-        this.sendCodeTime = sendCodeTime;
-    }
-
-    /**
-     * 获取备注
-     *
-     * @return remark - 备注
-     */
-    public String getRemark() {
-        return remark;
-    }
-
-    /**
-     * 设置备注
-     *
-     * @param remark 备注
-     */
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     @Override
     public String toString() {
         return "UserDO{" +
                 "id=" + id +
-                ", account='" + account + '\'' +
                 ", name='" + name + '\'' +
+                ", mobile='" + mobile + '\'' +
                 ", nickname='" + nickname + '\'' +
-                ", password='" + password + '\'' +
+                ", openid='" + openid + '\'' +
+                ", sex=" + sex +
+                ", headimgurl='" + headimgurl + '\'' +
+                ", country='" + country + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", language='" + language + '\'' +
+                ", accessToken='" + accessToken + '\'' +
                 ", accountType='" + accountType + '\'' +
-                ", email='" + email + '\'' +
                 ", rank='" + rank + '\'' +
                 ", amount=" + amount +
                 ", score=" + score +
-                ", activeFlag='" + activeFlag + '\'' +
                 ", lockFlag='" + lockFlag + '\'' +
-                ", lockStartTime=" + lockStartTime +
-                ", lockEndTime=" + lockEndTime +
-                ", lastLoginTime=" + lastLoginTime +
                 ", createTime=" + createTime +
+                ", lastLoginTime=" + lastLoginTime +
                 ", updateBy='" + updateBy + '\'' +
                 ", updateTime=" + updateTime +
-                ", smsCode='" + smsCode + '\'' +
-                ", smsUseful='" + smsUseful + '\'' +
-                ", sendCodeTime=" + sendCodeTime +
-                ", remark='" + remark + '\'' +
                 '}';
     }
 }

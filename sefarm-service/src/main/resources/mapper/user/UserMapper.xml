@@ -6,26 +6,69 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="headimgurl" jdbcType="VARCHAR" property="headimgurl" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="language" jdbcType="VARCHAR" property="language" />
+    <result column="access_token" jdbcType="VARCHAR" property="accessToken" />
     <result column="account_type" jdbcType="VARCHAR" property="accountType" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="rank" jdbcType="VARCHAR" property="rank" />
     <result column="amount" jdbcType="DECIMAL" property="amount" />
     <result column="score" jdbcType="DECIMAL" property="score" />
-    <result column="active_flag" jdbcType="CHAR" property="activeFlag" />
     <result column="lock_flag" jdbcType="CHAR" property="lockFlag" />
-    <result column="lock_start_time" jdbcType="TIMESTAMP" property="lockStartTime" />
-    <result column="lock_end_time" jdbcType="TIMESTAMP" property="lockEndTime" />
-    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="sms_code" jdbcType="VARCHAR" property="smsCode" />
-    <result column="sms_useful" jdbcType="VARCHAR" property="smsUseful" />
-    <result column="send_code_time" jdbcType="TIMESTAMP" property="sendCodeTime" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
+
+  <select id="getUserDOList" resultMap="BaseResultMap">
+    SELECT *
+    FROM sefarm_user
+    <where>
+      <if test="name != null and '' != name">
+        AND (name LIKE CONCAT('%', #{name}, '%') OR nickname LIKE CONCAT('%', #{name}, '%'))
+      </if>
+      <if test="mobile != null and '' != mobile">
+        AND (mobile LIKE CONCAT(#{mobile}, '%') OR openid LIKE CONCAT(#{mobile}, '%'))
+      </if>
+      <if test="address != null and '' != address">
+        AND (country = #{address} OR province = #{address} OR city = #{address})
+      </if>
+      <if test="sex != null and sex > -1">
+        AND sex = #{sex}
+      </if>
+      <if test="lock != null and '' != lock">
+        AND lock_flag = #{lock}
+      </if>
+      <if test="createTimeBegin != null and '' != createTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="createTimeEnd != null and '' != createTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="lastLoginTimeBegin != null and '' != lastLoginTimeBegin">
+        <![CDATA[
+          AND DATE_FORMAT(last_login_time, '%Y-%m-%d') >= DATE_FORMAT(#{lastLoginTimeBegin}, '%Y-%m-%d')
+        ]]>
+      </if>
+      <if test="lastLoginTimeEnd != null and '' != lastLoginTimeEnd">
+        <![CDATA[
+          AND DATE_FORMAT(last_login_time, '%Y-%m-%d') <= DATE_FORMAT(#{lastLoginTimeEnd}, '%Y-%m-%d')
+        ]]>
+      </if>
+    </where>
+    ORDER BY ${sortName} ${sortOrder}
+  </select>
+
 </mapper>

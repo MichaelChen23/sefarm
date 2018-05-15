@@ -114,7 +114,7 @@ public class UserAddressServiceImpl extends BaseServiceImpl<UserAddressMapper, U
         List<UserAddressDO> list = getMapper().selectByExample(example);
         for (int i = 0; i < list.size(); i++) {
             UserAddressDO userAddressDO = list.get(i);
-            if (id == userAddressDO.getId()) {
+            if (id.equals(userAddressDO.getId())) {
                 userAddressDO.setDefaultFlag(Constant.STATUS_UNLOCK);
             } else {
                 userAddressDO.setDefaultFlag(Constant.STATUS_LOCK);
