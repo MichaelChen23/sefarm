@@ -71,4 +71,9 @@
     ORDER BY ${sortName} ${sortOrder}
   </select>
 
+  <insert id="saveWechatUserByObj" parameterType="com.sefarm.model.user.UserDO" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO sefarm_user (nickname, openid, sex, headimgurl, country, province, city, language, access_token, create_time)
+    VALUES(#{nickname}, #{openid}, #{sex}, #{headimgurl}, #{country}, #{province}, #{city}, #{language}, #{accessToken}, #{createTime})
+  </insert>
+
 </mapper>

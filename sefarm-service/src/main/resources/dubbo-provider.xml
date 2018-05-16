@@ -39,8 +39,9 @@
     <dubbo:service interface="com.sefarm.service.common.ICartService" ref="cartService" version="1.0" registry="zookeeper"/>
 
     <!--user-dubbo-api-->
-    <dubbo:service interface="com.sefarm.service.user.IUserAddressService" ref="userAddressService" version="1.0" registry="zookeeper"/>
     <dubbo:service interface="com.sefarm.service.user.IUserService" ref="userService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.user.IUserAddressService" ref="userAddressService" version="1.0" registry="zookeeper"/>
+    <dubbo:service interface="com.sefarm.service.user.IUserRankService" ref="userRankService" version="1.0" registry="zookeeper"/>
 
     <!-- 具体服务接口的实现 -->
     <!--<bean id="computeService" class="cn.ctoedu.service.impl.ComputeServiceImpl" />-->

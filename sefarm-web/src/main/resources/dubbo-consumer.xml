@@ -51,9 +51,11 @@
                      check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="${dubbo.registry.timeout}"/>
 
     <!--user-dubbo-service-->
+    <dubbo:reference id="userService" interface="com.sefarm.service.user.IUserService"
+                     check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="${dubbo.registry.timeout}"/>
     <dubbo:reference id="userAddressService" interface="com.sefarm.service.user.IUserAddressService"
                      check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="${dubbo.registry.timeout}"/>
-    <dubbo:reference id="userService" interface="com.sefarm.service.user.IUserService"
+    <dubbo:reference id="userRankService" interface="com.sefarm.service.user.IUserRankService"
                      check="false" version="1.0" url="" registry="zookeeper" protocol="dubbo" timeout="${dubbo.registry.timeout}"/>
 
 </beans>

@@ -1,11 +1,15 @@
 package com.sefarm.model.user;
 
 import com.sefarm.common.base.BaseDO;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * 用户等级的实体类
@@ -19,7 +23,7 @@ public class UserRankDO extends BaseDO implements Serializable {
      * 用户等级ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "SELECT LAST_INSERT_ID()")
+    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     /**
@@ -28,7 +32,7 @@ public class UserRankDO extends BaseDO implements Serializable {
     private String code;
 
     /**
-     * 级别名称
+     * 等级名称
      */
     private String name;
 
@@ -58,6 +62,7 @@ public class UserRankDO extends BaseDO implements Serializable {
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "create_time")
     private Date createTime;
 
@@ -70,6 +75,7 @@ public class UserRankDO extends BaseDO implements Serializable {
     /**
      * 更新时间
      */
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "update_time")
     private Date updateTime;
 
@@ -110,18 +116,18 @@ public class UserRankDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取级别名称
+     * 获取等级名称
      *
-     * @return name - 级别名称
+     * @return name - 等级名称
      */
     public String getName() {
         return name;
     }
 
     /**
-     * 设置级别名称
+     * 设置等级名称
      *
-     * @param name 级别名称
+     * @param name 等级名称
      */
     public void setName(String name) {
         this.name = name;
