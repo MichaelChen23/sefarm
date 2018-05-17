@@ -75,9 +75,9 @@ public class UserController extends BaseController {
     @RequestMapping(value = "/user_list", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo<UserDO> getUserDOPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam String sortStr, @RequestParam String orderStr, @RequestParam(required = false) String name, @RequestParam(required = false) String mobile, @RequestParam(required = false) String address,
-                                              @RequestParam(required = false) Integer sexInt, @RequestParam(required = false) String lockStr, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd, @RequestParam(required = false) String lastLoginTimeBegin, @RequestParam(required = false) String lastLoginTimeEnd) {
+                                              @RequestParam(required = false) Integer sexInt, @RequestParam(required = false) String status, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd, @RequestParam(required = false) String lastLoginTimeBegin, @RequestParam(required = false) String lastLoginTimeEnd) {
         try {
-            PageInfo<UserDO> result = userService.getUserDOPageList(pageIndex, pageSize, sortStr, orderStr, name, mobile, address, sexInt, lockStr, createTimeBegin, createTimeEnd, lastLoginTimeBegin, lastLoginTimeEnd);
+            PageInfo<UserDO> result = userService.getUserDOPageList(pageIndex, pageSize, sortStr, orderStr, name, mobile, address, sexInt, status, createTimeBegin, createTimeEnd, lastLoginTimeBegin, lastLoginTimeEnd);
             return result;
         } catch (Exception e) {
             logger.error("get user page list fail(获取 用户 分页 列表失败) -- :{}", e.getMessage());

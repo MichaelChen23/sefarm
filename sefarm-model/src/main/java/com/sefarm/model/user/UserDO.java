@@ -104,10 +104,9 @@ public class UserDO extends BaseDO implements Serializable {
     private BigDecimal score;
 
     /**
-     * 账号是否锁住：y-已锁；n-未锁，默认为n
+     * 状态：y-启用；n-禁用，默认为y
      */
-    @Column(name = "lock_flag")
-    private String lockFlag;
+    private String status;
 
     /**
      * 账号注册时间/创建时间
@@ -424,21 +423,21 @@ public class UserDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取账号是否锁住：y-已锁；n-未锁，默认为n
+     * 获取状态：y-启用；n-禁用，默认为y
      *
-     * @return lock_flag - 账号是否锁住：y-已锁；n-未锁，默认为n
+     * @return status - 状态：y-启用；n-禁用，默认为y
      */
-    public String getLockFlag() {
-        return lockFlag;
+    public String getStatus() {
+        return status;
     }
 
     /**
-     * 设置账号是否锁住：y-已锁；n-未锁，默认为n
+     * 设置状态：y-启用；n-禁用，默认为y
      *
-     * @param lockFlag 账号是否锁住：y-已锁；n-未锁，默认为n
+     * @param status 状态：y-启用；n-禁用，默认为y
      */
-    public void setLockFlag(String lockFlag) {
-        this.lockFlag = lockFlag;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**
@@ -532,7 +531,7 @@ public class UserDO extends BaseDO implements Serializable {
                 ", rank='" + rank + '\'' +
                 ", amount=" + amount +
                 ", score=" + score +
-                ", lockFlag='" + lockFlag + '\'' +
+                ", status='" + status + '\'' +
                 ", createTime=" + createTime +
                 ", lastLoginTime=" + lastLoginTime +
                 ", updateBy='" + updateBy + '\'' +

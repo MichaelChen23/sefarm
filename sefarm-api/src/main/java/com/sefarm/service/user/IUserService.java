@@ -22,7 +22,7 @@ public interface IUserService extends IBaseService<UserDO> {
      * @param mobile
      * @param address
      * @param sexInt
-     * @param lockStr
+     * @param status
      * @param createTimeBegin
      * @param createTimeEnd
      * @param lastLoginTimeBegin
@@ -30,6 +30,13 @@ public interface IUserService extends IBaseService<UserDO> {
      * @return
      */
     PageInfo<UserDO> getUserDOPageList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, String name, String mobile,
-                                       String address, Integer sexInt, String lockStr, String createTimeBegin, String createTimeEnd, String lastLoginTimeBegin, String lastLoginTimeEnd);
+                                       String address, Integer sexInt, String status, String createTimeBegin, String createTimeEnd, String lastLoginTimeBegin, String lastLoginTimeEnd);
 
+    /**
+     * 新增保存微信用户，并返回该用户信息
+     * add by mc 2018-5-17
+     * @param userDO
+     * @return
+     */
+    UserDO saveWechatUser(UserDO userDO);
 }

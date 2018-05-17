@@ -95,8 +95,8 @@ $(function() {
     //初始化状态选项
     $("#status").val($("#statusValue").val());
     //初始化时间并转换格式
-    $("#startTime").val(timeFormatter($("#startTimeValue").val()));
-    $("#endTime").val(timeFormatter($("#endTimeValue").val()));
+    $("#startTime").val(cstTimeFormatter($("#startTimeValue").val()));
+    $("#endTime").val(cstTimeFormatter($("#endTimeValue").val()));
 
     // 初始化图片上传
     var imageUp = new $WebUpload("image");

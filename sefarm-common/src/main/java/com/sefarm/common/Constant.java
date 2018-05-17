@@ -1,5 +1,7 @@
 package com.sefarm.common;
 
+import java.math.BigDecimal;
+
 /**
  * 常量类
  * @author mc
@@ -19,8 +21,14 @@ public abstract class Constant {
 
 	public static final Integer DEFAULT_ROWS = 10;
 
+	/**
+	 * 用于status，启用就是没锁住，y
+	 */
 	public static final String STATUS_UNLOCK = "y";
 
+	/**
+	 * 用于status，禁用就是锁住，n
+	 */
 	public static final String STATUS_LOCK = "n";
 
 	/**
@@ -67,6 +75,21 @@ public abstract class Constant {
 	 * 事务默认timeout值，add by mc 2018-4-29
 	 */
 	public static final int DEFAULT_TRANSACTION_TIMEOUT = 36000;
+
+	/**
+	 * 用户帐号默认帐号类型为wechat微信
+	 */
+	public static final String ACCOUNT_DEFAULT_TYPE = "wechat";
+
+	/**
+	 * 用户帐号默认等级为R1
+	 */
+	public static final String ACCOUNT_DEFAULT_RANK = "R1";
+
+	/**
+	 * 用户帐号默认金额为0
+	 */
+	public static final BigDecimal ACCOUNT_DEFAULT_AMOUNT = BigDecimal.valueOf(0);
 
 	/**
 	 * 微信sefarm appID

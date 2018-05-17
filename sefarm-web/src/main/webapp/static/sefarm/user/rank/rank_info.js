@@ -92,7 +92,7 @@ RankInfoDlg.editSubmit = function() {
 $(function() {
 
     //初始化时间并转换格式
-    $("#createTime").val(timeFormatter($("#createTimeValue").val()));
-    $("#updateTime").val(timeFormatter($("#updateTimeValue").val()));
+    $("#createTime").val(cstTimeFormatter($("#createTimeValue").val()));
+    $("#updateTime").val(cstTimeFormatter($("#updateTimeValue").val()));
 });
 

@@ -21,7 +21,7 @@
     <result column="rank" jdbcType="VARCHAR" property="rank" />
     <result column="amount" jdbcType="DECIMAL" property="amount" />
     <result column="score" jdbcType="DECIMAL" property="score" />
-    <result column="lock_flag" jdbcType="CHAR" property="lockFlag" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
@@ -44,8 +44,8 @@
       <if test="sex != null and sex > -1">
         AND sex = #{sex}
       </if>
-      <if test="lock != null and '' != lock">
-        AND lock_flag = #{lock}
+      <if test="status != null and '' != status">
+        AND status = #{status}
       </if>
       <if test="createTimeBegin != null and '' != createTimeBegin">
         <![CDATA[
@@ -71,9 +71,9 @@
     ORDER BY ${sortName} ${sortOrder}
   </select>
 
-  <insert id="saveWechatUserByObj" parameterType="com.sefarm.model.user.UserDO" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO sefarm_user (nickname, openid, sex, headimgurl, country, province, city, language, access_token, create_time)
-    VALUES(#{nickname}, #{openid}, #{sex}, #{headimgurl}, #{country}, #{province}, #{city}, #{language}, #{accessToken}, #{createTime})
+  <insert id="saveUserByObj" parameterType="com.sefarm.model.user.UserDO" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO sefarm_user (name, mobile, nickname, openid, sex, headimgurl, country, province, city, language, access_token, account_type, rank, amount, score, status, create_time, last_login_time, update_by, update_time)
+    VALUES(#{name}, #{mobile}, #{nickname}, #{openid}, #{sex}, #{headimgurl}, #{country}, #{province}, #{city}, #{language}, #{accessToken}, #{accountType}, #{rank}, #{amount}, #{score}, #{status}, #{createTime}, #{lastLoginTime}, #{updateBy}, #{updateTime})
   </insert>
 
 </mapper>

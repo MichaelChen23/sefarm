@@ -6,7 +6,7 @@
             <input type="hidden" id="id" value="${userDO.id}">
             <input type="hidden" id="sexValue" value="${userDO.sex}">
             <input type="hidden" id="accountTypeValue" value="${userDO.accountType}">
-            <input type="hidden" id="lockFlagValue" value="${userDO.lockFlag}">
+            <input type="hidden" id="statusValue" value="${userDO.status}">
             <input type="hidden" id="createTimeValue" value="${userDO.createTime}">
             <input type="hidden" id="updateTimeValue" value="${userDO.updateTime}">
             <input type="hidden" id="lastLoginTimeValue" value="${userDO.lastLoginTime}">
@@ -63,9 +63,9 @@
 
                         <#input id="amount" name="钱包余额" underline="true" value="${userDO.amount}"/>
 
-                        <#select id="lockFlag" name="是否锁住" underline="true">
-                            <option value="y">是</option>
-                            <option value="n">否</option>
+                        <#select id="status" name="状态" underline="true">
+                            <option value="y">开启</option>
+                            <option value="n">停用</option>
                         </#select>
 
                         <#input id="updateBy" name="更新人" underline="true" value="${userDO.updateBy}"/>

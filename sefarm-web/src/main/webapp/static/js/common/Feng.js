@@ -132,7 +132,7 @@ function statusFormatter(value, row, index) {
 };
 
 /**
- * 把date类型转换为yyyy-mm-dd hh:mm:ss 形式
+ * 把 时间戳 转换为yyyy-mm-dd hh:mm:ss 形式
  * add by mc 2018-4-14
  *
  * @param value
@@ -153,8 +153,23 @@ function timeFormatter(value, row, index) {
     } else {
         return "";
     }
+};
+
+/**
+ * Thu Aug 18 20:38:54 CST 2016，CST时间格式转换
+ * 输出格式：yyyy-MM-dd HH:mm:ss
+ * @param cstTimeStr
+ * @returns {string}
+ */
+function cstTimeFormatter(cstTimeStr) {
+    if(null == cstTimeStr || "" == cstTimeStr){
+        return "";
+    }
+    var dateStr = cstTimeStr.trim().split(" ");
+    var gmtTimeStr = dateStr[0]+" "+dateStr[1]+" "+dateStr[2]+" "+dateStr[5]+" "+dateStr[3]+" GMT+0800";
+    return timeFormatter(Date.parse(gmtTimeStr));
 }
-;
+
 
 /**
  * fix 0 before format 不满10补0函数

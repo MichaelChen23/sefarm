@@ -20,7 +20,7 @@ public interface UserMapper extends SeFarmMapper<UserDO> {
      * @param mobile
      * @param address
      * @param sexInt
-     * @param lockStr
+     * @param status
      * @param createTimeBegin
      * @param createTimeEnd
      * @param lastLoginTimeBegin
@@ -29,13 +29,13 @@ public interface UserMapper extends SeFarmMapper<UserDO> {
      * @param order
      * @return
      */
-    List<UserDO> getUserDOList(@Param("name")String name, @Param("mobile")String mobile, @Param("address")String address, @Param("sex")Integer sexInt, @Param("lock")String lockStr,
+    List<UserDO> getUserDOList(@Param("name")String name, @Param("mobile")String mobile, @Param("address")String address, @Param("sex")Integer sexInt, @Param("status")String status,
                                @Param("createTimeBegin")String createTimeBegin, @Param("createTimeEnd")String createTimeEnd, @Param("lastLoginTimeBegin")String lastLoginTimeBegin, @Param("lastLoginTimeEnd")String lastLoginTimeEnd, @Param("sortName")String sort, @Param("sortOrder")String order);
 
     /**
-     * 保存微信用户信息，并且返回id
+     * 保存用户信息，并且返回id
      * @param userDO
      * @return
      */
-    Integer saveWechatUserByObj(UserDO userDO);
+    Integer saveUserByObj(UserDO userDO);
 }

@@ -30,7 +30,7 @@ User.initColumn = function () {
         {title: '等级', field: 'rank', align: 'center', valign: 'middle', sortable: true},
         {title: '余额', field: 'amount', align: 'center', valign: 'middle', sortable: true},
         {title: '积分', field: 'score', align: 'center', valign: 'middle', sortable: true},
-        {title: '是否锁住', field: 'lockFlag', align: 'center', valign: 'middle', sortable: true, formatter: lockFlagFormatter},
+        {title: '状态', field: 'status', align: 'center', valign: 'middle', sortable: true, formatter: statusFormatter},
         {title: '创建时间', field: 'createTime', align: 'center', valign: 'middle', sortable: true, formatter: timeFormatter},
         {title: '最后登录时间', field: 'lastLoginTime', align: 'center', valign: 'middle', sortable: true, formatter: timeFormatter},
         {title: '更新人', field: 'updateBy', visible: false, align: 'center', valign: 'middle', sortable: true},
@@ -87,22 +87,6 @@ function accountTypeFormatter(value, row, index) {
 };
 
 /**
- * 是否锁住判断
- * @param value
- * @param row
- * @param index
- */
-function lockFlagFormatter(value, row, index) {
-    if (row['defaultFlag'] == 'y') {
-        return '是';
-    }
-    if (row['defaultFlag'] == 'n') {
-        return '否';
-    }
-    return value;
-};
-
-/**
  * 检查是否选中
  */
 User.check = function () {
@@ -121,7 +105,7 @@ User.resetSearch = function () {
     $("#mobile").val("");
     $("#address").val("");
     $("#sexInt").val("");
-    $("#lockStr").val("");
+    $("#status").val("");
     $("#beginTime").val("");
     $("#endTime").val("");
     $("#loginBeginTime").val("");
@@ -138,7 +122,7 @@ User.search = function () {
     queryData['mobile'] = $("#mobile").val();
     queryData['address'] = $("#address").val();
     queryData['sexInt'] = $("#sexInt").val();
-    queryData['lockStr'] = $("#lockStr").val();
+    queryData['status'] = $("#status").val();
     queryData['createTimeBegin'] = $("#beginTime").val();
     queryData['createTimeEnd'] = $("#endTime").val();
     queryData['lastLoginTimeBegin'] = $("#loginBeginTime").val();

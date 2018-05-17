@@ -45,7 +45,7 @@ UserInfoDlg.close = function () {
  */
 UserInfoDlg.collectData = function() {
     this.set('id').set('name').set('mobile').set('nickname').set('openid').set('sex').set('headimgurl').set('country').set('province').set('city').set('language')
-        .set('accessToken').set('accountType').set('rank').set('amount').set('score').set('lockFlag').set('createTime').set('updateBy').set('updateTime');
+        .set('accessToken').set('accountType').set('rank').set('amount').set('score').set('status').set('createTime').set('updateBy').set('updateTime');
 };
 
 /**
@@ -96,11 +96,11 @@ $(function() {
     $("#sex").val($("#sexValue").val());
     //初始化帐号类别
     $("#accountType").val($("#accountTypeValue").val());
-    //初始化是否锁住
-    $("#lockFlag").val($("#lockFlagValue").val());
+    //初始化状态
+    $("#status").val($("#statusValue").val());
     //初始化时间并转换格式
-    $("#createTime").val(timeFormatter($("#createTimeValue").val()));
-    $("#updateTime").val(timeFormatter($("#updateTimeValue").val()));
-    $("#lastLoginTime").val(timeFormatter($("#lastLoginTimeValue").val()));
+    $("#createTime").val(cstTimeFormatter($("#createTimeValue").val()));
+    $("#updateTime").val(cstTimeFormatter($("#updateTimeValue").val()));
+    $("#lastLoginTime").val(cstTimeFormatter($("#lastLoginTimeValue").val()));
 });
 

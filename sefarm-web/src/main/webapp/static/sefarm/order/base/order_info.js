@@ -93,6 +93,6 @@ $(function() {
     //初始化状态选项
     $("#status").val($("#statusValue").val());
     //初始化时间并转换格式
-    $("#createTime").val(timeFormatter($("#createTimeValue").val()));
+    $("#createTime").val(cstTimeFormatter($("#createTimeValue").val()));
 });
 
