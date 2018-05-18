@@ -1,11 +1,16 @@
 package com.sefarm.controller.common;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.wxpay.sdk.WXPay;
+import com.github.wxpay.sdk.WXPayUtil;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.util.HttpKit;
+import com.sefarm.config.wechat.SeFarmWXPayConfig;
 import com.sefarm.model.user.UserDO;
 import com.sefarm.service.user.IUserService;
+import com.sefarm.util.ToolUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +60,13 @@ public class WechatController {
         queryMaps.put("grant_type", Constant.WECHAT_GRANT_TYPE);
         try {
             JSONObject result = HttpKit.doGet(Constant.WECHAT_GET_ACCESS_TOKEN_URL, queryMaps);
-            return new BaseResponse<>(result);
+            Integer errcode = result.getInteger("errcode");
+            String errmsg = result.getString("errmsg");
+            if (!ToolUtil.isEmpty(errcode) && StringUtils.isNotBlank(errmsg)) {
+                return new BaseResponse(errcode, errmsg, null);
+            } else {
+                return new BaseResponse<>(result);
+            }
         } catch (Exception e) {
             logger.error("get accessToken by code fail(获取微信accessToken失败) -- code:"+code+" :{}", e.getMessage());
             return new BaseResponse<>(null);
@@ -71,6 +88,12 @@ public class WechatController {
         queryMaps.put("lang", Constant.WECHAT_LANG_TYPE);
         try {
             JSONObject resultJson = HttpKit.doGet(Constant.WECHAT_GET_USER_INFO_URL, queryMaps);
+            //先判断有没有出错
+            Integer errcode = resultJson.getInteger("errcode");
+            String errmsg = resultJson.getString("errmsg");
+            if (!ToolUtil.isEmpty(errcode) && StringUtils.isNotBlank(errmsg)) {
+                return new BaseResponse(errcode, errmsg, null);
+            }
             //先根据openid查询有没有该用户，如果没该用户就保存，如果有就更新该用户
             String openid = resultJson.getString("openid");
             String nickname = resultJson.getString("nickname");
@@ -80,7 +103,6 @@ public class WechatController {
             String province = resultJson.getString("province");
             String city = resultJson.getString("city");
             String language = resultJson.getString("language");
-            Boolean result = false;
             UserDO user = new UserDO();
             user.setOpenid(openid);
             UserDO userDO = userService.getOneByObj(user);
@@ -89,7 +111,9 @@ public class WechatController {
                     //如果用户被停用，不能获取该用户信息
                     return new BaseResponse<>(null);
                 }
-                UserDO updateUserDO = userDO;
+                UserDO updateUserDO = new UserDO();
+                updateUserDO.setId(userDO.getId());
+                updateUserDO.setOpenid(userDO.getOpenid());
                 updateUserDO.setNickname(nickname);
                 updateUserDO.setHeadimgurl(headimgurl);
                 updateUserDO.setSex(sex);
@@ -99,8 +123,9 @@ public class WechatController {
                 updateUserDO.setLanguage(language);
                 updateUserDO.setAccessToken(accessToken);
                 updateUserDO.setLastLoginTime(new Date());
-                result = userService.updateByObj(updateUserDO);
-                return new BaseResponse<>(result? updateUserDO : userDO);
+                Boolean result = userService.updateByObj(updateUserDO);
+                UserDO resultUser = result? updateUserDO : userDO;
+                return new BaseResponse<>(resultUser);
             } else {
                 user.setNickname(nickname);
                 user.setHeadimgurl(headimgurl);
@@ -119,4 +144,85 @@ public class WechatController {
             return new BaseResponse<>(null);
         }
     }
+
+    /**
+     * 微信下单
+     * @return
+     */
+    @RequestMapping(value = "/doUnifiedOrder", method = RequestMethod.GET)
+    @ResponseBody
+    public BaseResponse<Map<String, String>> doUnifiedOrder() {
+        HashMap<String, String> data = new HashMap<>(8);
+        data.put("body", "SeFarm-买菜test");
+        data.put("out_trade_no",  "sefarm20180518211448test");
+        data.put("device_info", "WEB");
+        data.put("fee_type", "CNY");
+        data.put("total_fee", "1");
+        data.put("spbill_create_ip", "123.12.12.123");
+        data.put("notify_url", "http://www.ji-book.com/api/wechat/notify");
+        data.put("trade_type", "JSAPI");
+        data.put("openid", "");
+        try {
+            logger.info("微信下单前的data: {} " , data.toString());
+            SeFarmWXPayConfig seFarmWXPayConfig = new SeFarmWXPayConfig();
+            WXPay wxPay = new WXPay(seFarmWXPayConfig);
+            logger.info("wxPay: {} " , wxPay.toString());
+            Map<String, String> resp = wxPay.unifiedOrder(data);
+            return new BaseResponse<>(resp);
+        } catch (Exception e) {
+            logger.error("微信下单失败: {}", e.toString());
+            return new BaseResponse<>(null);
+        }
+    }
+
+    /**
+     * 微信支付-下单后-返回结果
+     */
+    @RequestMapping(value = "/notify", method = RequestMethod.GET)
+    public void weChatNotifyPayResult(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        InputStream inStream = request.getInputStream();
+        ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inStream.read(buffer)) != -1) {
+            outSteam.write(buffer, 0, len);
+        }
+        outSteam.close();
+        inStream.close();
+        String result = new String(outSteam.toByteArray(), "utf-8");
+        logger.info("微信支付返回的result: {}" , result);
+        Map<String, String> map = null;
+        try {
+            map = WXPayUtil.xmlToMap(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 此处调用订单查询接口验证是否交易成功
+        logger.info("微信支付返回的info: {}" , map.toString());
+        boolean isSucc = map!=null? true : false;
+
+        // 支付成功，商户处理后同步返回给微信参数
+        PrintWriter writer = response.getWriter();
+
+        if (!isSucc) {
+            // 支付失败， 记录流水失败
+            logger.error("微信支付失败");
+        } else {
+            // 付款成功，业务处理完毕
+            logger.info("微信支付成功");
+            // 通知微信已经收到消息，不要再给我发消息了，否则微信会8连击调用本接口
+            String noticeStr = setXML("SUCCESS", "");
+            writer.write(noticeStr);
+            writer.flush();
+        }
+        String noticeStr = setXML("FAIL", "");
+        writer.write(noticeStr);
+        writer.flush();
+    }
+
+    private String setXML(String return_code, String return_msg) {
+        return "<xml><return_code><![CDATA[" + return_code + "]]></return_code><return_msg><![CDATA[" + return_msg + "]]></return_msg></xml>";
+    }
+
 }

@@ -94,12 +94,22 @@ public abstract class Constant {
 	/**
 	 * 微信sefarm appID
 	 */
-	public static final String WECHAT_APPID = "wx354bab194f6ed7a7";
+	public static final String WECHAT_APPID = "";
 
 	/**
 	 * 微信sefarm appSecret
 	 */
-	public static final String WECHAT_APPSECRET = "926edb339f554583c72d565665284fe9";
+	public static final String WECHAT_APPSECRET = "";
+
+	/**
+	 * 微信支付商户号
+	 */
+	public static final String WECHAT_MCH_ID = "";
+
+	/**
+	 * 微信支付API密钥
+	 */
+	public static final String WECHAT_API_KEY = "";
 
 	/**
 	 * 微信获取accessToken url

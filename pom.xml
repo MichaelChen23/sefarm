@@ -43,6 +43,7 @@
         <druid.version>1.0.28</druid.version>
         <beetl.version>2.7.15</beetl.version>
         <swagger.version>2.2.2</swagger.version>
+        <wxpay.version>0.0.3</wxpay.version>
     </properties>
 
     <dependencyManagement>
@@ -122,6 +123,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
+            </dependency>
+            <!-- wx-pay -->
+            <dependency>
+                <groupId>com.github.wxpay</groupId>
+                <artifactId>wxpay-sdk</artifactId>
+                <version>${wxpay.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
