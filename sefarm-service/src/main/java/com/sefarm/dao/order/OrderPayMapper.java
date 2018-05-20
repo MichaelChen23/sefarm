@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface OrderPayMapper extends SeFarmMapper<OrderPayDO> {
 
-    List<OrderPayVO> getOrderPayVOList(@Param("name")String name, @Param("payAccount")String payAccount, @Param("orderNo")String orderNo, @Param("payStatus")String payStatus, @Param("createTimeBegin")String createTimeBegin, @Param("createTimeEnd")String createTimeEnd, @Param("sortName")String sort, @Param("sortOrder")String order);
+    List<OrderPayVO> getOrderPayVOList(@Param("name")String name, @Param("orderNo")String orderNo, @Param("payStatus")String payStatus, @Param("createTimeBegin")String createTimeBegin, @Param("createTimeEnd")String createTimeEnd, @Param("sortName")String sort, @Param("sortOrder")String order);
 
     OrderPayVO getOrderPayVO(@Param("payId") Long payId);
 

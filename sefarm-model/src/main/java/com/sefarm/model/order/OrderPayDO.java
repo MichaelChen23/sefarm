@@ -15,7 +15,7 @@ import java.util.Date;
  * 订单支付记录的实体类
  *
  * @author mc
- * @date 2018-3-24
+ * @date 2018-5-20
  */
 @Table(name = "sefarm_order_pay")
 public class OrderPayDO extends BaseDO implements Serializable {
@@ -51,25 +51,72 @@ public class OrderPayDO extends BaseDO implements Serializable {
     private Date payTime;
 
     /**
-     * 支付方式： alipay-支付宝；wechat-微信支付；cash-现金
+     * 支付方式：wechat-微信支付；alipay-支付宝
      */
     @Column(name = "pay_type")
     private String payType;
 
     /**
-     * 第三方支付，实际支付人账号
+     * 用户唯一标识
      */
-    @Column(name = "pay_account")
-    private String payAccount;
+    private String openid;
 
     /**
-     * 实际支付流水号
+     * 公众号id
      */
-    @Column(name = "pay_trade_no")
-    private String payTradeNo;
+    @Column(name = "app_id")
+    private String appId;
 
     /**
-     * 第三方支付反馈状态
+     * 支付时间戳，秒级
+     */
+    @Column(name = "time_stamp")
+    private String timeStamp;
+
+    /**
+     * 随机字符串
+     */
+    @Column(name = "nonce_str")
+    private String nonceStr;
+
+    /**
+     * 订单详情扩展字符串，微信JS支付参数名为：package
+     */
+    @Column(name = "prepay_id")
+    private String prepayId;
+
+    /**
+     * 签名类型：默认MD5
+     */
+    @Column(name = "sign_type")
+    private String signType;
+
+    /**
+     * 签名，微信统一下单返回参数是sign
+     */
+    @Column(name = "pay_sign")
+    private String paySign;
+
+    /**
+     * 商户号
+     */
+    @Column(name = "mch_id")
+    private String mchId;
+
+    /**
+     * 设备号
+     */
+    @Column(name = "device_info")
+    private String deviceInfo;
+
+    /**
+     * 交易类型：JSAPI 公众号支付；NATIVE 扫码支付；APP APP支付
+     */
+    @Column(name = "trade_type")
+    private String tradeType;
+
+    /**
+     * 第三方支付反馈状态：PAY_SUCCESS 支付成功；PAY_FAIL 支付失败；REFUNDIND 退款中；REFUND_SUCCESS 退款成功；REFUND_FAIL 退款失败
      */
     @Column(name = "pay_status")
     private String payStatus;
@@ -85,6 +132,12 @@ public class OrderPayDO extends BaseDO implements Serializable {
      */
     @Column(name = "end_time")
     private Date endTime;
+
+    /**
+     * 退款时间
+     */
+    @Column(name = "refund_time")
+    private Date refundTime;
 
     /**
      * 获取订单支付id
@@ -177,72 +230,216 @@ public class OrderPayDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取支付方式： alipay-支付宝；wechat-微信支付；cash-现金
+     * 获取支付方式：wechat-微信支付；alipay-支付宝
      *
-     * @return pay_type - 支付方式： alipay-支付宝；wechat-微信支付；cash-现金
+     * @return pay_type - 支付方式：wechat-微信支付；alipay-支付宝
      */
     public String getPayType() {
         return payType;
     }
 
     /**
-     * 设置支付方式： alipay-支付宝；wechat-微信支付；cash-现金
+     * 设置支付方式：wechat-微信支付；alipay-支付宝
      *
-     * @param payType 支付方式： alipay-支付宝；wechat-微信支付；cash-现金
+     * @param payType 支付方式：wechat-微信支付；alipay-支付宝
      */
     public void setPayType(String payType) {
         this.payType = payType;
     }
 
     /**
-     * 获取第三方支付，实际支付人账号
+     * 获取用户唯一标识
      *
-     * @return pay_account - 第三方支付，实际支付人账号
+     * @return openid - 用户唯一标识
      */
-    public String getPayAccount() {
-        return payAccount;
+    public String getOpenid() {
+        return openid;
     }
 
     /**
-     * 设置第三方支付，实际支付人账号
+     * 设置用户唯一标识
      *
-     * @param payAccount 第三方支付，实际支付人账号
+     * @param openid 用户唯一标识
      */
-    public void setPayAccount(String payAccount) {
-        this.payAccount = payAccount;
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 
     /**
-     * 获取实际支付流水号
+     * 获取公众号id
      *
-     * @return pay_trade_no - 实际支付流水号
+     * @return app_id - 公众号id
      */
-    public String getPayTradeNo() {
-        return payTradeNo;
+    public String getAppId() {
+        return appId;
     }
 
     /**
-     * 设置实际支付流水号
+     * 设置公众号id
      *
-     * @param payTradeNo 实际支付流水号
+     * @param appId 公众号id
      */
-    public void setPayTradeNo(String payTradeNo) {
-        this.payTradeNo = payTradeNo;
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     /**
-     * 获取第三方支付反馈状态
+     * 获取支付时间戳，秒级
      *
-     * @return pay_status - 第三方支付反馈状态
+     * @return time_stamp - 支付时间戳，秒级
+     */
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    /**
+     * 设置支付时间戳，秒级
+     *
+     * @param timeStamp 支付时间戳，秒级
+     */
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    /**
+     * 获取随机字符串
+     *
+     * @return nonce_str - 随机字符串
+     */
+    public String getNonceStr() {
+        return nonceStr;
+    }
+
+    /**
+     * 设置随机字符串
+     *
+     * @param nonceStr 随机字符串
+     */
+    public void setNonceStr(String nonceStr) {
+        this.nonceStr = nonceStr;
+    }
+
+    /**
+     * 获取订单详情扩展字符串，微信JS支付参数名为：package
+     *
+     * @return prepay_id - 订单详情扩展字符串，微信JS支付参数名为：package
+     */
+    public String getPrepayId() {
+        return prepayId;
+    }
+
+    /**
+     * 设置订单详情扩展字符串，微信JS支付参数名为：package
+     *
+     * @param prepayId 订单详情扩展字符串，微信JS支付参数名为：package
+     */
+    public void setPrepayId(String prepayId) {
+        this.prepayId = prepayId;
+    }
+
+    /**
+     * 获取签名类型：默认MD5
+     *
+     * @return sign_type - 签名类型：默认MD5
+     */
+    public String getSignType() {
+        return signType;
+    }
+
+    /**
+     * 设置签名类型：默认MD5
+     *
+     * @param signType 签名类型：默认MD5
+     */
+    public void setSignType(String signType) {
+        this.signType = signType;
+    }
+
+    /**
+     * 获取签名，微信统一下单返回参数是sign
+     *
+     * @return pay_sign - 签名，微信统一下单返回参数是sign
+     */
+    public String getPaySign() {
+        return paySign;
+    }
+
+    /**
+     * 设置签名，微信统一下单返回参数是sign
+     *
+     * @param paySign 签名，微信统一下单返回参数是sign
+     */
+    public void setPaySign(String paySign) {
+        this.paySign = paySign;
+    }
+
+    /**
+     * 获取商户号
+     *
+     * @return mch_id - 商户号
+     */
+    public String getMchId() {
+        return mchId;
+    }
+
+    /**
+     * 设置商户号
+     *
+     * @param mchId 商户号
+     */
+    public void setMchId(String mchId) {
+        this.mchId = mchId;
+    }
+
+    /**
+     * 获取设备号
+     *
+     * @return device_info - 设备号
+     */
+    public String getDeviceInfo() {
+        return deviceInfo;
+    }
+
+    /**
+     * 设置设备号
+     *
+     * @param deviceInfo 设备号
+     */
+    public void setDeviceInfo(String deviceInfo) {
+        this.deviceInfo = deviceInfo;
+    }
+
+    /**
+     * 获取交易类型：JSAPI 公众号支付；NATIVE 扫码支付；APP APP支付
+     *
+     * @return trade_type - 交易类型：JSAPI 公众号支付；NATIVE 扫码支付；APP APP支付
+     */
+    public String getTradeType() {
+        return tradeType;
+    }
+
+    /**
+     * 设置交易类型：JSAPI 公众号支付；NATIVE 扫码支付；APP APP支付
+     *
+     * @param tradeType 交易类型：JSAPI 公众号支付；NATIVE 扫码支付；APP APP支付
+     */
+    public void setTradeType(String tradeType) {
+        this.tradeType = tradeType;
+    }
+
+    /**
+     * 获取第三方支付反馈状态：PAY_SUCCESS 支付成功；PAY_FAIL 支付失败；REFUNDIND 退款中；REFUND_SUCCESS 退款成功；REFUND_FAIL 退款失败
+     *
+     * @return pay_status - 第三方支付反馈状态：PAY_SUCCESS 支付成功；PAY_FAIL 支付失败；REFUNDIND 退款中；REFUND_SUCCESS 退款成功；REFUND_FAIL 退款失败
      */
     public String getPayStatus() {
         return payStatus;
     }
 
     /**
-     * 设置第三方支付反馈状态
+     * 设置第三方支付反馈状态：PAY_SUCCESS 支付成功；PAY_FAIL 支付失败；REFUNDIND 退款中；REFUND_SUCCESS 退款成功；REFUND_FAIL 退款失败
      *
-     * @param payStatus 第三方支付反馈状态
+     * @param payStatus 第三方支付反馈状态：PAY_SUCCESS 支付成功；PAY_FAIL 支付失败；REFUNDIND 退款中；REFUND_SUCCESS 退款成功；REFUND_FAIL 退款失败
      */
     public void setPayStatus(String payStatus) {
         this.payStatus = payStatus;
@@ -251,7 +448,7 @@ public class OrderPayDO extends BaseDO implements Serializable {
     /**
      * 获取支付状态更新时间
      *
-     * @return update_time 支付状态更新时间
+     * @return update_time - 支付状态更新时间
      */
     public Date getUpdateTime() {
         return updateTime;
@@ -269,7 +466,7 @@ public class OrderPayDO extends BaseDO implements Serializable {
     /**
      * 获取支付结束时间
      *
-     * @return end_time 支付结束时间
+     * @return end_time - 支付结束时间
      */
     public Date getEndTime() {
         return endTime;
@@ -284,6 +481,24 @@ public class OrderPayDO extends BaseDO implements Serializable {
         this.endTime = endTime;
     }
 
+    /**
+     * 获取退款时间
+     *
+     * @return refund_time - 退款时间
+     */
+    public Date getRefundTime() {
+        return refundTime;
+    }
+
+    /**
+     * 设置退款时间
+     *
+     * @param refundTime 退款时间
+     */
+    public void setRefundTime(Date refundTime) {
+        this.refundTime = refundTime;
+    }
+
     @Override
     public String toString() {
         return "OrderPayDO{" +
@@ -293,11 +508,20 @@ public class OrderPayDO extends BaseDO implements Serializable {
                 ", payAmount=" + payAmount +
                 ", payTime=" + payTime +
                 ", payType='" + payType + '\'' +
-                ", payAccount='" + payAccount + '\'' +
-                ", payTradeNo='" + payTradeNo + '\'' +
+                ", openid='" + openid + '\'' +
+                ", appId='" + appId + '\'' +
+                ", timeStamp='" + timeStamp + '\'' +
+                ", nonceStr='" + nonceStr + '\'' +
+                ", prepayId='" + prepayId + '\'' +
+                ", signType='" + signType + '\'' +
+                ", paySign='" + paySign + '\'' +
+                ", mchId='" + mchId + '\'' +
+                ", deviceInfo='" + deviceInfo + '\'' +
+                ", tradeType='" + tradeType + '\'' +
                 ", payStatus='" + payStatus + '\'' +
                 ", updateTime=" + updateTime +
                 ", endTime=" + endTime +
+                ", refundTime=" + refundTime +
                 '}';
     }
 }

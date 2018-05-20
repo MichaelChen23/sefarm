@@ -131,4 +131,8 @@ public abstract class Constant {
 	 */
 	public static final String WECHAT_LANG_TYPE = "zh_CN";
 
+	/**
+	 * 关于微信wechat的类型
+	 */
+	public static final String WECHAT_TYPE = "wechat";
 }

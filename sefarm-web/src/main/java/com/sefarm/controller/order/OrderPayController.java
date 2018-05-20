@@ -78,9 +78,9 @@ public class OrderPayController extends BaseController {
     @RequestMapping(value = "/pay_list", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo<OrderPayVO> getOrderPayVOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr, @RequestParam(required = false) String name,
-                                                  @RequestParam(required = false) String payAccount, @RequestParam(required = false) String orderNo, @RequestParam(required = false) String payStatus, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
+                                                  @RequestParam(required = false) String orderNo, @RequestParam(required = false) String payStatus, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
         try {
-            PageInfo<OrderPayVO> result = orderPayService.getOrderPayVOList(pageIndex, pageSize, sortStr, orderStr, name, payAccount, orderNo, payStatus, createTimeBegin, createTimeEnd);
+            PageInfo<OrderPayVO> result = orderPayService.getOrderPayVOList(pageIndex, pageSize, sortStr, orderStr, name, orderNo, payStatus, createTimeBegin, createTimeEnd);
             return result;
         } catch (Exception e) {
             logger.error("get order-pay list fail(获取 订单支付记录 列表失败) -- :{}", e.getMessage());

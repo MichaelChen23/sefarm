@@ -22,11 +22,11 @@ import java.util.List;
 public class OrderPayServiceImpl extends BaseServiceImpl<OrderPayMapper, OrderPayDO> implements IOrderPayService {
 
     @Override
-    public PageInfo<OrderPayVO> getOrderPayVOList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, String name, String payAccount, String orderNo, String payStatus, String createTimeBegin, String createTimeEnd) {
+    public PageInfo<OrderPayVO> getOrderPayVOList(Integer pageIndex, Integer pageSize, String sortStr, String orderStr, String name, String orderNo, String payStatus, String createTimeBegin, String createTimeEnd) {
         if (pageIndex != null && pageIndex > 0 && pageSize != null && pageSize > 0) {
             PageHelper.startPage(pageIndex, pageSize);
         }
-        List<OrderPayVO> list = getMapper().getOrderPayVOList(name, payAccount, orderNo, payStatus, createTimeBegin, createTimeEnd, StrKit.changeDBfieldPattern("", sortStr), orderStr);
+        List<OrderPayVO> list = getMapper().getOrderPayVOList(name, orderNo, payStatus, createTimeBegin, createTimeEnd, StrKit.changeDBfieldPattern("", sortStr), orderStr);
         PageInfo<OrderPayVO> page = new PageInfo<>(list);
         return page;
     }

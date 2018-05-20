@@ -13,10 +13,14 @@ import com.sefarm.common.util.StrKit;
 import com.sefarm.common.vo.OrderDetailVO;
 import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.order.OrderDO;
+import com.sefarm.model.order.OrderPayDO;
 import com.sefarm.model.user.UserAddressDO;
+import com.sefarm.model.user.UserDO;
 import com.sefarm.service.order.IOrderService;
 import com.sefarm.service.user.IUserAddressService;
+import com.sefarm.service.user.IUserService;
 import com.sefarm.util.ToolUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +49,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     IOrderService orderService;
+
+    @Autowired
+    IUserService userService;
 
     @Autowired
     IUserAddressService userAddressService;
@@ -193,6 +200,15 @@ public class OrderController extends BaseController {
             //解析所选产品jsonStr为map jsonStr为{1:8,2:10,3:12}
             //productMaps = (Map<String, Integer>) JSON.parse(productJsonStr);
 
+            //获取用户唯一标识 openid 用于微信下单
+            String openid = "";
+            if (StringUtils.isNotBlank(account)) {
+                UserDO queryUser = new UserDO();
+                queryUser.setId(Long.valueOf(account));
+                UserDO userDO = userService.getOneByObj(queryUser);
+                openid = userDO.getOpenid();
+            }
+
             //获取用户地址
             UserAddressDO userAddressDO;
             if (userAddressId != null && userAddressId >0) {
@@ -216,11 +232,15 @@ public class OrderController extends BaseController {
             orderDO.setRequirement(requirement);
             orderDO.setCreateTime(new Date());
             //下订单 返回订单id
-            Long orderId = orderService.placeOrderByObj(orderDO, cartIdArray, userAddressDO);
-            if (orderId != null && orderId > 0) {
-                //返回 订单详情 给前端，去支付
-                OrderDetailVO result = orderService.getOrderDetailByOrderId(orderId);
-                return new BaseResponse(result);
+            OrderPayDO orderPayDO = orderService.placeOrderByObj(orderDO, cartIdArray, userAddressDO);
+            if (orderPayDO != null && orderPayDO.getOrderId() > 0) {
+                //去微信下统一订单
+                orderPayDO.setOpenid(openid);
+
+                //返回 订单支付记录 给前端，去支付
+
+
+                return new BaseResponse(null);
             } else {
                 return new BaseResponse(null);
             }

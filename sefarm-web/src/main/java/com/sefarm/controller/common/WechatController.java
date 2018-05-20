@@ -145,35 +145,6 @@ public class WechatController {
         }
     }
 
-    /**
-     * 微信下单
-     * @return
-     */
-    @RequestMapping(value = "/doUnifiedOrder", method = RequestMethod.GET)
-    @ResponseBody
-    public BaseResponse<Map<String, String>> doUnifiedOrder() {
-        HashMap<String, String> data = new HashMap<>(8);
-        data.put("body", "SeFarm-买菜test");
-        data.put("out_trade_no",  "sefarm20180518211448test");
-        data.put("device_info", "WEB");
-        data.put("fee_type", "CNY");
-        data.put("total_fee", "1");
-        data.put("spbill_create_ip", "123.12.12.123");
-        data.put("notify_url", "http://www.ji-book.com/api/wechat/notify");
-        data.put("trade_type", "JSAPI");
-        data.put("openid", "");
-        try {
-            logger.info("微信下单前的data: {} " , data.toString());
-            SeFarmWXPayConfig seFarmWXPayConfig = new SeFarmWXPayConfig();
-            WXPay wxPay = new WXPay(seFarmWXPayConfig);
-            logger.info("wxPay: {} " , wxPay.toString());
-            Map<String, String> resp = wxPay.unifiedOrder(data);
-            return new BaseResponse<>(resp);
-        } catch (Exception e) {
-            logger.error("微信下单失败: {}", e.toString());
-            return new BaseResponse<>(null);
-        }
-    }
 
     /**
      * 微信支付-下单后-返回结果

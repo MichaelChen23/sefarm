@@ -44,8 +44,8 @@ OrderPayInfoDlg.close = function () {
  * 收集数据
  */
 OrderPayInfoDlg.collectData = function() {
-    this.set('id').set('orderId').set('account').set('payAmount').set('payTime').set('payType')
-        .set('payAccount').set('payTradeNo').set('payStatus');
+    this.set('id').set('orderId').set('account').set('payAmount').set('payTime').set('payType').set('openid').set('appId').set('timeStamp')
+        .set('nonceStr').set('prepayId').set('signType').set('paySign').set('mchId').set('deviceInfo').set('tradeType').set('payStatus');
 };
 
 /**

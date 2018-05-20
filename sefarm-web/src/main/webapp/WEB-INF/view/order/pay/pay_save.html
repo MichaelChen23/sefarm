@@ -13,7 +13,15 @@
 
                     <#input id="payType" name="支付方式" underline="true"/>
 
-                    <#input id="payTradeNo" name="支付流水号"/>
+                    <#input id="appId" name="公众号id" underline="true"/>
+
+                    <#input id="nonceStr" name="随机字符串" underline="true"/>
+
+                    <#input id="signType" name="签名类型" underline="true"/>
+
+                    <#input id="mchId" name="商户号" underline="true"/>
+
+                    <#input id="tradeType" name="交易类型"/>
 
                 </div>
                 <div class="col-sm-6">
@@ -24,9 +32,17 @@
                         <#input id="payTime" name="支付时间" underline="true"
                                 clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
 
-                        <#input id="payAccount" name="实际支付帐号" underline="true"/>
+                        <#input id="openid" name="用户唯一标识" underline="true"/>
 
-                        <#input id="payStatus" name="支付状态"/>
+                        <#input id="timeStamp" name="支付秒级时间戳" underline="true"/>
+
+                        <#input id="prepayId" name="订单详情扩展字符串" underline="true"/>
+
+                        <#input id="paySign" name="签名" underline="true"/>
+
+                        <#input id="deviceInfo" name="设备号" underline="true"/>
+
+                        <#input id="payStatus" name="支付状态" />
 
                     </div>
                 </div>

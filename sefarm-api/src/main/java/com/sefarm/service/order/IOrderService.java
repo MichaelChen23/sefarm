@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.IBaseService;
 import com.sefarm.common.vo.OrderDetailVO;
 import com.sefarm.model.order.OrderDO;
+import com.sefarm.model.order.OrderPayDO;
 import com.sefarm.model.user.UserAddressDO;
 
 /**
@@ -37,7 +38,7 @@ public interface IOrderService extends IBaseService<OrderDO> {
      * @param userAddressDO
      * @return
      */
-    Long placeOrderByObj(OrderDO orderDO, Long[] cartIdArray, UserAddressDO userAddressDO);
+    OrderPayDO placeOrderByObj(OrderDO orderDO, Long[] cartIdArray, UserAddressDO userAddressDO);
 
     /**
      * 移动前端——根据订单id获取订单详情

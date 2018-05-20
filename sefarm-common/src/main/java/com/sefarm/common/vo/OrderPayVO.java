@@ -42,22 +42,62 @@ public class OrderPayVO implements Serializable {
     private String payTime;
 
     /**
-     * 支付方式： alipay-支付宝；wechat-微信支付；cash-现金
+     * 支付方式： wechat-微信支付；alipay-支付宝
      */
     private String payType;
 
     /**
-     * 第三方支付，实际支付人账号
+     * 用户唯一标识
      */
-    private String payAccount;
+    private String openid;
 
     /**
-     * 实际支付流水号
+     * 公众号id
      */
-    private String payTradeNo;
+    private String appId;
 
     /**
-     * 第三方支付反馈状态
+     * 支付时间戳，秒级
+     */
+    private String timeStamp;
+
+    /**
+     * 随机字符串
+     */
+    private String nonceStr;
+
+    /**
+     * 订单详情扩展字符串，微信JS支付参数名为：package
+     */
+    private String prepayId;
+
+    /**
+     * 签名类型：默认MD5
+     */
+    private String signType;
+
+    /**
+     * 签名，微信统一下单返回参数是sign
+     */
+    private String paySign;
+
+    /**
+     * 商户号
+     */
+    private String mchId;
+
+    /**
+     * 设备号
+     */
+    private String deviceInfo;
+
+    /**
+     * 交易类型：JSAPI 公众号支付；NATIVE 扫码支付；APP APP支付
+     */
+    private String tradeType;
+
+    /**
+     * 第三方支付反馈状态：PAY_SUCCESS 支付成功；PAY_FAIL 支付失败；REFUNDIND 退款中；REFUND_SUCCESS 退款成功；REFUND_FAIL 退款失败
      */
     private String payStatus;
 
@@ -70,6 +110,11 @@ public class OrderPayVO implements Serializable {
      * 支付结束时间
      */
     private String endTime;
+
+    /**
+     * 退款时间
+     */
+    private String refundTime;
 
     public Long getId() {
         return id;
@@ -127,20 +172,84 @@ public class OrderPayVO implements Serializable {
         this.payType = payType;
     }
 
-    public String getPayAccount() {
-        return payAccount;
+    public String getOpenid() {
+        return openid;
     }
 
-    public void setPayAccount(String payAccount) {
-        this.payAccount = payAccount;
+    public void setOpenid(String openid) {
+        this.openid = openid;
     }
 
-    public String getPayTradeNo() {
-        return payTradeNo;
+    public String getAppId() {
+        return appId;
     }
 
-    public void setPayTradeNo(String payTradeNo) {
-        this.payTradeNo = payTradeNo;
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public String getNonceStr() {
+        return nonceStr;
+    }
+
+    public void setNonceStr(String nonceStr) {
+        this.nonceStr = nonceStr;
+    }
+
+    public String getPrepayId() {
+        return prepayId;
+    }
+
+    public void setPrepayId(String prepayId) {
+        this.prepayId = prepayId;
+    }
+
+    public String getSignType() {
+        return signType;
+    }
+
+    public void setSignType(String signType) {
+        this.signType = signType;
+    }
+
+    public String getPaySign() {
+        return paySign;
+    }
+
+    public void setPaySign(String paySign) {
+        this.paySign = paySign;
+    }
+
+    public String getMchId() {
+        return mchId;
+    }
+
+    public void setMchId(String mchId) {
+        this.mchId = mchId;
+    }
+
+    public String getDeviceInfo() {
+        return deviceInfo;
+    }
+
+    public void setDeviceInfo(String deviceInfo) {
+        this.deviceInfo = deviceInfo;
+    }
+
+    public String getTradeType() {
+        return tradeType;
+    }
+
+    public void setTradeType(String tradeType) {
+        this.tradeType = tradeType;
     }
 
     public String getPayStatus() {
@@ -167,6 +276,14 @@ public class OrderPayVO implements Serializable {
         this.endTime = endTime;
     }
 
+    public String getRefundTime() {
+        return refundTime;
+    }
+
+    public void setRefundTime(String refundTime) {
+        this.refundTime = refundTime;
+    }
+
     @Override
     public String toString() {
         return "OrderPayVO{" +
@@ -177,11 +294,20 @@ public class OrderPayVO implements Serializable {
                 ", payAmount=" + payAmount +
                 ", payTime='" + payTime + '\'' +
                 ", payType='" + payType + '\'' +
-                ", payAccount='" + payAccount + '\'' +
-                ", payTradeNo='" + payTradeNo + '\'' +
+                ", openid='" + openid + '\'' +
+                ", appId='" + appId + '\'' +
+                ", timeStamp='" + timeStamp + '\'' +
+                ", nonceStr='" + nonceStr + '\'' +
+                ", prepayId='" + prepayId + '\'' +
+                ", signType='" + signType + '\'' +
+                ", paySign='" + paySign + '\'' +
+                ", mchId='" + mchId + '\'' +
+                ", deviceInfo='" + deviceInfo + '\'' +
+                ", tradeType='" + tradeType + '\'' +
                 ", payStatus='" + payStatus + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", endTime='" + endTime + '\'' +
+                ", refundTime='" + refundTime + '\'' +
                 '}';
     }
 }

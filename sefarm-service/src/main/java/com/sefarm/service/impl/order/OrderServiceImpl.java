@@ -15,6 +15,7 @@ import com.sefarm.dao.order.OrderMapper;
 import com.sefarm.model.order.OrderDO;
 import com.sefarm.model.order.OrderDeliveryDO;
 import com.sefarm.model.order.OrderItemDO;
+import com.sefarm.model.order.OrderPayDO;
 import com.sefarm.model.user.UserAddressDO;
 import com.sefarm.service.order.IOrderService;
 import org.apache.commons.lang3.StringUtils;
@@ -67,7 +68,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, OrderDO> impl
      */
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = Constant.DEFAULT_TRANSACTION_TIMEOUT, rollbackFor = Exception.class)
     @Override
-    public Long placeOrderByObj(OrderDO orderDO, Long[] cartIdArray, UserAddressDO userAddressDO) {
+    public OrderPayDO placeOrderByObj(OrderDO orderDO, Long[] cartIdArray, UserAddressDO userAddressDO) {
         //先初始化订单，获取订单id
         Integer count = getMapper().saveOrderByObj(orderDO);
         Long orderId = orderDO.getId();
@@ -128,7 +129,14 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, OrderDO> impl
         orderDeliveryDO.setRemark(orderDO.getRequirement());
         orderDeliveryDO.setCreateTime(orderDO.getCreateTime());
         orderDeliveryMapper.insertSelective(orderDeliveryDO);
-        return orderId;
+
+        //返回订单支付信息，去微信下单
+        OrderPayDO orderPayDO = new OrderPayDO();
+        orderPayDO.setOrderId(orderId);
+        orderPayDO.setAccount(orderDO.getAccount());
+        orderPayDO.setPayAmount(order.getAmount());
+        orderPayDO.setPayType(Constant.WECHAT_TYPE);
+        return orderPayDO;
     }
 
     @Override

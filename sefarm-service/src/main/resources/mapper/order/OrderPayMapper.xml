@@ -11,11 +11,20 @@
     <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
     <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
-    <result column="pay_account" jdbcType="VARCHAR" property="payAccount" />
-    <result column="pay_trade_no" jdbcType="VARCHAR" property="payTradeNo" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="time_stamp" jdbcType="VARCHAR" property="timeStamp" />
+    <result column="nonce_str" jdbcType="VARCHAR" property="nonceStr" />
+    <result column="prepay_id" jdbcType="VARCHAR" property="prepayId" />
+    <result column="sign_type" jdbcType="VARCHAR" property="signType" />
+    <result column="pay_sign" jdbcType="VARCHAR" property="paySign" />
+    <result column="mch_id" jdbcType="VARCHAR" property="mchId" />
+    <result column="device_info" jdbcType="VARCHAR" property="deviceInfo" />
+    <result column="trade_type" jdbcType="VARCHAR" property="tradeType" />
     <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
   </resultMap>
 
   <resultMap id="OrderPayVOResultMap" type="com.sefarm.common.vo.OrderPayVO">
@@ -24,20 +33,29 @@
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
-    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="pay_time" jdbcType="VARCHAR" property="payTime" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
-    <result column="pay_account" jdbcType="VARCHAR" property="payAccount" />
-    <result column="pay_trade_no" jdbcType="VARCHAR" property="payTradeNo" />
+    <result column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="time_stamp" jdbcType="VARCHAR" property="timeStamp" />
+    <result column="nonce_str" jdbcType="VARCHAR" property="nonceStr" />
+    <result column="prepay_id" jdbcType="VARCHAR" property="prepayId" />
+    <result column="sign_type" jdbcType="VARCHAR" property="signType" />
+    <result column="pay_sign" jdbcType="VARCHAR" property="paySign" />
+    <result column="mch_id" jdbcType="VARCHAR" property="mchId" />
+    <result column="device_info" jdbcType="VARCHAR" property="deviceInfo" />
+    <result column="trade_type" jdbcType="VARCHAR" property="tradeType" />
     <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
+    <result column="refund_time" jdbcType="VARCHAR" property="refundTime" />
   </resultMap>
 
   <sql id="selectOrderPayVOALL">
     SELECT
-    sop.id, sop.order_id, so.order_no AS order_no, sop.account, sop.pay_amount,
-    DATE_FORMAT(sop.pay_time, '%Y-%m-%d %T') AS pay_time, sop.pay_type, sop.pay_account,
-    sop.pay_trade_no, sop.pay_status, DATE_FORMAT(sop.update_time, '%Y-%m-%d %T') AS update_time, DATE_FORMAT(sop.end_time, '%Y-%m-%d %T') AS end_time
+    sop.id, sop.order_id, so.order_no AS order_no, sop.account, sop.pay_amount, DATE_FORMAT(sop.pay_time, '%Y-%m-%d %T') AS pay_time, sop.pay_type,
+    sop.openid, sop.app_id, sop.time_stamp, sop.nonce_str, sop.prepay_id, sop.sign_type, sop.pay_sign, sop.mch_id, sop.device_info, sop.trade_type,
+    sop.pay_status, DATE_FORMAT(sop.update_time, '%Y-%m-%d %T') AS update_time, DATE_FORMAT(sop.end_time, '%Y-%m-%d %T') AS end_time, DATE_FORMAT(sop.refund_time, '%Y-%m-%d %T') AS refund_time
     FROM sefarm_order_pay sop
     LEFT JOIN sefarm_order so ON so.id = sop.order_id
   </sql>
@@ -47,9 +65,6 @@
     <where>
       <if test="name != null and '' != name">
         AND sop.account LIKE CONCAT(#{name}, '%')
-      </if>
-      <if test="payAccount != null and '' != payAccount">
-        AND sop.pay_account LIKE CONCAT(#{payAccount}, '%')
       </if>
       <if test="orderNo != null and '' != orderNo">
         AND so.order_no LIKE CONCAT(#{orderNo}, '%')

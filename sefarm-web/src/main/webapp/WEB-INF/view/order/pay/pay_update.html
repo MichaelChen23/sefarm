@@ -14,7 +14,15 @@
 
                     <#input id="payType" name="支付方式" underline="true" value="${orderPayVO.payType}"/>
 
-                    <#input id="payTradeNo" name="支付流水号" underline="true" value="${orderPayVO.payTradeNo}"/>
+                    <#input id="appId" name="公众号id" underline="true" value="${orderPayVO.appId}"/>
+
+                    <#input id="nonceStr" name="随机字符串" underline="true" value="${orderPayVO.nonceStr}"/>
+
+                    <#input id="signType" name="签名类型" underline="true" value="${orderPayVO.signType}"/>
+
+                    <#input id="mchId" name="商户号" underline="true" value="${orderPayVO.mchId}"/>
+
+                    <#input id="tradeType" name="交易类型" underline="true" value="${orderPayVO.tradeType}"/>
 
                     <#input id="updateTime" name="状态更新时间" underline="true" value="${orderPayVO.updateTime}" disabled="disabled"/>
 
@@ -31,9 +39,19 @@
                         <#input id="payTime" name="支付时间" underline="true" value="${orderPayVO.payTime}"
                                 clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
 
-                        <#input id="payAccount" name="实际支付帐号" underline="true" value="${orderPayVO.payAccount}"/>
+                        <#input id="openid" name="用户唯一标识" underline="true" value="${orderPayVO.openid}"/>
 
-                        <#input id="payStatus" name="支付状态" value="${orderPayVO.payStatus}"/>
+                        <#input id="timeStamp" name="支付秒级时间戳" underline="true" value="${orderPayVO.timeStamp}"/>
+
+                        <#input id="prepayId" name="订单详情扩展字符串" underline="true" value="${orderPayVO.prepayId}"/>
+
+                        <#input id="paySign" name="签名" underline="true" value="${orderPayVO.paySign}"/>
+
+                        <#input id="deviceInfo" name="设备号" underline="true" value="${orderPayVO.deviceInfo}"/>
+
+                        <#input id="payStatus" name="支付状态" underline="true" value="${orderPayVO.payStatus}"/>
+
+                        <#input id="refundTime" name="退款时间" value="${orderPayVO.refundTime}" disabled="disabled"/>
 
                     </div>
                 </div>

@@ -300,4 +300,14 @@ public class DateUtil {
 //		System.out.println(getAfterDayWeek("3"));
 //	}
 
+	/**
+	 * date类型转换成秒级的时间戳 linux时间戳
+	 * @param date
+	 * @return
+	 */
+	public static String getLinuxTimeStamp(Date date) {
+		Long linuxTimeStamp = date.getTime()/1000;
+		return String.valueOf(linuxTimeStamp);
+	}
+
 }

@@ -1,8 +1,13 @@
 package com.sefarm.controller.common;
 
+import com.github.wxpay.sdk.WXPay;
+import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.constant.tips.SuccessTip;
 import com.sefarm.common.util.FileUtil;
 import com.sefarm.common.util.HttpKit;
+import com.sefarm.config.wechat.SeFarmWXPayConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * controller基础类，控制层常量和统一方法
@@ -21,6 +28,8 @@ import java.io.UnsupportedEncodingException;
  * @date 2018-3-30
  */
 public class BaseController {
+
+    private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
     protected static String SUCCESS = "SUCCESS";
     protected static String ERROR = "ERROR";
@@ -115,4 +124,38 @@ public class BaseController {
         headers.setContentDispositionFormData("attachment", dfileName);
         return new ResponseEntity<byte[]>(fileBytes, headers, HttpStatus.CREATED);
     }
+
+    /**
+     * 微信下单
+     * add by mc 2018-5-20
+     * @param orderNo 订单号
+     * @param totalFee 支付金额，分
+     * @param tradeType 交易方式 默认JSAPI
+     * @param openid 用户唯一标识码
+     * @return
+     */
+    public BaseResponse<Map<String, String>> doUnifiedOrder(String orderNo, String totalFee, String tradeType, String openid) {
+        HashMap<String, String> data = new HashMap<>(8);
+        data.put("body", "广州农夫诚品商贸有限公司-网购SeFarm富硒农产品");
+        data.put("out_trade_no",  orderNo);
+        data.put("device_info", "WEB");
+        data.put("fee_type", "CNY");
+        data.put("total_fee", totalFee);
+        data.put("spbill_create_ip", "123.12.12.123");
+        data.put("notify_url", "http://www.ji-book.com/api/wechat/notify");
+        data.put("trade_type", tradeType);
+        data.put("openid", openid);
+        try {
+            logger.info("微信下单前的data: {} " , data.toString());
+            SeFarmWXPayConfig seFarmWXPayConfig = new SeFarmWXPayConfig();
+            WXPay wxPay = new WXPay(seFarmWXPayConfig);
+            logger.info("wxPay: {} " , wxPay.toString());
+            Map<String, String> resp = wxPay.unifiedOrder(data);
+            return new BaseResponse<>(resp);
+        } catch (Exception e) {
+            logger.error("微信下单失败: {}", e.toString());
+            return new BaseResponse<>(null);
+        }
+    }
+
 }
