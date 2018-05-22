@@ -21,7 +21,11 @@
 
                     <#input id="mchId" name="商户号" underline="true"/>
 
-                    <#input id="tradeType" name="交易类型"/>
+                    <#input id="tradeType" name="交易类型" underline="true"/>
+
+                    <#input id="errCode" name="错误码" underline="true"/>
+
+                    <#input id="payIp" name="支付ip地址" />
 
                 </div>
                 <div class="col-sm-6">
@@ -29,7 +33,7 @@
 
                         <#input id="account" name="用户账号" underline="true"/>
 
-                        <#input id="payTime" name="支付时间" underline="true"
+                        <#input id="createTime" name="支付时间" underline="true"
                                 clickFun="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})"/>
 
                         <#input id="openid" name="用户唯一标识" underline="true"/>
@@ -42,7 +46,9 @@
 
                         <#input id="deviceInfo" name="设备号" underline="true"/>
 
-                        <#input id="payStatus" name="支付状态" />
+                        <#input id="payStatus" name="支付状态" underline="true"/>
+
+                        <#input id="errCodeDes" name="错误码描述" />
 
                     </div>
                 </div>

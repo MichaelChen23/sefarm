@@ -8,7 +8,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="sms_return_code" jdbcType="VARCHAR" property="smsReturnCode" />
     <result column="result_code" jdbcType="VARCHAR" property="resultCode" />

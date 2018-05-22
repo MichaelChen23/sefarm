@@ -113,6 +113,8 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, OrderDO> impl
         order.setAmount(orderTotalAmount.add(order.getCarryFeeTotal() != null ? order.getCarryFeeTotal() :  new BigDecimal(0)));
         //之前插入数据的时候，要返回id，所以没有把status设置为默认值，现在设置status为未完成
         order.setStatus(Constant.STATUS_LOCK);
+        //默认支付类型为wechat
+        order.setPayType(Constant.WECHAT_TYPE);
         getMapper().updateByPrimaryKeySelective(order);
 
         //把用户地址设置在订单配送里
@@ -136,6 +138,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, OrderDO> impl
         orderPayDO.setAccount(orderDO.getAccount());
         orderPayDO.setPayAmount(order.getAmount());
         orderPayDO.setPayType(Constant.WECHAT_TYPE);
+        orderPayDO.setCreateTime(orderDO.getCreateTime());
         return orderPayDO;
     }
 

@@ -37,9 +37,9 @@ public class OrderPayVO implements Serializable {
     private BigDecimal payAmount;
 
     /**
-     * 支付时间
+     * 创建时间/支付时间
      */
-    private String payTime;
+    private String createTime;
 
     /**
      * 支付方式： wechat-微信支付；alipay-支付宝
@@ -102,6 +102,21 @@ public class OrderPayVO implements Serializable {
     private String payStatus;
 
     /**
+     * 微信统一下单返回错误码
+     */
+    private String errCode;
+
+    /**
+     * 微信统一下单返回错误码描述
+     */
+    private String errCodeDes;
+
+    /**
+     * 支付ip地址
+     */
+    private String payIp;
+
+    /**
      * 支付状态更新时间
      */
     private String updateTime;
@@ -156,12 +171,12 @@ public class OrderPayVO implements Serializable {
         this.payAmount = payAmount;
     }
 
-    public String getPayTime() {
-        return payTime;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setPayTime(String payTime) {
-        this.payTime = payTime;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
     public String getPayType() {
@@ -260,6 +275,30 @@ public class OrderPayVO implements Serializable {
         this.payStatus = payStatus;
     }
 
+    public String getErrCode() {
+        return errCode;
+    }
+
+    public void setErrCode(String errCode) {
+        this.errCode = errCode;
+    }
+
+    public String getErrCodeDes() {
+        return errCodeDes;
+    }
+
+    public void setErrCodeDes(String errCodeDes) {
+        this.errCodeDes = errCodeDes;
+    }
+
+    public String getPayIp() {
+        return payIp;
+    }
+
+    public void setPayIp(String payIp) {
+        this.payIp = payIp;
+    }
+
     public String getUpdateTime() {
         return updateTime;
     }
@@ -292,7 +331,7 @@ public class OrderPayVO implements Serializable {
                 ", orderNo='" + orderNo + '\'' +
                 ", account='" + account + '\'' +
                 ", payAmount=" + payAmount +
-                ", payTime='" + payTime + '\'' +
+                ", createTime='" + createTime + '\'' +
                 ", payType='" + payType + '\'' +
                 ", openid='" + openid + '\'' +
                 ", appId='" + appId + '\'' +
@@ -305,6 +344,9 @@ public class OrderPayVO implements Serializable {
                 ", deviceInfo='" + deviceInfo + '\'' +
                 ", tradeType='" + tradeType + '\'' +
                 ", payStatus='" + payStatus + '\'' +
+                ", errCode='" + errCode + '\'' +
+                ", errCodeDes='" + errCodeDes + '\'' +
+                ", payIp='" + payIp + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", endTime='" + endTime + '\'' +
                 ", refundTime='" + refundTime + '\'' +

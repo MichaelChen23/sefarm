@@ -135,4 +135,14 @@ public abstract class Constant {
 	 * 关于微信wechat的类型
 	 */
 	public static final String WECHAT_TYPE = "wechat";
+
+	/**
+	 * 交易方式默认为JSAPI
+	 */
+	public static final String DEFAULT_TRADE_TYPE = "JSAPI";
+
+	/**
+	 * 微信返回失败状态码
+	 */
+	public static final String WECHAT_FAIL = "FAIL";
 }

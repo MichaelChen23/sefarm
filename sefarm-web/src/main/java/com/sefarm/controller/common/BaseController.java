@@ -1,7 +1,6 @@
 package com.sefarm.controller.common;
 
 import com.github.wxpay.sdk.WXPay;
-import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.constant.tips.SuccessTip;
 import com.sefarm.common.util.FileUtil;
 import com.sefarm.common.util.HttpKit;
@@ -132,29 +131,32 @@ public class BaseController {
      * @param totalFee 支付金额，分
      * @param tradeType 交易方式 默认JSAPI
      * @param openid 用户唯一标识码
+     * @param orderCreateTime 订单生成时间 格式为yyyyMMddHHmmss
+     * @param payIp ip地址
      * @return
      */
-    public BaseResponse<Map<String, String>> doUnifiedOrder(String orderNo, String totalFee, String tradeType, String openid) {
-        HashMap<String, String> data = new HashMap<>(8);
-        data.put("body", "广州农夫诚品商贸有限公司-网购SeFarm富硒农产品");
-        data.put("out_trade_no",  orderNo);
-        data.put("device_info", "WEB");
-        data.put("fee_type", "CNY");
-        data.put("total_fee", totalFee);
-        data.put("spbill_create_ip", "123.12.12.123");
-        data.put("notify_url", "http://www.ji-book.com/api/wechat/notify");
-        data.put("trade_type", tradeType);
-        data.put("openid", openid);
+    public Map<String, String> doUnifiedOrder(String orderNo, String totalFee, String tradeType, String openid, String orderCreateTime, String payIp) {
+        Map<String, String> result = new HashMap<>(10);
+        HashMap<String, String> data = new HashMap<>(10);
         try {
+            data.put("body", "广州农夫诚品商贸有限公司-网购SeFarm富硒农产品");
+            data.put("out_trade_no",  orderNo);
+            data.put("device_info", "WEB");
+            data.put("fee_type", "CNY");
+            data.put("total_fee", totalFee);
+            data.put("spbill_create_ip", payIp);
+            data.put("notify_url", "http://www.ji-book.com/api/wechat/notify");
+            data.put("trade_type", tradeType);
+            data.put("openid", openid);
+            data.put("time_start", orderCreateTime);
             logger.info("微信下单前的data: {} " , data.toString());
             SeFarmWXPayConfig seFarmWXPayConfig = new SeFarmWXPayConfig();
             WXPay wxPay = new WXPay(seFarmWXPayConfig);
-            logger.info("wxPay: {} " , wxPay.toString());
-            Map<String, String> resp = wxPay.unifiedOrder(data);
-            return new BaseResponse<>(resp);
+            result = wxPay.unifiedOrder(data);
+            return result;
         } catch (Exception e) {
             logger.error("微信下单失败: {}", e.toString());
-            return new BaseResponse<>(null);
+            return result;
         }
     }
 

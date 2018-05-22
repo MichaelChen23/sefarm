@@ -44,11 +44,11 @@ public class OrderPayDO extends BaseDO implements Serializable {
     private BigDecimal payAmount;
 
     /**
-     * 支付时间
+     * 创建时间/支付时间
      */
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column(name = "pay_time")
-    private Date payTime;
+    @Column(name = "create_time")
+    private Date createTime;
 
     /**
      * 支付方式：wechat-微信支付；alipay-支付宝
@@ -120,6 +120,24 @@ public class OrderPayDO extends BaseDO implements Serializable {
      */
     @Column(name = "pay_status")
     private String payStatus;
+
+    /**
+     * 微信统一下单返回错误码
+     */
+    @Column(name = "err_code")
+    private String errCode;
+
+    /**
+     * 微信统一下单返回错误码描述
+     */
+    @Column(name = "err_code_des")
+    private String errCodeDes;
+
+    /**
+     * 支付ip地址
+     */
+    @Column(name = "pay_ip")
+    private String payIp;
 
     /**
      * 支付状态更新时间
@@ -212,21 +230,21 @@ public class OrderPayDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取支付时间
+     * 获取创建时间/支付时间
      *
-     * @return pay_time - 支付时间
+     * @return create_time - 创建时间/支付时间
      */
-    public Date getPayTime() {
-        return payTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
     /**
-     * 设置支付时间
+     * 设置创建时间/支付时间
      *
-     * @param payTime 支付时间
+     * @param createTime 创建时间/支付时间
      */
-    public void setPayTime(Date payTime) {
-        this.payTime = payTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     /**
@@ -446,6 +464,60 @@ public class OrderPayDO extends BaseDO implements Serializable {
     }
 
     /**
+     * 获取微信统一下单返回错误码
+     *
+     * @return err_code - 微信统一下单返回错误码
+     */
+    public String getErrCode() {
+        return errCode;
+    }
+
+    /**
+     * 设置微信统一下单返回错误码
+     *
+     * @param errCode 微信统一下单返回错误码
+     */
+    public void setErrCode(String errCode) {
+        this.errCode = errCode;
+    }
+
+    /**
+     * 获取微信统一下单返回错误码描述
+     *
+     * @return err_code_des - 微信统一下单返回错误码描述
+     */
+    public String getErrCodeDes() {
+        return errCodeDes;
+    }
+
+    /**
+     * 设置微信统一下单返回错误码描述
+     *
+     * @param errCodeDes 微信统一下单返回错误码描述
+     */
+    public void setErrCodeDes(String errCodeDes) {
+        this.errCodeDes = errCodeDes;
+    }
+
+    /**
+     * 获取支付ip地址
+     *
+     * @return pay_ip - 支付ip地址
+     */
+    public String getPayIp() {
+        return payIp;
+    }
+
+    /**
+     * 设置支付ip地址
+     *
+     * @param payIp 支付ip地址
+     */
+    public void setPayIp(String payIp) {
+        this.payIp = payIp;
+    }
+
+    /**
      * 获取支付状态更新时间
      *
      * @return update_time - 支付状态更新时间
@@ -506,7 +578,7 @@ public class OrderPayDO extends BaseDO implements Serializable {
                 ", orderId=" + orderId +
                 ", account='" + account + '\'' +
                 ", payAmount=" + payAmount +
-                ", payTime=" + payTime +
+                ", createTime=" + createTime +
                 ", payType='" + payType + '\'' +
                 ", openid='" + openid + '\'' +
                 ", appId='" + appId + '\'' +
@@ -519,6 +591,9 @@ public class OrderPayDO extends BaseDO implements Serializable {
                 ", deviceInfo='" + deviceInfo + '\'' +
                 ", tradeType='" + tradeType + '\'' +
                 ", payStatus='" + payStatus + '\'' +
+                ", errCode='" + errCode + '\'' +
+                ", errCodeDes='" + errCodeDes + '\'' +
+                ", payIp='" + payIp + '\'' +
                 ", updateTime=" + updateTime +
                 ", endTime=" + endTime +
                 ", refundTime=" + refundTime +

@@ -9,7 +9,7 @@
     <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
-    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
     <result column="openid" jdbcType="VARCHAR" property="openid" />
     <result column="app_id" jdbcType="VARCHAR" property="appId" />
@@ -22,6 +22,9 @@
     <result column="device_info" jdbcType="VARCHAR" property="deviceInfo" />
     <result column="trade_type" jdbcType="VARCHAR" property="tradeType" />
     <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
+    <result column="err_code" jdbcType="VARCHAR" property="errCode" />
+    <result column="err_code_des" jdbcType="VARCHAR" property="errCodeDes" />
+    <result column="pay_ip" jdbcType="VARCHAR" property="payIp" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
@@ -33,7 +36,7 @@
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
-    <result column="pay_time" jdbcType="VARCHAR" property="payTime" />
+    <result column="create_time" jdbcType="VARCHAR" property="createTime" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
     <result column="openid" jdbcType="VARCHAR" property="openid" />
     <result column="app_id" jdbcType="VARCHAR" property="appId" />
@@ -46,6 +49,9 @@
     <result column="device_info" jdbcType="VARCHAR" property="deviceInfo" />
     <result column="trade_type" jdbcType="VARCHAR" property="tradeType" />
     <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
+    <result column="err_code" jdbcType="VARCHAR" property="errCode" />
+    <result column="err_code_des" jdbcType="VARCHAR" property="errCodeDes" />
+    <result column="pay_ip" jdbcType="VARCHAR" property="payIp" />
     <result column="update_time" jdbcType="VARCHAR" property="updateTime" />
     <result column="end_time" jdbcType="VARCHAR" property="endTime" />
     <result column="refund_time" jdbcType="VARCHAR" property="refundTime" />
@@ -53,9 +59,9 @@
 
   <sql id="selectOrderPayVOALL">
     SELECT
-    sop.id, sop.order_id, so.order_no AS order_no, sop.account, sop.pay_amount, DATE_FORMAT(sop.pay_time, '%Y-%m-%d %T') AS pay_time, sop.pay_type,
+    sop.id, sop.order_id, so.order_no AS order_no, sop.account, sop.pay_amount, DATE_FORMAT(sop.create_time, '%Y-%m-%d %T') AS create_time, sop.pay_type,
     sop.openid, sop.app_id, sop.time_stamp, sop.nonce_str, sop.prepay_id, sop.sign_type, sop.pay_sign, sop.mch_id, sop.device_info, sop.trade_type,
-    sop.pay_status, DATE_FORMAT(sop.update_time, '%Y-%m-%d %T') AS update_time, DATE_FORMAT(sop.end_time, '%Y-%m-%d %T') AS end_time, DATE_FORMAT(sop.refund_time, '%Y-%m-%d %T') AS refund_time
+    sop.pay_status, sop.err_code, sop.err_code_des, sop.pay_ip, DATE_FORMAT(sop.update_time, '%Y-%m-%d %T') AS update_time, DATE_FORMAT(sop.end_time, '%Y-%m-%d %T') AS end_time, DATE_FORMAT(sop.refund_time, '%Y-%m-%d %T') AS refund_time
     FROM sefarm_order_pay sop
     LEFT JOIN sefarm_order so ON so.id = sop.order_id
   </sql>
@@ -74,12 +80,12 @@
       </if>
       <if test="createTimeBegin != null and '' != createTimeBegin">
         <![CDATA[
-          AND DATE_FORMAT(sop.pay_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
+          AND DATE_FORMAT(sop.create_time, '%Y-%m-%d') >= DATE_FORMAT(#{createTimeBegin}, '%Y-%m-%d')
         ]]>
       </if>
       <if test="createTimeEnd != null and '' != createTimeEnd">
         <![CDATA[
-          AND DATE_FORMAT(sop.pay_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
+          AND DATE_FORMAT(sop.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{createTimeEnd}, '%Y-%m-%d')
         ]]>
       </if>
     </where>
@@ -91,6 +97,14 @@
     <where>
       sop.id = #{payId}
     </where>
+  </select>
+
+  <select id="getOrderPayVOByOrderId" resultMap="OrderPayVOResultMap">
+    <include refid="selectOrderPayVOALL" />
+    <where>
+      sop.order_id = #{orderId}
+    </where>
+    ORDER BY create_time DESC
   </select>
 
 </mapper>

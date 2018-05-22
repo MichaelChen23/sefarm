@@ -35,10 +35,10 @@ public class SmsDO extends BaseDO implements Serializable {
     private String content;
 
     /**
-     * 发送时间
+     * 创建时间/发送时间
      */
-    @Column(name = "send_time")
-    private Date sendTime;
+    @Column(name = "create_time")
+    private Date createTime;
 
     /**
      * 发送短信目的类型：register-注册; forgetPWD-找回密码;changeMobile-更换手机号;
@@ -112,21 +112,21 @@ public class SmsDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取发送时间
+     * 获取创建时间/发送时间
      *
-     * @return send_time - 发送时间
+     * @return create_time - 创建时间/发送时间
      */
-    public Date getSendTime() {
-        return sendTime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
     /**
-     * 设置发送时间
+     * 设置创建时间/发送时间
      *
-     * @param sendTime 发送时间
+     * @param createTime 创建时间/发送时间
      */
-    public void setSendTime(Date sendTime) {
-        this.sendTime = sendTime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     /**
@@ -189,7 +189,7 @@ public class SmsDO extends BaseDO implements Serializable {
                 "id=" + id +
                 ", mobile='" + mobile + '\'' +
                 ", content='" + content + '\'' +
-                ", sendTime=" + sendTime +
+                ", createTime=" + createTime +
                 ", type='" + type + '\'' +
                 ", smsReturnCode='" + smsReturnCode + '\'' +
                 ", resultCode='" + resultCode + '\'' +

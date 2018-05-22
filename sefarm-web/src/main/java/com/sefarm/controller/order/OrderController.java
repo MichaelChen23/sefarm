@@ -8,14 +8,18 @@ import com.sefarm.common.constant.tips.ErrorTip;
 import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
+import com.sefarm.common.util.DateUtil;
+import com.sefarm.common.util.HttpKit;
 import com.sefarm.common.util.NumberUtil;
 import com.sefarm.common.util.StrKit;
 import com.sefarm.common.vo.OrderDetailVO;
+import com.sefarm.common.vo.OrderPayVO;
 import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.order.OrderDO;
 import com.sefarm.model.order.OrderPayDO;
 import com.sefarm.model.user.UserAddressDO;
 import com.sefarm.model.user.UserDO;
+import com.sefarm.service.order.IOrderPayService;
 import com.sefarm.service.order.IOrderService;
 import com.sefarm.service.user.IUserAddressService;
 import com.sefarm.service.user.IUserService;
@@ -30,8 +34,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单的Controller
@@ -55,6 +61,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     IUserAddressService userAddressService;
+
+    @Autowired
+    IOrderPayService orderPayService;
 
     /**
      * 跳转到查看 订单 列表的页面
@@ -190,11 +199,11 @@ public class OrderController extends BaseController {
      * @param userAddressId
      * @param cartIds 购物车id用“,”相隔的string
      * @param requirement
-     * @return 返回orderDetailVO订单详情
+     * @return 返回 orderPayDO订单支付记录
      */
     @RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<OrderDetailVO> placeOrder(@RequestParam String account, @RequestParam Long userAddressId, @RequestParam String cartIds, @RequestParam(required = false) String requirement) {
+    public BaseResponse<OrderPayDO> placeOrder(@RequestParam String account, @RequestParam Long userAddressId, @RequestParam String cartIds, @RequestParam(required = false) String requirement) {
 //        Map<String, Integer> productMaps = new HashMap<>();
         try {
             //解析所选产品jsonStr为map jsonStr为{1:8,2:10,3:12}
@@ -230,24 +239,131 @@ public class OrderController extends BaseController {
             orderDO.setOrderNo(orderNo);
             orderDO.setAccount(account);
             orderDO.setRequirement(requirement);
-            orderDO.setCreateTime(new Date());
+            Date orderCreateTime = new Date();
+            orderDO.setCreateTime(orderCreateTime);
             //下订单 返回订单id
             OrderPayDO orderPayDO = orderService.placeOrderByObj(orderDO, cartIdArray, userAddressDO);
             if (orderPayDO != null && orderPayDO.getOrderId() > 0) {
+                //把总额转换为 分
+                String totalFee = String.valueOf(orderPayDO.getPayAmount().multiply(new BigDecimal(100)).intValue());
+                //获取ip地址
+                String payIp = HttpKit.getIpAddress();
                 //去微信下统一订单
+                Map<String, String> wxOrderInfo = doUnifiedOrder(orderNo, totalFee, Constant.DEFAULT_TRADE_TYPE, openid, DateUtil.formatDate(orderCreateTime, "yyyyMMddHHmmss"), payIp);
+                //判断微信订单返回结果，保存在订单支付记录表
                 orderPayDO.setOpenid(openid);
-
-                //返回 订单支付记录 给前端，去支付
-
-
-                return new BaseResponse(null);
+                orderPayDO.setPayIp(payIp);
+                return judgeUnifiedOrderResponse(wxOrderInfo, orderPayDO);
             } else {
                 return new BaseResponse(null);
             }
         } catch (Exception e) {
-            logger.error("place order fail(下订单失败)--"+account+"--"+cartIds+":{}", e.getMessage());
+            logger.error("place order fail(下订单失败)--"+account+"--"+cartIds+":{}", e.toString());
             return new BaseResponse(null);
         }
+    }
+
+    /**
+     * 移动前端——重新下订单
+     * add by mc 2018-5-22
+     * @param orderId
+     * @return orderPayDO订单支付记录
+     */
+    @RequestMapping(value = "/replaceOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<OrderPayDO> replaceOrder(@RequestParam Long orderId) {
+        try {
+            //首先去操作最近一次的订单支付记录
+            List<OrderPayVO> orderPayVOList = orderPayService.getOrderPayVOByOrderId(orderId);
+            Date orderCreateTime = new Date();
+            String orderCreateTimeStr = DateUtil.formatDate(orderCreateTime, "yyyyMMddHHmmss");
+            //获取ip地址
+            String payIp = HttpKit.getIpAddress();
+            if(orderPayVOList != null && orderPayVOList.size() > 0) {
+                OrderPayVO orderPayVO = orderPayVOList.get(0);
+                //把总额转换为 分
+                String totalFee = String.valueOf(orderPayVO.getPayAmount().multiply(new BigDecimal(100)).intValue());
+                //去微信下统一订单
+                Map<String, String> wxOrderInfo = doUnifiedOrder(orderPayVO.getOrderNo(), totalFee, Constant.DEFAULT_TRADE_TYPE, orderPayVO.getOpenid(), orderCreateTimeStr, payIp);
+                OrderPayDO orderPayDO = new OrderPayDO();
+                orderPayDO.setOrderId(orderPayVO.getOrderId());
+                orderPayDO.setAccount(orderPayVO.getAccount());
+                orderPayDO.setPayAmount(orderPayVO.getPayAmount());
+                orderPayDO.setCreateTime(orderCreateTime);
+                orderPayDO.setPayType(orderPayVO.getPayType());
+                orderPayDO.setOpenid(orderPayVO.getOpenid());
+                orderPayDO.setPayIp(payIp);
+                //返回预订单信息，保存在订单支付记录
+                return judgeUnifiedOrderResponse(wxOrderInfo, orderPayDO);
+            } else {
+                //获取订单信息
+                OrderDO queryOrder = new OrderDO();
+                queryOrder.setId(orderId);
+                OrderDO orderDO = orderService.getOneByObj(queryOrder);
+                UserDO queryUser = new UserDO();
+                queryUser.setId(Long.valueOf(orderDO.getAccount()));
+                UserDO userDO = userService.getOneByObj(queryUser);
+                //把总额转换为 分
+                String totalFee = String.valueOf(orderDO.getAmount().multiply(new BigDecimal(100)).intValue());
+                //去微信下统一订单
+                Map<String, String> wxOrderInfo = doUnifiedOrder(orderDO.getOrderNo(), totalFee, Constant.DEFAULT_TRADE_TYPE, userDO.getOpenid(), orderCreateTimeStr, payIp);
+                OrderPayDO orderPayDO = new OrderPayDO();
+                orderPayDO.setOrderId(orderDO.getId());
+                orderPayDO.setAccount(orderDO.getAccount());
+                orderPayDO.setPayAmount(orderDO.getAmount());
+                orderPayDO.setCreateTime(orderCreateTime);
+                //支付类型跟order的支付类型一致
+                orderPayDO.setPayType(orderDO.getPayType());
+                orderPayDO.setOpenid(userDO.getOpenid());
+                orderPayDO.setPayIp(payIp);
+                //返回预订单信息，保存在订单支付记录
+                return judgeUnifiedOrderResponse(wxOrderInfo, orderPayDO);
+            }
+        } catch (Exception e) {
+            logger.error("replace order fail(重新下订单失败)--"+orderId+":{}", e.toString());
+            return new BaseResponse(null);
+        }
+    }
+
+    /**
+     * 根据微信统一下单返回的结果，保存在订单支付记录里
+     * @param wxOrderInfo
+     * @param orderPayDO
+     * @return
+     */
+    private BaseResponse<OrderPayDO> judgeUnifiedOrderResponse(Map<String, String> wxOrderInfo, OrderPayDO orderPayDO) {
+        //判断返回失败，出现的错误信息
+        String returnCode = wxOrderInfo.get("return_code");
+        String returnMsg = wxOrderInfo.get("return_msg");
+        if (Constant.WECHAT_FAIL.equals(returnCode) && StringUtils.isNotBlank(returnMsg)) {
+            orderPayDO.setErrCode(returnCode);
+            orderPayDO.setErrCodeDes(returnMsg);
+            //保存在订单支付表
+            orderPayService.saveByObj(orderPayDO);
+            return new BaseResponse(Constant.FAIL_CODE, returnCode+","+returnMsg, null);
+        }
+        //判断返回成功，出现的错误信息
+        String errCode = wxOrderInfo.get("err_code");
+        String errCodeDes = wxOrderInfo.get("err_code_des");
+        if (StringUtils.isNotBlank(errCode) && StringUtils.isNotBlank(errCodeDes)) {
+            orderPayDO.setErrCode(errCode);
+            orderPayDO.setErrCodeDes(errCodeDes);
+            //保存在订单支付表
+            orderPayService.saveByObj(orderPayDO);
+            return new BaseResponse(Constant.FAIL_CODE, errCode+","+errCodeDes, null);
+        }
+        orderPayDO.setAppId(wxOrderInfo.get("appid"));
+        orderPayDO.setTimeStamp(DateUtil.getLinuxTimeStamp(orderPayDO.getCreateTime()));
+        orderPayDO.setNonceStr(wxOrderInfo.get("nonce_str"));
+        orderPayDO.setPrepayId(wxOrderInfo.get("prepay_id"));
+        orderPayDO.setPaySign(wxOrderInfo.get("sign"));
+        orderPayDO.setMchId(wxOrderInfo.get("mch_id"));
+        orderPayDO.setDeviceInfo(wxOrderInfo.get("device_info"));
+        orderPayDO.setTradeType(wxOrderInfo.get("trade_type"));
+        //保存在订单支付表
+        orderPayService.saveByObj(orderPayDO);
+        //返回 订单支付记录 给前端，去支付
+        return new BaseResponse(orderPayDO);
     }
 
     /**

@@ -19,7 +19,7 @@ OrderPay.initColumn = function () {
         {title: '订单号', field: 'orderNo', align: 'center', valign: 'middle', sortable: true},
         {title: '用户帐号', field: 'account', align: 'center', valign: 'middle', sortable: true},
         {title: '支付金额', field: 'payAmount', align: 'center', valign: 'middle', sortable: true},
-        {title: '支付时间', field: 'payTime', align: 'center', valign: 'middle', sortable: true},
+        {title: '支付时间', field: 'createTime', align: 'center', valign: 'middle', sortable: true},
         {title: '支付方式', field: 'payType', align: 'center', valign: 'middle', sortable: true},
         {title: '唯一标识', field: 'openid', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '公众号id', field: 'appId', visible: false, align: 'center', valign: 'middle', sortable: true},
@@ -32,6 +32,9 @@ OrderPay.initColumn = function () {
         {title: '设备号', field: 'deviceInfo', align: 'center', valign: 'middle', sortable: true},
         {title: '交易类型', field: 'tradeType', align: 'center', valign: 'middle', sortable: true},
         {title: '支付状态', field: 'payStatus', align: 'center', valign: 'middle', sortable: true},
+        {title: '错误码', field: 'errCode', align: 'center', valign: 'middle', sortable: true},
+        {title: '错误码描述', field: 'errCodeDes', align: 'center', valign: 'middle', sortable: true},
+        {title: '支付ip地址', field: 'payIp', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '状态更新时间', field: 'updateTime', visible: false, align: 'center', valign: 'middle', sortable: true},
         {title: '支付结束时间', field: 'endTime', align: 'center', valign: 'middle', sortable: true},
         {title: '退款时间', field: 'refundTime', visible: false, align: 'center', valign: 'middle', sortable: true}
