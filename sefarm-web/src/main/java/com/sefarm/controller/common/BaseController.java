@@ -1,6 +1,9 @@
 package com.sefarm.controller.common;
 
 import com.github.wxpay.sdk.WXPay;
+import com.github.wxpay.sdk.WXPayConstants;
+import com.github.wxpay.sdk.WXPayUtil;
+import com.sefarm.common.Constant;
 import com.sefarm.common.constant.tips.SuccessTip;
 import com.sefarm.common.util.FileUtil;
 import com.sefarm.common.util.HttpKit;
@@ -19,6 +22,9 @@ import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.github.wxpay.sdk.WXPayUtil.MD5;
+
 
 /**
  * controller基础类，控制层常量和统一方法
@@ -141,23 +147,57 @@ public class BaseController {
         try {
             data.put("body", "广州农夫诚品商贸有限公司-网购SeFarm富硒农产品");
             data.put("out_trade_no",  orderNo);
-            data.put("device_info", "WEB");
             data.put("fee_type", "CNY");
             data.put("total_fee", totalFee);
+            data.put("device_info", "WEB");
             data.put("spbill_create_ip", payIp);
+            data.put("time_start", orderCreateTime);
             data.put("notify_url", "http://www.ji-book.com/api/wechat/notify");
             data.put("trade_type", tradeType);
             data.put("openid", openid);
-            data.put("time_start", orderCreateTime);
             logger.info("微信下单前的data: {} " , data.toString());
             SeFarmWXPayConfig seFarmWXPayConfig = new SeFarmWXPayConfig();
-            WXPay wxPay = new WXPay(seFarmWXPayConfig);
+            WXPay wxPay = new WXPay(seFarmWXPayConfig, WXPayConstants.SignType.MD5);
             result = wxPay.unifiedOrder(data);
             return result;
         } catch (Exception e) {
             logger.error("微信下单失败: {}", e.toString());
             return result;
         }
+    }
+
+    /**
+     * 生成32位随机数
+     * add by mc 2018-5-23
+     * @return
+     */
+    public String getNonceStr() {
+//        String res = String.valueOf(System.currentTimeMillis());
+        String res = WXPayUtil.generateNonceStr();
+        return res;
+    }
+
+    /**
+     * 根据prepay_id和传给前端支付的参数生成签名
+     * add by mc 2018-5-23
+     * @param appId
+     * @param timeStamp
+     * @param nonceStr
+     * @param prepayId
+     * @param signType
+     * @return
+     * @throws Exception
+     */
+    public String getSign(String appId, String timeStamp, String nonceStr, String prepayId, String signType) throws Exception {
+        StringBuilder signSb = new StringBuilder();
+        signSb.append("appId="+appId+"&");
+        signSb.append("nonceStr="+nonceStr+"&");
+        signSb.append("package=prepay_id="+prepayId+"&");
+        signSb.append("signType="+signType+"&");
+        signSb.append("timeStamp="+timeStamp+"&");
+        signSb.append("key="+Constant.WECHAT_API_KEY);
+        String sign = MD5(signSb.toString()).toUpperCase();
+        return sign;
     }
 
 }

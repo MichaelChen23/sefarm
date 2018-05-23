@@ -90,13 +90,17 @@ public class UserAddressServiceImpl extends BaseServiceImpl<UserAddressMapper, U
             criteria.andEqualTo("account", account);
         }
         List<UserAddressDO> list = getMapper().selectByExample(example);
-        for (int i = 0; i < list.size(); i++) {
-            UserAddressDO userAddressDO = list.get(i);
-            userAddressDO.setDefaultFlag(Constant.STATUS_LOCK);
-            int resultCode = getMapper().updateByPrimaryKeySelective(userAddressDO);
-            if (i == list.size()-1) {
-                result = resultCode > 0 ? true : false;
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                UserAddressDO userAddressDO = list.get(i);
+                userAddressDO.setDefaultFlag(Constant.STATUS_LOCK);
+                int resultCode = getMapper().updateByPrimaryKeySelective(userAddressDO);
+                if (i == list.size() - 1) {
+                    result = resultCode > 0 ? true : false;
+                }
             }
+        } else {
+            result = true;
         }
         return result;
     }

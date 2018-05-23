@@ -16,9 +16,11 @@ import com.sefarm.common.vo.OrderDetailVO;
 import com.sefarm.common.vo.OrderPayVO;
 import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.order.OrderDO;
+import com.sefarm.model.order.OrderItemDO;
 import com.sefarm.model.order.OrderPayDO;
 import com.sefarm.model.user.UserAddressDO;
 import com.sefarm.model.user.UserDO;
+import com.sefarm.service.order.IOrderItemService;
 import com.sefarm.service.order.IOrderPayService;
 import com.sefarm.service.order.IOrderService;
 import com.sefarm.service.user.IUserAddressService;
@@ -64,6 +66,9 @@ public class OrderController extends BaseController {
 
     @Autowired
     IOrderPayService orderPayService;
+
+    @Autowired
+    IOrderItemService orderItemService;
 
     /**
      * 跳转到查看 订单 列表的页面
@@ -171,9 +176,9 @@ public class OrderController extends BaseController {
      * @param orderId
      * @return
      */
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @RequestMapping(value = "/removeOrder", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long orderId) {
+    public Tip removeOrder(@RequestParam Long orderId) {
         if (ToolUtil.isEmpty(orderId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -252,6 +257,7 @@ public class OrderController extends BaseController {
                 Map<String, String> wxOrderInfo = doUnifiedOrder(orderNo, totalFee, Constant.DEFAULT_TRADE_TYPE, openid, DateUtil.formatDate(orderCreateTime, "yyyyMMddHHmmss"), payIp);
                 //判断微信订单返回结果，保存在订单支付记录表
                 orderPayDO.setOpenid(openid);
+                orderPayDO.setSignType(Constant.DEFAULT_SIGN_TYPE);
                 orderPayDO.setPayIp(payIp);
                 return judgeUnifiedOrderResponse(wxOrderInfo, orderPayDO);
             } else {
@@ -289,9 +295,9 @@ public class OrderController extends BaseController {
                 orderPayDO.setOrderId(orderPayVO.getOrderId());
                 orderPayDO.setAccount(orderPayVO.getAccount());
                 orderPayDO.setPayAmount(orderPayVO.getPayAmount());
-                orderPayDO.setCreateTime(orderCreateTime);
                 orderPayDO.setPayType(orderPayVO.getPayType());
                 orderPayDO.setOpenid(orderPayVO.getOpenid());
+                orderPayDO.setSignType(orderPayVO.getSignType());
                 orderPayDO.setPayIp(payIp);
                 //返回预订单信息，保存在订单支付记录
                 return judgeUnifiedOrderResponse(wxOrderInfo, orderPayDO);
@@ -311,10 +317,10 @@ public class OrderController extends BaseController {
                 orderPayDO.setOrderId(orderDO.getId());
                 orderPayDO.setAccount(orderDO.getAccount());
                 orderPayDO.setPayAmount(orderDO.getAmount());
-                orderPayDO.setCreateTime(orderCreateTime);
                 //支付类型跟order的支付类型一致
                 orderPayDO.setPayType(orderDO.getPayType());
                 orderPayDO.setOpenid(userDO.getOpenid());
+                orderPayDO.setSignType(Constant.DEFAULT_SIGN_TYPE);
                 orderPayDO.setPayIp(payIp);
                 //返回预订单信息，保存在订单支付记录
                 return judgeUnifiedOrderResponse(wxOrderInfo, orderPayDO);
@@ -331,7 +337,7 @@ public class OrderController extends BaseController {
      * @param orderPayDO
      * @return
      */
-    private BaseResponse<OrderPayDO> judgeUnifiedOrderResponse(Map<String, String> wxOrderInfo, OrderPayDO orderPayDO) {
+    private BaseResponse<OrderPayDO> judgeUnifiedOrderResponse(Map<String, String> wxOrderInfo, OrderPayDO orderPayDO) throws Exception {
         //判断返回失败，出现的错误信息
         String returnCode = wxOrderInfo.get("return_code");
         String returnMsg = wxOrderInfo.get("return_msg");
@@ -353,10 +359,13 @@ public class OrderController extends BaseController {
             return new BaseResponse(Constant.FAIL_CODE, errCode+","+errCodeDes, null);
         }
         orderPayDO.setAppId(wxOrderInfo.get("appid"));
-        orderPayDO.setTimeStamp(DateUtil.getLinuxTimeStamp(orderPayDO.getCreateTime()));
-        orderPayDO.setNonceStr(wxOrderInfo.get("nonce_str"));
+        Date payTime = new Date();
+        orderPayDO.setCreateTime(payTime);
+        orderPayDO.setTimeStamp(DateUtil.getLinuxTimeStamp(payTime));
+        orderPayDO.setNonceStr(getNonceStr());
         orderPayDO.setPrepayId(wxOrderInfo.get("prepay_id"));
-        orderPayDO.setPaySign(wxOrderInfo.get("sign"));
+        //根据prepay_id和其他必要的参数再次生成签名传给前端
+        orderPayDO.setPaySign(getSign(Constant.WECHAT_APPID, orderPayDO.getTimeStamp(), orderPayDO.getNonceStr(), wxOrderInfo.get("prepay_id"), orderPayDO.getSignType()));
         orderPayDO.setMchId(wxOrderInfo.get("mch_id"));
         orderPayDO.setDeviceInfo(wxOrderInfo.get("device_info"));
         orderPayDO.setTradeType(wxOrderInfo.get("trade_type"));
@@ -385,6 +394,39 @@ public class OrderController extends BaseController {
         } catch (Exception e) {
             logger.error("get order detail fail(查询订单详情 失败) "+ orderId +"-- :{}", e.getMessage());
             return new BaseResponse<>(null);
+        }
+    }
+
+    /**
+     * 移动前端——根据订单id删除订单及其下所有的订单项
+     * add by mc 2018-5-23
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<Boolean> remove(@RequestParam Long orderId) {
+        try {
+            if (orderId != null && orderId > 0) {
+                //删除订单
+                OrderDO orderDO = new OrderDO();
+                orderDO.setId(orderId);
+                //只能删除未完成的订单
+                orderDO.setStatus(Constant.STATUS_LOCK);
+                Boolean orderResult = orderService.removeByObj(orderDO);
+                //删除订单成功之后才能删除其订单项
+                if(orderResult) {
+                    //删除订单下的所有订单项
+                    OrderItemDO orderItemDO = new OrderItemDO();
+                    orderItemDO.setOrderId(orderId);
+                    orderItemService.removeByObj(orderItemDO);
+                }
+                return BaseResponse.getRespByResultBool(orderResult);
+            }
+            return BaseResponse.getRespByResultBool(false);
+        } catch (Exception e) {
+            logger.error("remove order and all order item fail(删除工单和其下的所有工单项 失败) "+ orderId +"-- :{}", e.getMessage());
+            return BaseResponse.getRespByResultBool(false);
         }
     }
 

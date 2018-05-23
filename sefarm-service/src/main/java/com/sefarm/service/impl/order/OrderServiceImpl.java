@@ -138,7 +138,6 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, OrderDO> impl
         orderPayDO.setAccount(orderDO.getAccount());
         orderPayDO.setPayAmount(order.getAmount());
         orderPayDO.setPayType(Constant.WECHAT_TYPE);
-        orderPayDO.setCreateTime(orderDO.getCreateTime());
         return orderPayDO;
     }
 

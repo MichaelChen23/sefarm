@@ -142,6 +142,11 @@ public abstract class Constant {
 	public static final String DEFAULT_TRADE_TYPE = "JSAPI";
 
 	/**
+	 * 签名方式默认为MD5
+	 */
+	public static final String DEFAULT_SIGN_TYPE = "MD5";
+
+	/**
 	 * 微信返回失败状态码
 	 */
 	public static final String WECHAT_FAIL = "FAIL";

@@ -199,7 +199,7 @@ public class UserAddressController extends BaseController {
             userAddressDO.setPhone(phone);
             userAddressDO.setMobile(mobile);
             userAddressDO.setDefaultFlag(defaultFlag);
-            if (defaultFlag.equals(Constant.STATUS_UNLOCK)) {
+            if (Constant.STATUS_UNLOCK.equals(defaultFlag)) {
                 Boolean updateFlag = userAddressService.updateAllDefaultFlag(account);
                 if (!updateFlag) {
                     return BaseResponse.getRespByResultBool(false);

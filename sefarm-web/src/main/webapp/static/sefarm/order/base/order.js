@@ -128,7 +128,7 @@ Order.delOrder = function () {
 
         var operation = function(){
             var orderId = Order.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/api/order/remove", function () {
+            var ajax = new $ax(Feng.ctxPath + "/api/order/removeOrder", function () {
                 Feng.success("删除成功!");
                 Order.table.refresh();
             }, function (data) {
