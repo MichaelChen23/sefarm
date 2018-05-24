@@ -10,7 +10,9 @@ import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.vo.ProductCommentVO;
 import com.sefarm.controller.common.BaseController;
+import com.sefarm.model.order.OrderItemDO;
 import com.sefarm.model.product.ProductCommentDO;
+import com.sefarm.service.order.IOrderItemService;
 import com.sefarm.service.product.IProductCommentService;
 import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
@@ -41,6 +43,9 @@ public class ProductCommentController extends BaseController {
 
     @Autowired
     public IProductCommentService productCommentService;
+
+    @Autowired
+    public IOrderItemService orderItemService;
 
     /**
      * 跳转到查看 产品评论 列表的页面
@@ -214,10 +219,24 @@ public class ProductCommentController extends BaseController {
             productCommentDO.setStar(star);
             productCommentDO.setCreateTime(new Date());
             Boolean res = productCommentService.saveByObj(productCommentDO);
+            //评论产品成功之后，再去改写订单项的已评论状态 add by mc 2018-5-24
+            if (res) {
+                OrderItemDO orderItemQuery = new OrderItemDO();
+                orderItemQuery.setOrderId(orderId);
+                orderItemQuery.setProductId(productId);
+                OrderItemDO orderItemDO = orderItemService.getOneByObj(orderItemQuery);
+                if (orderItemDO != null && orderItemDO.getId() > 0) {
+                    //改为已评论
+                    orderItemDO.setCommentFlag(Constant.STATUS_UNLOCK);
+                    orderItemDO.setUpdateBy(account);
+                    orderItemDO.setUpdateTime(new Date());
+                    orderItemService.updateByObj(orderItemDO);
+                }
+            }
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
             logger.error("prod-comment save fail(保存失败)--"+productId+"--"+orderId+"--"+account+"--"+name+"--"+content+"--"+star+":{}", e.getMessage());
-            return new BaseResponse(null);
+            return BaseResponse.getRespByResultBool(false);
         }
     }
 
