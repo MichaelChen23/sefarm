@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -154,6 +155,17 @@ public class LoginController extends BaseController {
 //        LogManager.me().executeLog(LogTaskFactory.exitLog(ShiroKit.getUser().getId(), getIp()));
 //        ShiroKit.getSubject().logout();
         return REDIRECT + "/admin/login";
+    }
+
+    /**
+     * 跳转到各种状态的错误页面
+     * add by mc 2018-5-25
+     * @param code
+     * @return
+     */
+    @RequestMapping(value = "/error/{code}")
+    public String error(@PathVariable int code) {
+        return "/error/"+code+".html";
     }
 
 }
