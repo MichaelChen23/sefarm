@@ -1,10 +1,7 @@
 package com.sefarm.controller.common;
 
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.vo.CartVO;
@@ -94,20 +91,15 @@ public class CartController extends BaseController {
      */
     @RequestMapping(value = "/saveCart", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid CartDO cartDO, BindingResult result) {
+    public BaseResponse save(@Valid CartDO cartDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             Boolean res = cartService.saveByObj(cartDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("cart save fail(保存失败)--"+cartDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "cart save fail(保存失败)--"+cartDO.toString()+":{}", true);
         }
     }
 
@@ -119,21 +111,15 @@ public class CartController extends BaseController {
      */
     @RequestMapping(value = "/updateCart", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid CartDO cartDO, BindingResult result) {
+    public BaseResponse update(@Valid CartDO cartDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (cartDO != null) {
-                Boolean res = cartService.updateByObj(cartDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            Boolean res = cartService.updateByObj(cartDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("cart update fail(更新失败)--"+cartDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "cart update fail(更新失败)--"+cartDO.toString()+":{}", true);
         }
     }
 
@@ -144,22 +130,17 @@ public class CartController extends BaseController {
      */
     @RequestMapping(value = "/removeCart", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long cartId) {
+    public BaseResponse remove(@RequestParam Long cartId) {
         if (ToolUtil.isEmpty(cartId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             CartDO cartDO = new CartDO();
             cartDO.setId(cartId);
-            Boolean result = cartService.removeByObj(cartDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = cartService.removeByObj(cartDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("cart delete fail(删除失败)--"+cartId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "cart delete fail(删除失败)--"+cartId+":{}", true);
         }
     }
 
@@ -175,8 +156,7 @@ public class CartController extends BaseController {
             List<CartVO> list = cartService.getCartVOAllListByAccount(account);
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            logger.error("cart get all list by account fail(获取所有的购物车列表失败)--"+account+":{}", e.getMessage());
-            return new BaseResponse(null);
+            return baseException.handleException(e, logger, "cart get all list by account fail(获取所有的购物车列表失败)--"+account+":{}", false);
         }
     }
 
@@ -199,8 +179,7 @@ public class CartController extends BaseController {
             Boolean result = cartService.saveByObj(cartDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            logger.error("cart save fail(保存失败)--"+account+"--"+account+"--"+number+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            return baseException.handleException(e, logger, "cart save fail(保存失败)--"+account+"--"+productId+"--"+number+":{}", false);
         }
     }
 
@@ -221,8 +200,7 @@ public class CartController extends BaseController {
             Boolean result = cartService.updateByObj(cartDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            logger.error("cart update fail(更新失败)--"+cartId+"--"+number+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            return baseException.handleException(e, logger, "cart update fail(更新失败)--"+cartId+"--"+number+":{}", false);
         }
     }
 
@@ -241,8 +219,7 @@ public class CartController extends BaseController {
             Boolean result = cartService.removeByObj(cartDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            logger.error("cart remove fail(删除失败)--"+cartId+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            return baseException.handleException(e, logger, "cart remove fail(删除失败)--"+cartId+":{}", false);
         }
     }
 }

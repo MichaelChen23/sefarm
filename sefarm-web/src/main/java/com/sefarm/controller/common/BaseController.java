@@ -5,11 +5,13 @@ import com.github.wxpay.sdk.WXPayConstants;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.sefarm.common.Constant;
 import com.sefarm.common.constant.tips.SuccessTip;
+import com.sefarm.common.exception.BaseException;
 import com.sefarm.common.util.FileUtil;
 import com.sefarm.common.util.HttpKit;
 import com.sefarm.config.wechat.SeFarmWXPayConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,6 +45,13 @@ public class BaseController {
     protected static String FORWARD = "forward:";
 
     protected static SuccessTip SUCCESS_TIP = new SuccessTip();
+
+    /**
+     * 引入自定义基础异常
+     * add by mc 2018-6-8
+     */
+    @Autowired
+    public BaseException baseException;
 
     protected HttpServletRequest getHttpServletRequest() {
         return HttpKit.getRequest();

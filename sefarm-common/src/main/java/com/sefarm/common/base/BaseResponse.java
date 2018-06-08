@@ -2,6 +2,7 @@ package com.sefarm.common.base;
 
 
 import com.sefarm.common.Constant;
+import com.sefarm.common.exception.BaseExcepitonEnum;
 
 import java.io.Serializable;
 
@@ -29,7 +30,12 @@ public class BaseResponse<T> implements Serializable {
 	 * 返回实体
 	 */
 	private T result;
-	
+
+	public BaseResponse(Integer code, String msg) {
+		this.code = code;
+		this.msg = msg;
+	}
+
 	public BaseResponse(Integer code, String msg, T result) {
 		super();
 		this.code = code;
@@ -75,6 +81,16 @@ public class BaseResponse<T> implements Serializable {
 
 	public static BaseResponse<Boolean> getRespByResultBool(Boolean result) {
 		return result ? new BaseResponse<Boolean>(Constant.SUCCESS_CODE, Constant.SUCCESS_MSG, result) : new BaseResponse<Boolean>(Constant.FAIL_CODE, Constant.FAIL_MSG, result);
+	}
+
+	/**
+	 * 根据异常信息生成返回结果
+	 * add by mc 2018-6-8
+	 * @param excepitonEnum
+	 * @return
+	 */
+	public static BaseResponse getResultByException(BaseExcepitonEnum excepitonEnum) {
+		return new BaseResponse(excepitonEnum.getCode(), excepitonEnum.getMsg());
 	}
 
 }
