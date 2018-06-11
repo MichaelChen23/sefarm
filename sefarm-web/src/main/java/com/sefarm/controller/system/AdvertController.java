@@ -1,10 +1,7 @@
 package com.sefarm.controller.system;
 
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.controller.common.BaseController;
@@ -96,7 +93,7 @@ public class AdvertController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid AdvertDO advertDO, BindingResult result) {
+    public BaseResponse save(@Valid AdvertDO advertDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -105,14 +102,9 @@ public class AdvertController extends BaseController {
             advertDO.setCreateBy("sys");
             advertDO.setCreateTime(new Date());
             Boolean res = advertService.saveByObj(advertDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("advert save fail(保存失败)--"+advertDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "advert save fail(保存失败)--"+advertDO.toString()+":{}", true);
         }
     }
 
@@ -124,23 +116,17 @@ public class AdvertController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid AdvertDO advertDO, BindingResult result) {
+    public BaseResponse update(@Valid AdvertDO advertDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (advertDO != null) {
-                advertDO.setUpdateBy("sys");
-                advertDO.setUpdateTime(new Date());
-                Boolean res = advertService.updateByObj(advertDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            advertDO.setUpdateBy("sys");
+            advertDO.setUpdateTime(new Date());
+            Boolean res = advertService.updateByObj(advertDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("advert update fail(更新失败)--"+advertDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "advert update fail(更新失败)--"+advertDO.toString()+":{}", true);
         }
     }
 
@@ -151,22 +137,17 @@ public class AdvertController extends BaseController {
      */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long advertId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+    public BaseResponse remove(@RequestParam Long advertId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
         if (ToolUtil.isEmpty(advertId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             AdvertDO advertDO = new AdvertDO();
             advertDO.setId(advertId);
-            Boolean result = advertService.removeByObj(advertDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = advertService.removeByObj(advertDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("advert delete fail(删除失败)--"+advertId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "advert delete fail(删除失败)-- id:"+advertId+":{}", true);
         }
     }
 
@@ -184,7 +165,7 @@ public class AdvertController extends BaseController {
             return new BaseResponse<>(list);
         } catch (Exception e) {
             logger.error("advert get page list (获取广告分页list失败)-- :{}", e.getMessage());
-            return new BaseResponse<>(null);
+            return baseException.handleException(e, logger, "advert get page list (获取广告分页list失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+":{}", false);
         }
     }
 

@@ -65,6 +65,7 @@ public interface ISysMenuService extends IBaseService<SysMenuDO> {
     /**
      * 根据菜单id删除其下所有的子菜单
      * @param MenuId
+     * @return
      */
-    void removeAllSubMenusByMenuId(Long MenuId);
+    Boolean removeAllSubMenusByMenuId(Long MenuId);
 }

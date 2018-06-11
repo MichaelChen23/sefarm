@@ -131,11 +131,15 @@ SysUser.delSysUser = function () {
 
         var operation = function(){
             var userId = SysUser.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/api/sys-user/remove", function () {
-                Feng.success("删除成功!");
+            var ajax = new $ax(Feng.ctxPath + "/api/sys-user/remove", function (data) {
+                if (data.code == 200) {
+                    Feng.success("删除成功!");
+                } else {
+                    Feng.infoDetail("删除失败!", data.msg);
+                }
                 SysUser.table.refresh();
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.infoDetail("删除失败!", data.msg);
             });
             ajax.set("userId", userId);
             ajax.start();
@@ -156,10 +160,14 @@ SysUser.resetPwd = function () {
             shade: false //不显示遮罩
         }, function () {
             var ajax = new $ax(Feng.ctxPath + "/api/sys-user/reset", function (data) {
-                Feng.success("重置密码成功!");
+                if (data.code == 200) {
+                    Feng.success("重置密码成功!");
+                } else {
+                    Feng.infoDetail("重置密码失败!", data.msg);
+                }
                 SysUser.table.refresh();
             }, function (data) {
-                Feng.error("重置密码失败!");
+                Feng.infoDetail("重置密码失败!", data.msg);
             });
             ajax.set("userId", userId);
             ajax.start();

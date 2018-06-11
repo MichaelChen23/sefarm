@@ -1,11 +1,8 @@
 package com.sefarm.controller.system;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.vo.SysUserVO;
@@ -117,7 +114,7 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid SysUserDO sysUserDO, BindingResult result) {
+    public BaseResponse save(@Valid SysUserDO sysUserDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -136,14 +133,9 @@ public class SysUserController extends BaseController {
             sysUserDO.setCreateTime(new Date());
 
             Boolean res = sysUserService.saveByObj(sysUserDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-user save fail(保存失败)--"+sysUserDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-user save fail(保存失败)--"+sysUserDO.toString()+":{}", true);
         }
     }
 
@@ -155,23 +147,17 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid SysUserDO sysUserDO, BindingResult result) {//一定要通过id来修改
+    public BaseResponse update(@Valid SysUserDO sysUserDO, BindingResult result) {//一定要通过id来修改
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            if (result.hasErrors()) {
-                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-            }
-            if (sysUserDO != null) {
-                sysUserDO.setUpdateBy("sys");
-                sysUserDO.setUpdateTime(new Date());
-                Boolean res = sysUserService.updateByObj(sysUserDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            sysUserDO.setUpdateBy("sys");
+            sysUserDO.setUpdateTime(new Date());
+            Boolean res = sysUserService.updateByObj(sysUserDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-user update fail(更新失败)--"+sysUserDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-user update fail(更新失败)--"+sysUserDO.toString()+":{}", true);
         }
     }
 
@@ -182,22 +168,17 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long userId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+    public BaseResponse remove(@RequestParam Long userId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+        if (ToolUtil.isEmpty(userId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            if (ToolUtil.isEmpty(userId)) {
-                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-            }
             SysUserDO sysUserDO = new SysUserDO();
             sysUserDO.setId(userId);
-            Boolean result = sysUserService.removeByObj(sysUserDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = sysUserService.removeByObj(sysUserDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-user delete fail(删除失败)--"+userId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-user delete fail(删除失败)-- id:"+userId+":{}", true);
         }
     }
 
@@ -208,11 +189,11 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("/reset")
     @ResponseBody
-    public Tip resetPassword(@RequestParam Long userId) {
+    public BaseResponse resetPassword(@RequestParam Long userId) {
+        if (ToolUtil.isEmpty(userId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            if (ToolUtil.isEmpty(userId)) {
-                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-            }
             SysUserDO sysUser = new SysUserDO();
             sysUser.setId(userId);
             SysUserDO sysUserDO = sysUserService.getOneByObj(sysUser);
@@ -220,27 +201,25 @@ public class SysUserController extends BaseController {
             sysUserDO.setUpdateBy("sys");
             sysUserDO.setUpdateTime(new Date());
             Boolean res = sysUserService.updateByObj(sysUserDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-user reset password fail(重置密码失败)--"+userId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-user reset password fail(重置密码失败)-- id:"+userId+":{}", true);
         }
     }
 
     /**
      * 分配系统角色
+     * @param userId
+     * @param roleIds
+     * @return
      */
     @RequestMapping("/setSysRole")
     @ResponseBody
-    public Tip setSysRole(@RequestParam("userId") Long userId, @RequestParam("roleIds") String roleIds) {
+    public BaseResponse setSysRole(@RequestParam("userId") Long userId, @RequestParam("roleIds") String roleIds) {
+        if (ToolUtil.isOneEmpty(userId, roleIds)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            if (ToolUtil.isOneEmpty(userId, roleIds)) {
-                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-            }
             String[] roleIdArray = roleIds.split(",");
             SysUserDO sysUser = new SysUserDO();
             sysUser.setId(userId);
@@ -250,14 +229,9 @@ public class SysUserController extends BaseController {
             sysUserDO.setUpdateBy("sys");
             sysUserDO.setUpdateTime(new Date());
             Boolean res = sysUserService.updateByObj(sysUserDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-user set sys-role fail(设置系统角色失败)--"+userId+"---roleids--"+roleIds+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-user set sys-role fail(设置系统角色失败)-- userId:"+userId+"-- roleIds:"+roleIds+":{}", true);
         }
     }
 
@@ -280,83 +254,6 @@ public class SysUserController extends BaseController {
             return null;
         } catch (Exception e) {
             logger.error("sys-user get list by deptId fail(获取列表失败)--"+deptId+":{}", e.getMessage());
-            return null;
-        }
-    }
-
-
-
-    @RequestMapping(value = "/removeList", method = RequestMethod.POST)
-    public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除
-        try {
-            List<String> list = JSON.parseArray(ids, String.class);
-            Boolean result = sysUserService.batchRemoveByIds(list);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("sys-user batch delete fail(批量删除失败)--"+ids+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
-    }
-
-    @RequestMapping(value = "/get", method = RequestMethod.POST)
-    public BaseResponse<SysUserDO> get(@RequestBody SysUserDO sysUserDO) {//可以通过id来查找，也可以同唯一性的条件来查找出唯一的数据，例如username是不相同，唯一的，就可以定位到唯一的数据
-        SysUserDO result = null;
-        try {
-            result = (SysUserDO) sysUserService.getOneByObj(sysUserDO);
-            return new BaseResponse<SysUserDO>(result);
-        } catch (Exception e) {
-            logger.error("sys-user get fail(获取失败)--"+sysUserDO.toString()+":{}", e.getMessage());
-            return new BaseResponse(result);
-        }
-    }
-
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
-    @ResponseBody
-    public List<SysUserDO> getList(@RequestBody SysUserDO sysUserDO) {//通过输入page页数和rows每页查询的行数来查询lsit，如果不输入，默认值查询第一页；如果改用select（Obj）方法输入唯一性字段来查询会查到相关唯一的记录。
-        try {
-            List<SysUserDO> list = sysUserService.getListByObj(sysUserDO);
-            return list;
-        } catch (Exception e) {
-            logger.error("sys-user get list fail(获取列表失败)--"+sysUserDO.toString()+":{}", e.getMessage());
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public BaseResponse<List<SysUserDO>> getAll() {
-        try {
-            List<SysUserDO> list = sysUserService.getALL();
-            return new BaseResponse<>(list);
-        } catch (Exception e) {
-            logger.error("sys-user get all(获取所有数据失败)-- :{}", e.getMessage());
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/count", method = RequestMethod.POST)
-    public Integer getCount(@RequestBody SysUserDO sysUserDO) {//输入为null，查询全部的数量，输入唯一性的字段，根据该字段数值查询唯一，数量为1
-        try {
-            Integer count = sysUserService.getCount(sysUserDO);
-            return count;
-        } catch (Exception e) {
-            logger.error("sys-user count fail(统计数目失败)--"+sysUserDO.toString()+":{}", e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * 根据输入字段和值，进行模糊查询
-     * @param sysUserDO
-     * @return
-     * searchKey-查询的字段，searchValue-查询字段的值
-     */
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public PageInfo<SysUserDO> searchList(@RequestBody SysUserDO sysUserDO) {
-        try {
-            List<SysUserDO> list = sysUserService.searchListByKV(sysUserDO);
-            return new PageInfo<SysUserDO>(list);
-        } catch (Exception e) {
-            logger.error("sys-user search query fail(搜索查询失败)--"+sysUserDO.toString()+":{}", e.getMessage());
             return null;
         }
     }

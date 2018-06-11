@@ -110,11 +110,15 @@ Advert.delAdvert = function () {
 
         var operation = function(){
             var advertId = Advert.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/api/advert/remove", function () {
-                Feng.success("删除成功!");
+            var ajax = new $ax(Feng.ctxPath + "/api/advert/remove", function (data) {
+                if (data.code == 200) {
+                    Feng.success("删除成功!");
+                } else {
+                    Feng.infoDetail("删除失败!", data.msg);
+                }
                 Advert.table.refresh();
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.infoDetail("删除失败!", data.msg);
             });
             ajax.set("advertId", advertId);
             ajax.start();

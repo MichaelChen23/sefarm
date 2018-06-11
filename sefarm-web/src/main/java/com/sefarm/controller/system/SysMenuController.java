@@ -1,8 +1,6 @@
 package com.sefarm.controller.system;
 
-import com.sefarm.common.Constant;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
+import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.node.ZTreeNode;
@@ -124,7 +122,7 @@ public class SysMenuController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid SysMenuDO sysMenuDO, BindingResult result) {
+    public BaseResponse save(@Valid SysMenuDO sysMenuDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -136,14 +134,9 @@ public class SysMenuController extends BaseController {
             setMenuPcodeByPMenuId(sysMenuDO, true);
 
             Boolean res = sysMenuService.saveByObj(sysMenuDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-menu save fail(保存失败)--"+sysMenuDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-menu save fail(保存失败)--"+sysMenuDO.toString()+":{}", true);
         }
     }
 
@@ -155,25 +148,19 @@ public class SysMenuController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid SysMenuDO sysMenuDO, BindingResult result) {//一定要通过id来修改
+    public BaseResponse update(@Valid SysMenuDO sysMenuDO, BindingResult result) {//一定要通过id来修改
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (sysMenuDO != null) {
-                sysMenuDO.setUpdateBy("sys");
-                sysMenuDO.setUpdateTime(new Date());
-                //设上级菜单和层级
-                setMenuPcodeByPMenuId(sysMenuDO, false);
-                Boolean res = sysMenuService.updateByObj(sysMenuDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            sysMenuDO.setUpdateBy("sys");
+            sysMenuDO.setUpdateTime(new Date());
+            //设上级菜单和层级
+            setMenuPcodeByPMenuId(sysMenuDO, false);
+            Boolean res = sysMenuService.updateByObj(sysMenuDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-menu update fail(更新失败)--"+sysMenuDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-menu update fail(更新失败)--"+sysMenuDO.toString()+":{}", true);
         }
     }
 
@@ -184,16 +171,15 @@ public class SysMenuController extends BaseController {
      */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long menuId) {
+    public BaseResponse remove(@RequestParam Long menuId) {
         if (ToolUtil.isEmpty(menuId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            sysMenuService.removeAllSubMenusByMenuId(menuId);
-            return SUCCESS_TIP;
+            Boolean res = sysMenuService.removeAllSubMenusByMenuId(menuId);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-menu delete fail(删除失败)--"+menuId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-menu delete fail(删除失败)-- id:"+menuId+":{}", true);
         }
     }
 

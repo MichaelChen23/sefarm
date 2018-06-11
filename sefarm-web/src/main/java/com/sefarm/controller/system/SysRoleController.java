@@ -2,10 +2,7 @@ package com.sefarm.controller.system;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.node.ZTreeNode;
@@ -123,7 +120,7 @@ public class SysRoleController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid SysRoleDO sysRoleDO, BindingResult result) {
+    public BaseResponse save(@Valid SysRoleDO sysRoleDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -142,14 +139,9 @@ public class SysRoleController extends BaseController {
             sysRoleDO.setCreateTime(new Date());
 
             Boolean res = sysRoleService.saveByObj(sysRoleDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-role save fail(保存失败)--"+sysRoleDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-role save fail(保存失败)--"+sysRoleDO.toString()+":{}", true);
         }
     }
 
@@ -161,23 +153,17 @@ public class SysRoleController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid SysRoleDO sysRoleDO, BindingResult result) {//一定要通过id来修改
+    public BaseResponse update(@Valid SysRoleDO sysRoleDO, BindingResult result) {//一定要通过id来修改
+        if (result.hasErrors()) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            if (result.hasErrors()) {
-                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-            }
-            if (sysRoleDO != null) {
-                sysRoleDO.setUpdateBy("sys");
-                sysRoleDO.setUpdateTime(new Date());
-                Boolean res = sysRoleService.updateByObj(sysRoleDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            sysRoleDO.setUpdateBy("sys");
+            sysRoleDO.setUpdateTime(new Date());
+            Boolean res = sysRoleService.updateByObj(sysRoleDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-role update fail(更新失败)--"+sysRoleDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-role update fail(更新失败)--"+sysRoleDO.toString()+":{}", true);
         }
     }
 
@@ -188,22 +174,17 @@ public class SysRoleController extends BaseController {
      */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long roleId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+    public BaseResponse remove(@RequestParam Long roleId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+        if (ToolUtil.isEmpty(roleId)) {
+            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
+        }
         try {
-            if (ToolUtil.isEmpty(roleId)) {
-                throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-            }
             SysRoleDO sysRoleDO = new SysRoleDO();
             sysRoleDO.setId(roleId);
-            Boolean result = sysRoleService.removeByObj(sysRoleDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = sysRoleService.removeByObj(sysRoleDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-role delete fail(删除失败)--"+roleId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-role delete fail(删除失败)-- id:"+roleId+":{}", true);
         }
     }
 
@@ -215,16 +196,15 @@ public class SysRoleController extends BaseController {
      */
     @RequestMapping("/set_authority")
     @ResponseBody
-    public Tip setMenuAuthority(@RequestParam("roleId") Long roleId, @RequestParam("ids") String ids) {
+    public BaseResponse setMenuAuthority(@RequestParam("roleId") Long roleId, @RequestParam("ids") String ids) {
         try {
             if (ToolUtil.isOneEmpty(roleId)) {
                 throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
             }
-            sysRoleService.setMenuAuthority(roleId, ids);
-            return SUCCESS_TIP;
+            Boolean res = sysRoleService.setMenuAuthority(roleId, ids);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-role set menu authority fail(系统角色配置菜单权限失败)--"+roleId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-role set menu authority fail(系统角色配置菜单权限失败)-- id:"+roleId+":{}", true);
         }
     }
 

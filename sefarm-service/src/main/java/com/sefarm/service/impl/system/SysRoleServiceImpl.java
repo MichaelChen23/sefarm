@@ -52,7 +52,8 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleDO
     }
 
     @Override
-    public void setMenuAuthority(Long roleId, String ids) {
+    public Boolean setMenuAuthority(Long roleId, String ids) {
+        Integer res = 0;
         Example example = new Example(SysRoleMenuDO.class);
         example.createCriteria().andEqualTo("sysRoleId", roleId);
         // 先查出当前角色是否有权限
@@ -81,8 +82,9 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleDO
                     sysRoleMenuList.add(sysRoleMenuDO);
                 }
             }
-            sysRoleMenuMapper.insertList(sysRoleMenuList);
+            res = sysRoleMenuMapper.insertList(sysRoleMenuList);
         }
+        return res > 0;
     }
 
 }

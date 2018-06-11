@@ -53,14 +53,15 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuDO
     }
 
     @Override
-    public void removeAllSubMenusByMenuId(Long MenuId) {
+    public Boolean removeAllSubMenusByMenuId(Long MenuId) {
         SysMenuDO pSysMenuDO = getMapper().selectByPrimaryKey(MenuId);
         //删除当前菜单
         removeByObj(pSysMenuDO);
         //删除所有子菜单
         Example example = new Example(SysMenuDO.class);
         example.createCriteria().andLike("pcodes","%[" + pSysMenuDO.getCode() + "]%");
-        getMapper().deleteByExample(example);
+        Integer res = getMapper().deleteByExample(example);
+        return res > 0;
     }
 
 }

@@ -1,9 +1,7 @@
 package com.sefarm.controller.system;
 
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.Constant;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
+import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.node.ZTreeNode;
@@ -108,7 +106,7 @@ public class SysDeptController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid SysDeptDO sysDeptDO, BindingResult result) {
+    public BaseResponse save(@Valid SysDeptDO sysDeptDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -127,14 +125,9 @@ public class SysDeptController extends BaseController {
             sysDeptDO.setCreateTime(new Date());
 
             Boolean res = sysDeptService.saveByObj(sysDeptDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-dept save fail(保存失败)--"+sysDeptDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-dept save fail(保存失败)--"+sysDeptDO.toString()+":{}", true);
         }
     }
 
@@ -146,23 +139,17 @@ public class SysDeptController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid SysDeptDO sysDeptDO, BindingResult result) {//一定要通过id来修改
+    public BaseResponse update(@Valid SysDeptDO sysDeptDO, BindingResult result) {//一定要通过id来修改
         try {
             if (result.hasErrors()) {
                 throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
             }
-            if (sysDeptDO != null) {
-                sysDeptDO.setUpdateBy("sys");
-                sysDeptDO.setUpdateTime(new Date());
-                Boolean res = sysDeptService.updateByObj(sysDeptDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            sysDeptDO.setUpdateBy("sys");
+            sysDeptDO.setUpdateTime(new Date());
+            Boolean res = sysDeptService.updateByObj(sysDeptDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-dept update fail(更新失败)--"+sysDeptDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-dept update fail(更新失败)--"+sysDeptDO.toString()+":{}", true);
         }
     }
 
@@ -173,22 +160,17 @@ public class SysDeptController extends BaseController {
      */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long deptId) {
+    public BaseResponse remove(@RequestParam Long deptId) {
         try {
             if (ToolUtil.isEmpty(deptId)) {
                 throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
             }
             SysDeptDO sysDeptDO = new SysDeptDO();
             sysDeptDO.setId(deptId);
-            Boolean result = sysDeptService.removeByObj(sysDeptDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = sysDeptService.removeByObj(sysDeptDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("sys-dept delete fail(删除失败)--"+deptId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "sys-dept delete fail(删除失败)-- id:"+deptId+":{}", true);
         }
     }
 

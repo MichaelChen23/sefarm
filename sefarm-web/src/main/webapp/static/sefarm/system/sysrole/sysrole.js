@@ -104,11 +104,15 @@ SysRole.delSysRole = function () {
 
         var operation = function(){
             var roleId = SysRole.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/api/sys-role/remove", function () {
-                Feng.success("删除成功!");
+            var ajax = new $ax(Feng.ctxPath + "/api/sys-role/remove", function (data) {
+                if (data.code == 200) {
+                    Feng.success("删除成功!");
+                } else {
+                    Feng.infoDetail("删除失败!", data.msg);
+                }
                 SysRole.table.refresh();
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.infoDetail("删除失败!", data.msg);
             });
             ajax.set("roleId", roleId);
             ajax.start();

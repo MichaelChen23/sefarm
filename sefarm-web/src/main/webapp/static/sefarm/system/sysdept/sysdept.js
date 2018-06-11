@@ -103,11 +103,15 @@ SysDept.delSysDept = function () {
 
         var operation = function(){
             var deptId = SysDept.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/api/sys-dept/remove", function () {
-                Feng.success("删除成功!");
+            var ajax = new $ax(Feng.ctxPath + "/api/sys-dept/remove", function (data) {
+                if (data.code == 200) {
+                    Feng.success("删除成功!");
+                } else {
+                    Feng.infoDetail("删除失败!", data.msg);
+                }
                 SysDept.table.refresh();
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.infoDetail("删除失败!", data.msg);
             });
             ajax.set("deptId", deptId);
             ajax.start();

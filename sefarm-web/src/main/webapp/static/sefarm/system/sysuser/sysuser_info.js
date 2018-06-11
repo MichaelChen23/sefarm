@@ -127,11 +127,15 @@ SysUserInfoDlg.addSubmit = function () {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/api/sys-user/save", function (data) {
-        Feng.success("添加成功!");
+        if (data.code == 200) {
+            Feng.success("添加成功!");
+        } else {
+            Feng.infoDetail("添加失败!", data.msg);
+        }
         window.parent.SysUser.table.refresh();
         SysUserInfoDlg.close();
     }, function (data) {
-        Feng.error("添加失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("添加失败!", data.msg);
     });
     ajax.set(this.sysUserInfoData);
     ajax.start();
@@ -147,13 +151,17 @@ SysUserInfoDlg.editSubmit = function () {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/api/sys-user/update", function (data) {
-        Feng.success("修改成功!");
+        if (data.code == 200) {
+            Feng.success("修改成功!");
+        } else {
+            Feng.infoDetail("修改失败!", data.msg);
+        }
         if(window.parent.SysUser != undefined){
             window.parent.SysUser.table.refresh();
             SysUserInfoDlg.close();
         }
     }, function (data) {
-        Feng.error("修改失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("修改失败!", data.msg);
     });
     ajax.set(this.sysUserInfoData);
     ajax.start();
@@ -164,9 +172,13 @@ SysUserInfoDlg.editSubmit = function () {
  */
 SysUserInfoDlg.chPwd = function () {
     var ajax = new $ax(Feng.ctxPath + "/api/sys-user/changePwd", function (data) {
-        Feng.success("修改成功!");
+        if (data.code == 200) {
+            Feng.success("修改密码成功!");
+        } else {
+            Feng.infoDetail("修改密码失败!", data.msg);
+        }
     }, function (data) {
-        Feng.error("修改失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("修改密码失败!", data.msg);
     });
     ajax.set("oldPwd");
     ajax.set("newPwd");

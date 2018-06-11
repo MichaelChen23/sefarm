@@ -22,6 +22,6 @@ public interface ISysRoleService extends IBaseService<SysRoleDO> {
 
     SysRoleVO getSysRoleVO(Long sysRoleId);
 
-    void setMenuAuthority(Long roleId, String ids);
+    Boolean setMenuAuthority(Long roleId, String ids);
 
 }
