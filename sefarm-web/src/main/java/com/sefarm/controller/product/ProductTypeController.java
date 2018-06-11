@@ -2,10 +2,7 @@ package com.sefarm.controller.product;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.vo.ProductTypeVO;
@@ -97,7 +94,7 @@ public class ProductTypeController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid ProductTypeDO productTypeDO, BindingResult result) {
+    public BaseResponse save(@Valid ProductTypeDO productTypeDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -105,14 +102,9 @@ public class ProductTypeController extends BaseController {
             productTypeDO.setCreateBy("sys");
             productTypeDO.setCreateTime(new Date());
             Boolean res = productTypeService.saveByObj(productTypeDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("prod-type save fail(保存失败)--"+productTypeDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "prod-type save fail(保存失败)--"+productTypeDO.toString()+":{}", true);
         }
     }
 
@@ -124,23 +116,17 @@ public class ProductTypeController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid ProductTypeDO productTypeDO, BindingResult result) {
+    public BaseResponse update(@Valid ProductTypeDO productTypeDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (productTypeDO != null) {
-                productTypeDO.setUpdateBy("sys");
-                productTypeDO.setUpdateTime(new Date());
-                Boolean res = productTypeService.updateByObj(productTypeDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            productTypeDO.setUpdateBy("sys");
+            productTypeDO.setUpdateTime(new Date());
+            Boolean res = productTypeService.updateByObj(productTypeDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("prod-type update fail(更新失败)--"+productTypeDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "prod-type update fail(更新失败)--"+productTypeDO.toString()+":{}", true);
         }
     }
 
@@ -151,22 +137,17 @@ public class ProductTypeController extends BaseController {
      */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long typeId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
+    public BaseResponse remove(@RequestParam Long typeId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
         if (ToolUtil.isEmpty(typeId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             ProductTypeDO productTypeDO = new ProductTypeDO();
             productTypeDO.setId(typeId);
-            Boolean result = productTypeService.removeByObj(productTypeDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = productTypeService.removeByObj(productTypeDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("prod-type delete fail(删除失败)--"+typeId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "prod-type delete fail(删除失败)-- id:"+typeId+":{}", true);
         }
     }
 
@@ -181,8 +162,7 @@ public class ProductTypeController extends BaseController {
             List<ProductTypeDO> list = productTypeService.getALL();
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            logger.error("prod-type get all(获取所有数据失败)-- :{}", e.getMessage());
-            return null;
+            return baseException.handleException(e, logger, "prod-type get all(获取所有数据失败)-- :{}", true);
         }
     }
 
@@ -199,8 +179,7 @@ public class ProductTypeController extends BaseController {
             List<ProductTypeDO> list = productTypeService.getProductTypeListByCatalogId(catalogId);
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            logger.error("prod-type get all list by catalogid (获取全部产品类型list失败)-- :{}", e.getMessage());
-            return new BaseResponse<>(null);
+            return baseException.handleException(e, logger, "prod-type get all list by catalogid (获取全部产品类型list失败)-- id:"+catalogId+":{}", false);
         }
     }
 

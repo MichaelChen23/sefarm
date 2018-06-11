@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.vo.ProductCommentVO;
@@ -102,21 +100,16 @@ public class ProductCommentController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid ProductCommentDO productCommentDO, BindingResult result) {
+    public BaseResponse save(@Valid ProductCommentDO productCommentDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             productCommentDO.setCreateTime(new Date());
             Boolean res = productCommentService.saveByObj(productCommentDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("prod-comment save fail(保存失败)--"+productCommentDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "prod-comment save fail(保存失败)--"+productCommentDO.toString()+":{}", true);
         }
     }
 
@@ -128,21 +121,15 @@ public class ProductCommentController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid ProductCommentDO productCommentDO, BindingResult result) {
+    public BaseResponse update(@Valid ProductCommentDO productCommentDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (productCommentDO != null) {
-                Boolean res = productCommentService.updateByObj(productCommentDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            Boolean res = productCommentService.updateByObj(productCommentDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("prod-comment update fail(更新失败)--"+productCommentDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "prod-comment update fail(更新失败)--"+productCommentDO.toString()+":{}", true);
         }
     }
 
@@ -153,22 +140,17 @@ public class ProductCommentController extends BaseController {
      */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long commentId) {
+    public BaseResponse remove(@RequestParam Long commentId) {
         if (ToolUtil.isEmpty(commentId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             ProductCommentDO productCommentDO = new ProductCommentDO();
             productCommentDO.setId(commentId);
-            Boolean result = productCommentService.removeByObj(productCommentDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = productCommentService.removeByObj(productCommentDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("prod-comment delete fail(删除失败)--"+commentId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "prod-comment delete fail(删除失败)-- id:"+commentId+":{}", true);
         }
     }
 
@@ -189,8 +171,7 @@ public class ProductCommentController extends BaseController {
             PageInfo<ProductCommentDO> result = productCommentService.getProductCommentPageDOList(pageIndex, pageSize, productId, orderId, stars);
             return new BaseResponse(result);
         } catch (Exception e) {
-            logger.error("get prod-comment page list fail(获取 产品评论 分页list 列表失败) -- :{}", e.getMessage());
-            return new BaseResponse(null);
+            return baseException.handleException(e, logger, "get prod-comment page list fail(获取 产品评论 分页list 列表失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+"-- productId:"+productId+"-- orderId:"+orderId+"-- stars:"+stars+":{}", false);
         }
     }
 
@@ -235,8 +216,7 @@ public class ProductCommentController extends BaseController {
             }
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("prod-comment save fail(保存失败)--"+productId+"--"+orderId+"--"+account+"--"+name+"--"+content+"--"+star+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            return baseException.handleException(e, logger, "prod-comment save fail(保存失败)-- productId:"+productId+"-- orderId:"+orderId+"-- account:"+account+"-- name:"+name+"-- content:"+content+"-- star:"+star+":{}", false);
         }
     }
 

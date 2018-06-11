@@ -174,11 +174,15 @@ Product.delProduct = function () {
 
         var operation = function(){
             var prodId = Product.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/api/prod/remove", function () {
-                Feng.success("删除成功!");
+            var ajax = new $ax(Feng.ctxPath + "/api/prod/remove", function (data) {
+                if (data.code == 200) {
+                    Feng.success("删除成功!");
+                } else {
+                    Feng.infoDetail("删除失败!", data.msg);
+                }
                 Product.table.refresh();
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.infoDetail("删除失败!", data.msg);
             });
             ajax.set("prodId", prodId);
             ajax.start();

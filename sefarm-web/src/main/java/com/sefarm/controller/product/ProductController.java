@@ -2,10 +2,7 @@ package com.sefarm.controller.product;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.vo.ProductVO;
@@ -97,7 +94,7 @@ public class ProductController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid ProductDO productDO, BindingResult result) {
+    public BaseResponse save(@Valid ProductDO productDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -105,14 +102,9 @@ public class ProductController extends BaseController {
             productDO.setCreateBy("sys");
             productDO.setCreateTime(new Date());
             Boolean res = productService.saveByObj(productDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("prod save fail(保存失败)--"+productDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "prod save fail(保存失败)--"+productDO.toString()+":{}", true);
         }
     }
 
@@ -124,23 +116,17 @@ public class ProductController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid ProductDO productDO, BindingResult result) {
+    public BaseResponse update(@Valid ProductDO productDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (productDO != null) {
-                productDO.setUpdateBy("sys");
-                productDO.setUpdateTime(new Date());
-                Boolean res = productService.updateByObj(productDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            productDO.setUpdateBy("sys");
+            productDO.setUpdateTime(new Date());
+            Boolean res = productService.updateByObj(productDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("prod update fail(更新失败)--"+productDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "prod update fail(更新失败)--"+productDO.toString()+":{}", true);
         }
     }
 
@@ -151,22 +137,17 @@ public class ProductController extends BaseController {
      */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long prodId) {
+    public BaseResponse remove(@RequestParam Long prodId) {
         if (ToolUtil.isEmpty(prodId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             ProductDO productDO = new ProductDO();
             productDO.setId(prodId);
-            Boolean result = productService.removeByObj(productDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = productService.removeByObj(productDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("prod delete fail(删除失败)--"+prodId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "prod delete fail(删除失败)-- id:"+prodId+":{}", true);
         }
     }
 
@@ -183,8 +164,7 @@ public class ProductController extends BaseController {
             List<ProductDO> list = productService.getProductListByTypeId(typeId);
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            logger.error("product get all list by typeId (获取全部产品list失败)-- :{}", e.getMessage());
-            return new BaseResponse<>(null);
+            return baseException.handleException(e, logger, "product get all list by typeId (获取全部产品list失败)-- id:"+typeId+":{}", false);
         }
     }
 
@@ -200,8 +180,7 @@ public class ProductController extends BaseController {
             PageInfo<ProductDO> result = productService.searchProductDOPageList(pageIndex, pageSize, name);
             return new BaseResponse<>(result);
         } catch (Exception e) {
-            logger.error("search prod page list fail(搜索 产品 列表失败) -- :{}", e.getMessage());
-            return new BaseResponse<>(null);
+            return baseException.handleException(e, logger, "search prod page list fail(搜索 产品 列表失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+"-- name:"+name+":{}", false);
         }
     }
 
@@ -218,8 +197,7 @@ public class ProductController extends BaseController {
             PageInfo<ProductDO> result = productService.getProductDOPageList(pageIndex, pageSize, typeId, name, newFlag, saleFlag, sortStr, orderStr);
             return new BaseResponse<>(result);
         } catch (Exception e) {
-            logger.error("get prod page list fail(按条件查询 产品 列表失败) -- :{}", e.getMessage());
-            return new BaseResponse<>(null);
+            return baseException.handleException(e, logger, "get prod page list fail(按条件查询 产品 列表失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+"-- typeId:"+typeId+"-- name:"+name+"-- newFlag:"+newFlag+"-- saleFlag:"+saleFlag+"-- sortStr:"+sortStr+"-- orderStr:"+orderStr+":{}", false);
         }
     }
 
@@ -238,8 +216,7 @@ public class ProductController extends BaseController {
             ProductDO result = productService.getOneByObj(productDO);
             return new BaseResponse<>(result);
         } catch (Exception e) {
-            logger.error("get prod fail(根据id查询 产品信息 失败) -- " + productId + ":{}", e.getMessage());
-            return new BaseResponse<>(null);
+            return baseException.handleException(e, logger, "get prod fail(根据id查询 产品信息 失败)-- productId:" + productId + ":{}", false);
         }
     }
 
