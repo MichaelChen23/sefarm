@@ -1,11 +1,8 @@
 package com.sefarm.controller.order;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.util.DateUtil;
@@ -126,20 +123,15 @@ public class OrderController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid OrderDO orderDO, BindingResult result) {
+    public BaseResponse save(@Valid OrderDO orderDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             Boolean res = orderService.saveByObj(orderDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("order save fail(保存失败)--"+orderDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "order save fail(保存失败)--"+orderDO.toString()+":{}", true);
         }
     }
 
@@ -151,23 +143,17 @@ public class OrderController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid OrderDO orderDO, BindingResult result) {
+    public BaseResponse update(@Valid OrderDO orderDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (orderDO != null) {
-                orderDO.setUpdateBy("sys");
-                orderDO.setUpdateTime(new Date());
-                Boolean res = orderService.updateByObj(orderDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            orderDO.setUpdateBy("sys");
+            orderDO.setUpdateTime(new Date());
+            Boolean res = orderService.updateByObj(orderDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("order update fail(更新失败)--"+orderDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "order update fail(更新失败)--"+orderDO.toString()+":{}", true);
         }
     }
 
@@ -178,22 +164,17 @@ public class OrderController extends BaseController {
      */
     @RequestMapping(value = "/removeOrder", method = RequestMethod.POST)
     @ResponseBody
-    public Tip removeOrder(@RequestParam Long orderId) {
+    public BaseResponse removeOrder(@RequestParam Long orderId) {
         if (ToolUtil.isEmpty(orderId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             OrderDO orderDO = new OrderDO();
             orderDO.setId(orderId);
-            Boolean result = orderService.removeByObj(orderDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = orderService.removeByObj(orderDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("order delete fail(删除失败)--"+orderId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "order delete fail(删除失败)-- id:"+orderId+":{}", true);
         }
     }
 
@@ -264,8 +245,7 @@ public class OrderController extends BaseController {
                 return new BaseResponse(null);
             }
         } catch (Exception e) {
-            logger.error("place order fail(下订单失败)--"+account+"--"+cartIds+":{}", e.toString());
-            return new BaseResponse(null);
+            return baseException.handleException(e, logger, "place order fail(下订单失败)-- account:"+account+"-- cartIds:"+cartIds+":{}", false);
         }
     }
 
@@ -326,8 +306,7 @@ public class OrderController extends BaseController {
                 return judgeUnifiedOrderResponse(wxOrderInfo, orderPayDO);
             }
         } catch (Exception e) {
-            logger.error("replace order fail(重新下订单失败)--"+orderId+":{}", e.toString());
-            return new BaseResponse(null);
+            return baseException.handleException(e, logger, "replace order fail(重新下订单失败)-- id:"+orderId+":{}", false);
         }
     }
 
@@ -392,8 +371,7 @@ public class OrderController extends BaseController {
                 return new BaseResponse<>(null);
             }
         } catch (Exception e) {
-            logger.error("get order detail fail(查询订单详情 失败) "+ orderId +"-- :{}", e.getMessage());
-            return new BaseResponse<>(null);
+            return baseException.handleException(e, logger, "get order detail fail(查询订单详情 失败)-- id:"+ orderId +":{}", false);
         }
     }
 
@@ -425,8 +403,7 @@ public class OrderController extends BaseController {
             }
             return BaseResponse.getRespByResultBool(false);
         } catch (Exception e) {
-            logger.error("remove order and all order item fail(删除工单和其下的所有工单项 失败) "+ orderId +"-- :{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            return baseException.handleException(e, logger, "remove order and all order item fail(删除工单和其下的所有工单项 失败)-- id:"+ orderId +":{}", false);
         }
     }
 
@@ -444,72 +421,7 @@ public class OrderController extends BaseController {
             PageInfo<OrderDO> result = orderService.getOrderDOPageList(pageIndex, pageSize, account);
             return new BaseResponse<>(result);
         } catch (Exception e) {
-            logger.error("get order page list fail(按条件查询 订单 列表失败) -- :{}", e.getMessage());
-            return new BaseResponse<>(null);
-        }
-    }
-
-
-    @RequestMapping(value = "/removeList", method = RequestMethod.POST)
-    public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除
-        try {
-            List<String> list = JSON.parseArray(ids, String.class);
-            Boolean result = orderService.batchRemoveByIds(list);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("order batch delete fail(批量删除失败)--"+ids+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
-    }
-
-    @RequestMapping(value = "/get", method = RequestMethod.POST)
-    public BaseResponse<OrderDO> get(@RequestBody OrderDO orderDO) {//可以通过id来查找，也可以同唯一性的条件来查找出唯一的数据，例如username是不相同，唯一的，就可以定位到唯一的数据
-        OrderDO result = null;
-        try {
-            result = (OrderDO) orderService.getOneByObj(orderDO);
-            return new BaseResponse<OrderDO>(result);
-        } catch (Exception e) {
-            logger.error("order get fail(获取失败)--"+orderDO.toString()+":{}", e.getMessage());
-            return new BaseResponse(result);
-        }
-    }
-
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public BaseResponse<List<OrderDO>> getAll() {
-        try {
-            List<OrderDO> list = orderService.getALL();
-            return new BaseResponse<>(list);
-        } catch (Exception e) {
-            logger.error("order get all(获取所有数据失败)-- :{}", e.getMessage());
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/count", method = RequestMethod.POST)
-    public Integer getCount(@RequestBody OrderDO orderDO) {//输入为null，查询全部的数量，输入唯一性的字段，根据该字段数值查询唯一，数量为1
-        try {
-            Integer count = orderService.getCount(orderDO);
-            return count;
-        } catch (Exception e) {
-            logger.error("order count fail(统计数目失败)--"+orderDO.toString()+":{}", e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * 根据输入字段和值，进行模糊查询
-     * @param orderDO
-     * @return
-     * searchKey-查询的字段，searchValue-查询字段的值
-     */
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public PageInfo<OrderDO> searchList(@RequestBody OrderDO orderDO) {
-        try {
-            List<OrderDO> list = orderService.searchListByKV(orderDO);
-            return new PageInfo<OrderDO>(list);
-        } catch (Exception e) {
-            logger.error("order search query fail(搜索查询失败)--"+orderDO.toString()+":{}", e.getMessage());
-            return null;
+            return baseException.handleException(e, logger, "get order page list fail(按条件查询 订单 列表失败)-- pageindex:"+ pageIndex + "-- pagesize:"+ pageSize + "-- account:"+ account +":{}", false);
         }
     }
 

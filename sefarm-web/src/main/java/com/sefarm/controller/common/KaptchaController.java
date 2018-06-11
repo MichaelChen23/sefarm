@@ -65,25 +65,25 @@ public class KaptchaController {
         ServletOutputStream out = null;
         try {
             out = response.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // write the data out
-        try {
+            // write the data out
             ImageIO.write(bi, "jpg", out);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         try {
             try {
-                out.flush();
+                if (out != null) {
+                    out.flush();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } finally {
             try {
-                out.close();
+                if (out != null) {
+                    out.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

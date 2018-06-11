@@ -144,11 +144,15 @@ OrderItem.delOrderItem = function () {
 
         var operation = function(){
             var itemId = OrderItem.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/api/order-item/remove", function () {
-                Feng.success("删除成功!");
+            var ajax = new $ax(Feng.ctxPath + "/api/order-item/remove", function (data) {
+                if (data.code == 200) {
+                    Feng.success("删除成功!");
+                } else {
+                    Feng.infoDetail("删除失败!", data.msg);
+                }
                 OrderItem.table.refresh();
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.infoDetail("删除失败!", data.msg);
             });
             ajax.set("itemId", itemId);
             ajax.start();

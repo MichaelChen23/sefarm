@@ -1,12 +1,11 @@
 package com.sefarm.controller.common;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.exception.BaseException;
 import com.sefarm.common.util.HttpKit;
-import com.sefarm.config.wechat.SeFarmWXPayConfig;
 import com.sefarm.model.user.UserDO;
 import com.sefarm.service.user.IUserService;
 import com.sefarm.util.ToolUtil;
@@ -42,6 +41,13 @@ public class WechatController {
 
     private static final Logger logger = LoggerFactory.getLogger(WechatController.class);
 
+    /**
+     * 引入自定义基础异常
+     * add by mc 2018-6-11
+     */
+    @Autowired
+    public BaseException baseException;
+
     @Autowired
     public IUserService userService;
 
@@ -68,8 +74,7 @@ public class WechatController {
                 return new BaseResponse<>(result);
             }
         } catch (Exception e) {
-            logger.error("get accessToken by code fail(获取微信accessToken失败) -- code:"+code+" :{}", e.getMessage());
-            return new BaseResponse<>(null);
+            return baseException.handleException(e, logger, "get accessToken by code fail(获取微信accessToken失败) -- code:"+code+" :{}", false);
         }
     }
 
@@ -140,8 +145,7 @@ public class WechatController {
                 return new BaseResponse<>(newUserDO);
             }
         } catch (Exception e) {
-            logger.error("get userinfo by accessToken and openId fail(获取用户信息失败) -- accessToken:" + accessToken + " openId:" + openId + " :{}", e.getMessage());
-            return new BaseResponse<>(null);
+            return baseException.handleException(e, logger, "get userinfo by accessToken and openId fail(获取用户信息失败) -- accessToken:" + accessToken + " openId:" + openId + " :{}", false);
         }
     }
 

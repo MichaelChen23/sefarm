@@ -145,11 +145,15 @@ OrderDelivery.delOrderDelivery = function () {
 
         var operation = function(){
             var deliveryId = OrderDelivery.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/api/order-dely/remove", function () {
-                Feng.success("删除成功!");
+            var ajax = new $ax(Feng.ctxPath + "/api/order-dely/remove", function (data) {
+                if (data.code == 200) {
+                    Feng.success("删除成功!");
+                } else {
+                    Feng.infoDetail("删除失败!", data.msg);
+                }
                 OrderDelivery.table.refresh();
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.infoDetail("删除失败!", data.msg);
             });
             ajax.set("deliveryId", deliveryId);
             ajax.start();
@@ -165,11 +169,15 @@ OrderDelivery.delOrderDelivery = function () {
 OrderDelivery.readyOrder = function () {
     if (this.check()) {
         var deliveryId = OrderDelivery.seItem.id;
-        var ajax = new $ax(Feng.ctxPath + "/api/order-dely/ready", function () {
-            Feng.success("待发货成功!");
+        var ajax = new $ax(Feng.ctxPath + "/api/order-dely/ready", function (data) {
+            if (data.code == 200) {
+                Feng.success("待发货成功!");
+            } else {
+                Feng.infoDetail("待发货失败!", data.msg);
+            }
             OrderDelivery.table.refresh();
         }, function (data) {
-            Feng.error("待发货失败!" + data.responseJSON.message + "!");
+            Feng.infoDetail("待发货失败!", data.msg);
         });
         ajax.set("deliveryId", deliveryId);
         ajax.start();
@@ -182,11 +190,15 @@ OrderDelivery.readyOrder = function () {
 OrderDelivery.deliveryOrder = function () {
     if (this.check()) {
         var deliveryId = OrderDelivery.seItem.id;
-        var ajax = new $ax(Feng.ctxPath + "/api/order-dely/delivery", function () {
-            Feng.success("发货成功!");
+        var ajax = new $ax(Feng.ctxPath + "/api/order-dely/delivery", function (data) {
+            if (data.code == 200) {
+                Feng.success("发货成功!");
+            } else {
+                Feng.infoDetail("发货失败!", data.msg);
+            }
             OrderDelivery.table.refresh();
         }, function (data) {
-            Feng.error("发货失败!" + data.responseJSON.message + "!");
+            Feng.infoDetail("发货失败!", data.msg);
         });
         ajax.set("deliveryId", deliveryId);
         ajax.start();
@@ -199,11 +211,15 @@ OrderDelivery.deliveryOrder = function () {
 OrderDelivery.receiveOrder = function () {
     if (this.check()) {
         var deliveryId = OrderDelivery.seItem.id;
-        var ajax = new $ax(Feng.ctxPath + "/api/order-dely/receive", function () {
-            Feng.success("接收成功!");
+        var ajax = new $ax(Feng.ctxPath + "/api/order-dely/receive", function (data) {
+            if (data.code == 200) {
+                Feng.success("接收成功!");
+            } else {
+                Feng.infoDetail("接收失败!", data.msg);
+            }
             OrderDelivery.table.refresh();
         }, function (data) {
-            Feng.error("接收失败!" + data.responseJSON.message + "!");
+            Feng.infoDetail("接收失败!", data.msg);
         });
         ajax.set("deliveryId", deliveryId);
         ajax.start();

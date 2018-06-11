@@ -96,20 +96,15 @@ public class OrderPayController extends BaseController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Tip save(@Valid OrderPayDO orderPayDO, BindingResult result) {
+    public BaseResponse save(@Valid OrderPayDO orderPayDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             Boolean res = orderPayService.saveByObj(orderPayDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("order-pay save fail(保存失败)--"+orderPayDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "order-pay save fail(保存失败)--"+orderPayDO.toString()+":{}", true);
         }
     }
 
@@ -121,21 +116,15 @@ public class OrderPayController extends BaseController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public Tip update(@Valid OrderPayDO orderPayDO, BindingResult result) {
+    public BaseResponse update(@Valid OrderPayDO orderPayDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (orderPayDO != null) {
-                Boolean res = orderPayService.updateByObj(orderPayDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            Boolean res = orderPayService.updateByObj(orderPayDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("order-pay update fail(更新失败)--"+orderPayDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "order-pay update fail(更新失败)--"+orderPayDO.toString()+":{}", true);
         }
     }
 
@@ -146,22 +135,17 @@ public class OrderPayController extends BaseController {
      */
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     @ResponseBody
-    public Tip remove(@RequestParam Long payId) {
+    public BaseResponse remove(@RequestParam Long payId) {
         if (ToolUtil.isEmpty(payId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             OrderPayDO orderPayDO = new OrderPayDO();
             orderPayDO.setId(payId);
-            Boolean result = orderPayService.removeByObj(orderPayDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = orderPayService.removeByObj(orderPayDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("order-pay delete fail(删除失败)--"+payId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "order-pay delete fail(删除失败)-- id:"+payId+":{}", true);
         }
     }
 

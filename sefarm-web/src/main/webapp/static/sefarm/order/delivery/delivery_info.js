@@ -123,11 +123,15 @@ OrderDeliveryInfoDlg.addSubmit = function() {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/api/order-dely/save", function(data){
-        Feng.success("添加成功!");
+        if (data.code == 200) {
+            Feng.success("添加成功!");
+        } else {
+            Feng.infoDetail("添加失败!", data.msg);
+        }
         window.parent.OrderDelivery.table.refresh();
         OrderDeliveryInfoDlg.close();
     },function(data){
-        Feng.error("添加失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("添加失败!", data.msg);
     });
     ajax.set(this.orderDeliveryInfoData);
     ajax.start();
@@ -143,11 +147,15 @@ OrderDeliveryInfoDlg.editSubmit = function() {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/api/order-dely/update", function(data){
-        Feng.success("修改成功!");
+        if (data.code == 200) {
+            Feng.success("修改成功!");
+        } else {
+            Feng.infoDetail("修改失败!", data.msg);
+        }
         window.parent.OrderDelivery.table.refresh();
         OrderDeliveryInfoDlg.close();
     },function(data){
-        Feng.error("修改失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("修改失败!", data.msg);
     });
     ajax.set(this.orderDeliveryInfoData);
     ajax.start();

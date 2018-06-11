@@ -58,11 +58,15 @@ OrderItemInfoDlg.addSubmit = function() {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/api/order-item/save", function(data){
-        Feng.success("添加成功!");
+        if (data.code == 200) {
+            Feng.success("添加成功!");
+        } else {
+            Feng.infoDetail("添加失败!", data.msg);
+        }
         window.parent.OrderItem.table.refresh();
         OrderItemInfoDlg.close();
     },function(data){
-        Feng.error("添加失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("添加失败!", data.msg);
     });
     ajax.set(this.orderItemInfoData);
     ajax.start();
@@ -78,11 +82,15 @@ OrderItemInfoDlg.editSubmit = function() {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/api/order-item/update", function(data){
-        Feng.success("修改成功!");
+        if (data.code == 200) {
+            Feng.success("修改成功!");
+        } else {
+            Feng.infoDetail("修改失败!", data.msg);
+        }
         window.parent.OrderItem.table.refresh();
         OrderItemInfoDlg.close();
     },function(data){
-        Feng.error("修改失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("修改失败!", data.msg);
     });
     ajax.set(this.orderItemInfoData);
     ajax.start();
