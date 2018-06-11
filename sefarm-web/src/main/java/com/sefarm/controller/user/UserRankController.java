@@ -1,9 +1,7 @@
 package com.sefarm.controller.user;
 
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.Constant;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
+import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.controller.common.BaseController;
@@ -93,20 +91,15 @@ public class UserRankController extends BaseController {
      */
     @RequestMapping(value = "/saveRank", method = RequestMethod.POST)
     @ResponseBody
-    public Tip saveRank(@Valid UserRankDO userRankDO, BindingResult result) {
+    public BaseResponse saveRank(@Valid UserRankDO userRankDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             Boolean res = userRankService.saveByObj(userRankDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("user-rank save fail(保存失败)--"+userRankDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "user-rank save fail(保存失败)--"+userRankDO.toString()+":{}", true);
         }
     }
 
@@ -118,21 +111,15 @@ public class UserRankController extends BaseController {
      */
     @RequestMapping(value = "/updateRank", method = RequestMethod.POST)
     @ResponseBody
-    public Tip updateRank(@Valid UserRankDO userRankDO, BindingResult result) {
+    public BaseResponse updateRank(@Valid UserRankDO userRankDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (userRankDO != null) {
-                Boolean res = userRankService.updateByObj(userRankDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            Boolean res = userRankService.updateByObj(userRankDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("user-rank update fail(更新失败)--"+userRankDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "user-rank update fail(更新失败)--"+userRankDO.toString()+":{}", true);
         }
     }
 
@@ -143,22 +130,17 @@ public class UserRankController extends BaseController {
      */
     @RequestMapping(value = "/removeRank", method = RequestMethod.POST)
     @ResponseBody
-    public Tip removeRank(@RequestParam Long rankId) {
+    public BaseResponse removeRank(@RequestParam Long rankId) {
         if (ToolUtil.isEmpty(rankId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             UserRankDO userRankDO = new UserRankDO();
             userRankDO.setId(rankId);
-            Boolean result = userRankService.removeByObj(userRankDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = userRankService.removeByObj(userRankDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("user-rank delete fail(删除失败)--"+rankId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "user-rank delete fail(删除失败)-- id:"+rankId+":{}", true);
         }
     }
 

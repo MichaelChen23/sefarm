@@ -3,8 +3,6 @@ package com.sefarm.controller.user;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.controller.common.BaseController;
@@ -96,20 +94,15 @@ public class UserAddressController extends BaseController {
      */
     @RequestMapping(value = "/saveAddress", method = RequestMethod.POST)
     @ResponseBody
-    public Tip saveAddress(@Valid UserAddressDO userAddressDO, BindingResult result) {
+    public BaseResponse saveAddress(@Valid UserAddressDO userAddressDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             Boolean res = userAddressService.saveByObj(userAddressDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("user-adr save fail(保存失败)--"+userAddressDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "user-adr save fail(保存失败)--"+userAddressDO.toString()+":{}", true);
         }
     }
 
@@ -121,21 +114,15 @@ public class UserAddressController extends BaseController {
      */
     @RequestMapping(value = "/updateAddress", method = RequestMethod.POST)
     @ResponseBody
-    public Tip updateAddress(@Valid UserAddressDO userAddressDO, BindingResult result) {
+    public BaseResponse updateAddress(@Valid UserAddressDO userAddressDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (userAddressDO != null) {
-                Boolean res = userAddressService.updateByObj(userAddressDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            Boolean res = userAddressService.updateByObj(userAddressDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("user-adr update fail(更新失败)--"+userAddressDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "user-adr update fail(更新失败)--"+userAddressDO.toString()+":{}", true);
         }
     }
 
@@ -146,22 +133,17 @@ public class UserAddressController extends BaseController {
      */
     @RequestMapping(value = "/removeAddress", method = RequestMethod.POST)
     @ResponseBody
-    public Tip removeAddress(@RequestParam Long addressId) {
+    public BaseResponse removeAddress(@RequestParam Long addressId) {
         if (ToolUtil.isEmpty(addressId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             UserAddressDO userAddressDO = new UserAddressDO();
             userAddressDO.setId(addressId);
-            Boolean result = userAddressService.removeByObj(userAddressDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = userAddressService.removeByObj(userAddressDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("user-adr delete fail(删除失败)--"+addressId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "user-adr delete fail(删除失败)-- id:"+addressId+":{}", true);
         }
     }
 
@@ -209,8 +191,7 @@ public class UserAddressController extends BaseController {
             Boolean result = userAddressService.saveByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            logger.error("user-adr save fail(保存失败)--"+userAddressDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            return baseException.handleException(e, logger, "user-adr save fail(保存失败)--"+userAddressDO.toString()+":{}", false);
         }
     }
 
@@ -228,8 +209,7 @@ public class UserAddressController extends BaseController {
             Boolean result = userAddressService.removeByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            logger.error("user-adr delete fail(删除失败)--"+userAddressId+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            return baseException.handleException(e, logger, "user-adr delete fail(删除失败)-- id:"+userAddressId+":{}", false);
         }
     }
 
@@ -279,8 +259,7 @@ public class UserAddressController extends BaseController {
             Boolean result = userAddressService.updateByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            logger.error("user-adr update fail(更新失败)--"+userAddressDO.toString()+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
+            return baseException.handleException(e, logger, "user-adr update fail(更新失败)--"+userAddressDO.toString()+":{}", false);
         }
     }
 
@@ -297,8 +276,7 @@ public class UserAddressController extends BaseController {
             List<UserAddressDO> list = userAddressService.getUserAddressDOAllListByAccountAndFlag(account, defaultFlag);
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            logger.error("user-adr get all by account & defaultFlag (根据用户帐号和是否默认地址标签 获取所有的用户地址 数据失败)-- :{}", e.getMessage());
-            return new BaseResponse(null);
+            return baseException.handleException(e, logger, "user-adr get all by account & defaultFlag (根据用户帐号和是否默认地址标签 获取所有的用户地址 数据失败)-- :{}", false);
         }
     }
 

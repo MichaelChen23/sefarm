@@ -1,9 +1,7 @@
 package com.sefarm.controller.user;
 
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.Constant;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
+import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.controller.common.BaseController;
@@ -93,20 +91,15 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "/saveUser", method = RequestMethod.POST)
     @ResponseBody
-    public Tip saveUser(@Valid UserDO userDO, BindingResult result) {
+    public BaseResponse saveUser(@Valid UserDO userDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             Boolean res = userService.saveByObj(userDO);
-            if (res) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("user save fail(保存失败)--"+userDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "user save fail(保存失败)--"+userDO.toString()+":{}", true);
         }
     }
 
@@ -118,21 +111,15 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
     @ResponseBody
-    public Tip updateUser(@Valid UserDO userDO, BindingResult result) {
+    public BaseResponse updateUser(@Valid UserDO userDO, BindingResult result) {
         if (result.hasErrors()) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            if (userDO != null) {
-                Boolean res = userService.updateByObj(userDO);
-                if (res) {
-                    return SUCCESS_TIP;
-                }
-            }
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            Boolean res = userService.updateByObj(userDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("user update fail(更新失败)--"+userDO.toString()+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "user update fail(更新失败)--"+userDO.toString()+":{}", true);
         }
     }
 
@@ -143,22 +130,17 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "/removeUser", method = RequestMethod.POST)
     @ResponseBody
-    public Tip removeUser(@RequestParam Long userId) {
+    public BaseResponse removeUser(@RequestParam Long userId) {
         if (ToolUtil.isEmpty(userId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
             UserDO userDO = new UserDO();
             userDO.setId(userId);
-            Boolean result = userService.removeByObj(userDO);
-            if (result) {
-                return SUCCESS_TIP;
-            } else {
-                return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
-            }
+            Boolean res = userService.removeByObj(userDO);
+            return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            logger.error("user delete fail(删除失败)--"+userId+":{}", e.getMessage());
-            return new ErrorTip(Constant.FAIL_CODE, Constant.FAIL_MSG);
+            return baseException.handleException(e, logger, "user delete fail(删除失败)-- id:"+userId+":{}", true);
         }
     }
 

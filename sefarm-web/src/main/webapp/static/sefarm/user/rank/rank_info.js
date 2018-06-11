@@ -57,11 +57,15 @@ RankInfoDlg.addSubmit = function() {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/api/user-rank/saveRank", function(data){
-        Feng.success("添加成功!");
+        if (data.code == 200) {
+            Feng.success("添加成功!");
+        } else {
+            Feng.infoDetail("添加失败!", data.msg);
+        }
         window.parent.Rank.table.refresh();
         RankInfoDlg.close();
     },function(data){
-        Feng.error("添加失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("添加失败!", data.msg);
     });
     ajax.set(this.rankInfoData);
     ajax.start();
@@ -77,13 +81,17 @@ RankInfoDlg.editSubmit = function() {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/api/user-rank/updateRank", function(data){
-        Feng.success("修改成功!");
+        if (data.code == 200) {
+            Feng.success("修改成功!");
+        } else {
+            Feng.infoDetail("修改失败!", data.msg);
+        }
         if(window.parent.Rank != undefined) {
             window.parent.Rank.table.refresh();
             RankInfoDlg.close();
         }
     },function(data){
-        Feng.error("修改失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("修改失败!", data.msg);
     });
     ajax.set(this.rankInfoData);
     ajax.start();

@@ -58,11 +58,15 @@ UserInfoDlg.addSubmit = function() {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/api/user/saveUser", function(data){
-        Feng.success("添加成功!");
+        if (data.code == 200) {
+            Feng.success("添加成功!");
+        } else {
+            Feng.infoDetail("添加失败!", data.msg);
+        }
         window.parent.User.table.refresh();
         UserInfoDlg.close();
     },function(data){
-        Feng.error("添加失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("添加失败!", data.msg);
     });
     ajax.set(this.userInfoData);
     ajax.start();
@@ -78,13 +82,17 @@ UserInfoDlg.editSubmit = function() {
 
     //提交信息
     var ajax = new $ax(Feng.ctxPath + "/api/user/updateUser", function(data){
-        Feng.success("修改成功!");
+        if (data.code == 200) {
+            Feng.success("修改成功!");
+        } else {
+            Feng.infoDetail("修改失败!", data.msg);
+        }
         if(window.parent.User != undefined) {
             window.parent.User.table.refresh();
             UserInfoDlg.close();
         }
     },function(data){
-        Feng.error("修改失败!" + data.responseJSON.message + "!");
+        Feng.infoDetail("修改失败!", data.msg);
     });
     ajax.set(this.userInfoData);
     ajax.start();

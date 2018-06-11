@@ -125,11 +125,15 @@ Address.delAddress = function () {
 
         var operation = function(){
             var addressId = Address.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/api/user-adr/removeAddress", function () {
-                Feng.success("删除成功!");
+            var ajax = new $ax(Feng.ctxPath + "/api/user-adr/removeAddress", function (data) {
+                if (data.code == 200) {
+                    Feng.success("删除成功!");
+                } else {
+                    Feng.infoDetail("删除失败!", data.msg);
+                }
                 Address.table.refresh();
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.infoDetail("删除失败!", data.msg);
             });
             ajax.set("addressId", addressId);
             ajax.start();

@@ -102,11 +102,15 @@ Rank.delRank = function () {
 
         var operation = function(){
             var rankId = Rank.seItem.id;
-            var ajax = new $ax(Feng.ctxPath + "/api/user-rank/removeRank", function () {
-                Feng.success("删除成功!");
+            var ajax = new $ax(Feng.ctxPath + "/api/user-rank/removeRank", function (data) {
+                if (data.code == 200) {
+                    Feng.success("删除成功!");
+                } else {
+                    Feng.infoDetail("删除失败!", data.msg);
+                }
                 Rank.table.refresh();
             }, function (data) {
-                Feng.error("删除失败!" + data.responseJSON.message + "!");
+                Feng.infoDetail("删除失败!", data.msg);
             });
             ajax.set("rankId", rankId);
             ajax.start();
