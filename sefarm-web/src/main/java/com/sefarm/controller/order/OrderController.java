@@ -131,7 +131,7 @@ public class OrderController extends BaseController {
             Boolean res = orderService.saveByObj(orderDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order save fail(保存失败)--"+orderDO.toString()+":{}", true);
+            return handleException(e, "order save fail(保存失败)--"+orderDO.toString()+":{}", true);
         }
     }
 
@@ -153,7 +153,7 @@ public class OrderController extends BaseController {
             Boolean res = orderService.updateByObj(orderDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order update fail(更新失败)--"+orderDO.toString()+":{}", true);
+            return handleException(e, "order update fail(更新失败)--"+orderDO.toString()+":{}", true);
         }
     }
 
@@ -174,7 +174,7 @@ public class OrderController extends BaseController {
             Boolean res = orderService.removeByObj(orderDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order delete fail(删除失败)-- id:"+orderId+":{}", true);
+            return handleException(e, "order delete fail(删除失败)-- id:"+orderId+":{}", true);
         }
     }
 
@@ -245,7 +245,7 @@ public class OrderController extends BaseController {
                 return new BaseResponse(null);
             }
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "place order fail(下订单失败)-- account:"+account+"-- cartIds:"+cartIds+":{}", false);
+            return handleException(e, "place order fail(下订单失败)-- account:"+account+"-- cartIds:"+cartIds+":{}", false);
         }
     }
 
@@ -306,7 +306,7 @@ public class OrderController extends BaseController {
                 return judgeUnifiedOrderResponse(wxOrderInfo, orderPayDO);
             }
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "replace order fail(重新下订单失败)-- id:"+orderId+":{}", false);
+            return handleException(e, "replace order fail(重新下订单失败)-- id:"+orderId+":{}", false);
         }
     }
 
@@ -320,6 +320,9 @@ public class OrderController extends BaseController {
         //判断返回失败，出现的错误信息
         String returnCode = wxOrderInfo.get("return_code");
         String returnMsg = wxOrderInfo.get("return_msg");
+        //支付时间，创建时间，必须有才能入库
+        Date payTime = new Date();
+        orderPayDO.setCreateTime(payTime);
         if (Constant.WECHAT_FAIL.equals(returnCode) && StringUtils.isNotBlank(returnMsg)) {
             orderPayDO.setErrCode(returnCode);
             orderPayDO.setErrCodeDes(returnMsg);
@@ -338,8 +341,6 @@ public class OrderController extends BaseController {
             return new BaseResponse(Constant.FAIL_CODE, errCode+","+errCodeDes, null);
         }
         orderPayDO.setAppId(wxOrderInfo.get("appid"));
-        Date payTime = new Date();
-        orderPayDO.setCreateTime(payTime);
         orderPayDO.setTimeStamp(DateUtil.getLinuxTimeStamp(payTime));
         orderPayDO.setNonceStr(getNonceStr());
         orderPayDO.setPrepayId(wxOrderInfo.get("prepay_id"));
@@ -371,7 +372,7 @@ public class OrderController extends BaseController {
                 return new BaseResponse<>(null);
             }
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "get order detail fail(查询订单详情 失败)-- id:"+ orderId +":{}", false);
+            return handleException(e, "get order detail fail(查询订单详情 失败)-- id:"+ orderId +":{}", false);
         }
     }
 
@@ -403,7 +404,7 @@ public class OrderController extends BaseController {
             }
             return BaseResponse.getRespByResultBool(false);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "remove order and all order item fail(删除工单和其下的所有工单项 失败)-- id:"+ orderId +":{}", false);
+            return handleException(e, "remove order and all order item fail(删除工单和其下的所有工单项 失败)-- id:"+ orderId +":{}", false);
         }
     }
 
@@ -421,7 +422,7 @@ public class OrderController extends BaseController {
             PageInfo<OrderDO> result = orderService.getOrderDOPageList(pageIndex, pageSize, account);
             return new BaseResponse<>(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "get order page list fail(按条件查询 订单 列表失败)-- pageindex:"+ pageIndex + "-- pagesize:"+ pageSize + "-- account:"+ account +":{}", false);
+            return handleException(e, "get order page list fail(按条件查询 订单 列表失败)-- pageindex:"+ pageIndex + "-- pagesize:"+ pageSize + "-- account:"+ account +":{}", false);
         }
     }
 

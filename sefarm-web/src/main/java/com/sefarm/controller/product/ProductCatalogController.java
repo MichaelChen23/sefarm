@@ -104,7 +104,7 @@ public class ProductCatalogController extends BaseController {
             Boolean res = productCatalogService.saveByObj(productCatalogDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-cata save fail(保存失败)--"+productCatalogDO.toString()+":{}", true);
+            return handleException(e, "prod-cata save fail(保存失败)--"+productCatalogDO.toString()+":{}", true);
         }
     }
 
@@ -126,7 +126,7 @@ public class ProductCatalogController extends BaseController {
             Boolean res = productCatalogService.updateByObj(productCatalogDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-cata update fail(更新失败)--"+productCatalogDO.toString()+":{}", true);
+            return handleException(e, "prod-cata update fail(更新失败)--"+productCatalogDO.toString()+":{}", true);
         }
     }
 
@@ -147,7 +147,7 @@ public class ProductCatalogController extends BaseController {
             Boolean res = productCatalogService.removeByObj(productCatalogDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-cata delete fail(删除失败)-- id:"+catalogId+":{}", true);
+            return handleException(e, "prod-cata delete fail(删除失败)-- id:"+catalogId+":{}", true);
         }
     }
 
@@ -163,7 +163,7 @@ public class ProductCatalogController extends BaseController {
             List<ProductCatalogDO> list = productCatalogService.getAllProductCatalogList();
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-cata get all list (获取所有产品目录list失败)-- :{}", false);
+            return handleException(e, "prod-cata get all list (获取所有产品目录list失败)-- :{}", false);
         }
     }
 

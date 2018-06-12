@@ -127,7 +127,7 @@ public class SysDeptController extends BaseController {
             Boolean res = sysDeptService.saveByObj(sysDeptDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-dept save fail(保存失败)--"+sysDeptDO.toString()+":{}", true);
+            return handleException(e, "sys-dept save fail(保存失败)--"+sysDeptDO.toString()+":{}", true);
         }
     }
 
@@ -149,7 +149,7 @@ public class SysDeptController extends BaseController {
             Boolean res = sysDeptService.updateByObj(sysDeptDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-dept update fail(更新失败)--"+sysDeptDO.toString()+":{}", true);
+            return handleException(e, "sys-dept update fail(更新失败)--"+sysDeptDO.toString()+":{}", true);
         }
     }
 
@@ -170,7 +170,7 @@ public class SysDeptController extends BaseController {
             Boolean res = sysDeptService.removeByObj(sysDeptDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-dept delete fail(删除失败)-- id:"+deptId+":{}", true);
+            return handleException(e, "sys-dept delete fail(删除失败)-- id:"+deptId+":{}", true);
         }
     }
 

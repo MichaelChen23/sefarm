@@ -109,7 +109,7 @@ public class ProductCommentController extends BaseController {
             Boolean res = productCommentService.saveByObj(productCommentDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-comment save fail(保存失败)--"+productCommentDO.toString()+":{}", true);
+            return handleException(e, "prod-comment save fail(保存失败)--"+productCommentDO.toString()+":{}", true);
         }
     }
 
@@ -129,7 +129,7 @@ public class ProductCommentController extends BaseController {
             Boolean res = productCommentService.updateByObj(productCommentDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-comment update fail(更新失败)--"+productCommentDO.toString()+":{}", true);
+            return handleException(e, "prod-comment update fail(更新失败)--"+productCommentDO.toString()+":{}", true);
         }
     }
 
@@ -150,7 +150,7 @@ public class ProductCommentController extends BaseController {
             Boolean res = productCommentService.removeByObj(productCommentDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-comment delete fail(删除失败)-- id:"+commentId+":{}", true);
+            return handleException(e, "prod-comment delete fail(删除失败)-- id:"+commentId+":{}", true);
         }
     }
 
@@ -171,7 +171,7 @@ public class ProductCommentController extends BaseController {
             PageInfo<ProductCommentDO> result = productCommentService.getProductCommentPageDOList(pageIndex, pageSize, productId, orderId, stars);
             return new BaseResponse(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "get prod-comment page list fail(获取 产品评论 分页list 列表失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+"-- productId:"+productId+"-- orderId:"+orderId+"-- stars:"+stars+":{}", false);
+            return handleException(e, "get prod-comment page list fail(获取 产品评论 分页list 列表失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+"-- productId:"+productId+"-- orderId:"+orderId+"-- stars:"+stars+":{}", false);
         }
     }
 
@@ -216,7 +216,7 @@ public class ProductCommentController extends BaseController {
             }
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-comment save fail(保存失败)-- productId:"+productId+"-- orderId:"+orderId+"-- account:"+account+"-- name:"+name+"-- content:"+content+"-- star:"+star+":{}", false);
+            return handleException(e, "prod-comment save fail(保存失败)-- productId:"+productId+"-- orderId:"+orderId+"-- account:"+account+"-- name:"+name+"-- content:"+content+"-- star:"+star+":{}", false);
         }
     }
 

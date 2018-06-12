@@ -141,7 +141,7 @@ public class SysRoleController extends BaseController {
             Boolean res = sysRoleService.saveByObj(sysRoleDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-role save fail(保存失败)--"+sysRoleDO.toString()+":{}", true);
+            return handleException(e, "sys-role save fail(保存失败)--"+sysRoleDO.toString()+":{}", true);
         }
     }
 
@@ -163,7 +163,7 @@ public class SysRoleController extends BaseController {
             Boolean res = sysRoleService.updateByObj(sysRoleDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-role update fail(更新失败)--"+sysRoleDO.toString()+":{}", true);
+            return handleException(e, "sys-role update fail(更新失败)--"+sysRoleDO.toString()+":{}", true);
         }
     }
 
@@ -184,7 +184,7 @@ public class SysRoleController extends BaseController {
             Boolean res = sysRoleService.removeByObj(sysRoleDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-role delete fail(删除失败)-- id:"+roleId+":{}", true);
+            return handleException(e, "sys-role delete fail(删除失败)-- id:"+roleId+":{}", true);
         }
     }
 
@@ -204,7 +204,7 @@ public class SysRoleController extends BaseController {
             Boolean res = sysRoleService.setMenuAuthority(roleId, ids);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-role set menu authority fail(系统角色配置菜单权限失败)-- id:"+roleId+":{}", true);
+            return handleException(e, "sys-role set menu authority fail(系统角色配置菜单权限失败)-- id:"+roleId+":{}", true);
         }
     }
 

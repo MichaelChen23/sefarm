@@ -135,7 +135,7 @@ public class SysUserController extends BaseController {
             Boolean res = sysUserService.saveByObj(sysUserDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-user save fail(保存失败)--"+sysUserDO.toString()+":{}", true);
+            return handleException(e, "sys-user save fail(保存失败)--"+sysUserDO.toString()+":{}", true);
         }
     }
 
@@ -157,7 +157,7 @@ public class SysUserController extends BaseController {
             Boolean res = sysUserService.updateByObj(sysUserDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-user update fail(更新失败)--"+sysUserDO.toString()+":{}", true);
+            return handleException(e, "sys-user update fail(更新失败)--"+sysUserDO.toString()+":{}", true);
         }
     }
 
@@ -178,7 +178,7 @@ public class SysUserController extends BaseController {
             Boolean res = sysUserService.removeByObj(sysUserDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-user delete fail(删除失败)-- id:"+userId+":{}", true);
+            return handleException(e, "sys-user delete fail(删除失败)-- id:"+userId+":{}", true);
         }
     }
 
@@ -203,7 +203,7 @@ public class SysUserController extends BaseController {
             Boolean res = sysUserService.updateByObj(sysUserDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-user reset password fail(重置密码失败)-- id:"+userId+":{}", true);
+            return handleException(e, "sys-user reset password fail(重置密码失败)-- id:"+userId+":{}", true);
         }
     }
 
@@ -231,7 +231,7 @@ public class SysUserController extends BaseController {
             Boolean res = sysUserService.updateByObj(sysUserDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-user set sys-role fail(设置系统角色失败)-- userId:"+userId+"-- roleIds:"+roleIds+":{}", true);
+            return handleException(e, "sys-user set sys-role fail(设置系统角色失败)-- userId:"+userId+"-- roleIds:"+roleIds+":{}", true);
         }
     }
 

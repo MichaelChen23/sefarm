@@ -99,7 +99,7 @@ public class UserRankController extends BaseController {
             Boolean res = userRankService.saveByObj(userRankDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user-rank save fail(保存失败)--"+userRankDO.toString()+":{}", true);
+            return handleException(e, "user-rank save fail(保存失败)--"+userRankDO.toString()+":{}", true);
         }
     }
 
@@ -119,7 +119,7 @@ public class UserRankController extends BaseController {
             Boolean res = userRankService.updateByObj(userRankDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user-rank update fail(更新失败)--"+userRankDO.toString()+":{}", true);
+            return handleException(e, "user-rank update fail(更新失败)--"+userRankDO.toString()+":{}", true);
         }
     }
 
@@ -140,7 +140,7 @@ public class UserRankController extends BaseController {
             Boolean res = userRankService.removeByObj(userRankDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user-rank delete fail(删除失败)-- id:"+rankId+":{}", true);
+            return handleException(e, "user-rank delete fail(删除失败)-- id:"+rankId+":{}", true);
         }
     }
 

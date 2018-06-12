@@ -99,7 +99,7 @@ public class UserController extends BaseController {
             Boolean res = userService.saveByObj(userDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user save fail(保存失败)--"+userDO.toString()+":{}", true);
+            return handleException(e, "user save fail(保存失败)--"+userDO.toString()+":{}", true);
         }
     }
 
@@ -119,7 +119,7 @@ public class UserController extends BaseController {
             Boolean res = userService.updateByObj(userDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user update fail(更新失败)--"+userDO.toString()+":{}", true);
+            return handleException(e, "user update fail(更新失败)--"+userDO.toString()+":{}", true);
         }
     }
 
@@ -140,7 +140,7 @@ public class UserController extends BaseController {
             Boolean res = userService.removeByObj(userDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user delete fail(删除失败)-- id:"+userId+":{}", true);
+            return handleException(e, "user delete fail(删除失败)-- id:"+userId+":{}", true);
         }
     }
 

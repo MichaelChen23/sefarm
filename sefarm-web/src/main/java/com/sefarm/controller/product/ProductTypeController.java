@@ -104,7 +104,7 @@ public class ProductTypeController extends BaseController {
             Boolean res = productTypeService.saveByObj(productTypeDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-type save fail(保存失败)--"+productTypeDO.toString()+":{}", true);
+            return handleException(e, "prod-type save fail(保存失败)--"+productTypeDO.toString()+":{}", true);
         }
     }
 
@@ -126,7 +126,7 @@ public class ProductTypeController extends BaseController {
             Boolean res = productTypeService.updateByObj(productTypeDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-type update fail(更新失败)--"+productTypeDO.toString()+":{}", true);
+            return handleException(e, "prod-type update fail(更新失败)--"+productTypeDO.toString()+":{}", true);
         }
     }
 
@@ -147,7 +147,7 @@ public class ProductTypeController extends BaseController {
             Boolean res = productTypeService.removeByObj(productTypeDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-type delete fail(删除失败)-- id:"+typeId+":{}", true);
+            return handleException(e, "prod-type delete fail(删除失败)-- id:"+typeId+":{}", true);
         }
     }
 
@@ -162,7 +162,7 @@ public class ProductTypeController extends BaseController {
             List<ProductTypeDO> list = productTypeService.getALL();
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-type get all(获取所有数据失败)-- :{}", true);
+            return handleException(e, "prod-type get all(获取所有数据失败)-- :{}", true);
         }
     }
 
@@ -179,7 +179,7 @@ public class ProductTypeController extends BaseController {
             List<ProductTypeDO> list = productTypeService.getProductTypeListByCatalogId(catalogId);
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod-type get all list by catalogid (获取全部产品类型list失败)-- id:"+catalogId+":{}", false);
+            return handleException(e, "prod-type get all list by catalogid (获取全部产品类型list失败)-- id:"+catalogId+":{}", false);
         }
     }
 

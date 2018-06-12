@@ -99,7 +99,7 @@ public class CartController extends BaseController {
             Boolean res = cartService.saveByObj(cartDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "cart save fail(保存失败)--"+cartDO.toString()+":{}", true);
+            return handleException(e, "cart save fail(保存失败)--"+cartDO.toString()+":{}", true);
         }
     }
 
@@ -119,7 +119,7 @@ public class CartController extends BaseController {
             Boolean res = cartService.updateByObj(cartDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "cart update fail(更新失败)--"+cartDO.toString()+":{}", true);
+            return handleException(e, "cart update fail(更新失败)--"+cartDO.toString()+":{}", true);
         }
     }
 
@@ -140,7 +140,7 @@ public class CartController extends BaseController {
             Boolean res = cartService.removeByObj(cartDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "cart delete fail(删除失败)-- id:"+cartId+":{}", true);
+            return handleException(e, "cart delete fail(删除失败)-- id:"+cartId+":{}", true);
         }
     }
 
@@ -156,7 +156,7 @@ public class CartController extends BaseController {
             List<CartVO> list = cartService.getCartVOAllListByAccount(account);
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "cart get all list by account fail(获取所有的购物车列表失败)-- account:"+account+":{}", false);
+            return handleException(e, "cart get all list by account fail(获取所有的购物车列表失败)-- account:"+account+":{}", false);
         }
     }
 
@@ -179,7 +179,7 @@ public class CartController extends BaseController {
             Boolean result = cartService.saveByObj(cartDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "cart save fail(保存失败)-- account:"+account+"-- productId:"+productId+"-- number:"+number+":{}", false);
+            return handleException(e, "cart save fail(保存失败)-- account:"+account+"-- productId:"+productId+"-- number:"+number+":{}", false);
         }
     }
 
@@ -200,7 +200,7 @@ public class CartController extends BaseController {
             Boolean result = cartService.updateByObj(cartDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "cart update fail(更新失败)-- cartId:"+cartId+"-- number:"+number+":{}", false);
+            return handleException(e, "cart update fail(更新失败)-- cartId:"+cartId+"-- number:"+number+":{}", false);
         }
     }
 
@@ -219,7 +219,7 @@ public class CartController extends BaseController {
             Boolean result = cartService.removeByObj(cartDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "cart remove fail(删除失败)-- cartId:"+cartId+":{}", false);
+            return handleException(e, "cart remove fail(删除失败)-- cartId:"+cartId+":{}", false);
         }
     }
 }

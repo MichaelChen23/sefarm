@@ -4,18 +4,19 @@ import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayConstants;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.sefarm.common.Constant;
+import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.constant.tips.SuccessTip;
-import com.sefarm.common.exception.BaseException;
+import com.sefarm.common.exception.BaseExcepitonEnum;
 import com.sefarm.common.util.FileUtil;
 import com.sefarm.common.util.HttpKit;
 import com.sefarm.config.wechat.SeFarmWXPayConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -47,11 +48,15 @@ public class BaseController {
     protected static SuccessTip SUCCESS_TIP = new SuccessTip();
 
     /**
-     * 引入自定义基础异常
-     * add by mc 2018-6-8
+     * 重复数据key
      */
-    @Autowired
-    public BaseException baseException;
+    private static final String DUPLICATE = "Duplicate";
+
+    /**
+     * 数据为空key
+     */
+    private static final String NULLDATA = "Null";
+
 
     protected HttpServletRequest getHttpServletRequest() {
         return HttpKit.getRequest();
@@ -137,6 +142,38 @@ public class BaseController {
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         headers.setContentDispositionFormData("attachment", dfileName);
         return new ResponseEntity<byte[]>(fileBytes, headers, HttpStatus.CREATED);
+    }
+
+    /**
+     * 统一处理异常
+     * @param e
+     * @param logMsg
+     * @param isExceptionDetail
+     * @return
+     */
+    @ResponseBody
+    public BaseResponse handleException(Exception e, String logMsg, boolean isExceptionDetail) {
+        logger.error(logMsg, e.getMessage());
+        if (e instanceof RuntimeException) {
+            //输出到后台管理系统，返回详细异常信息
+            if (isExceptionDetail) {
+                return new BaseResponse(400, e.getMessage());
+            }
+            if (e.getMessage().indexOf(DUPLICATE) != -1) {
+                //重复插入主键相同的数据
+                return  BaseResponse.getResultByException(BaseExcepitonEnum.EXIST_DATA);
+            } else if (e.getMessage().indexOf(NULLDATA) != -1) {
+                //空指针异常
+                return  BaseResponse.getResultByException(BaseExcepitonEnum.NULL_DATA);
+            }
+            //运行异常
+            return BaseResponse.getResultByException(BaseExcepitonEnum.RUNTIME_ERROR);
+        }
+        //输出到后台管理系统，返回详细异常信息
+        if (isExceptionDetail) {
+            return new BaseResponse(400, e.getMessage());
+        }
+        return BaseResponse.getResultByException(BaseExcepitonEnum.SYSTEM_ERROR);
     }
 
     /**

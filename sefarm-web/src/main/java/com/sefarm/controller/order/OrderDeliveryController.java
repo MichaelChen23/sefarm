@@ -101,7 +101,7 @@ public class OrderDeliveryController extends BaseController {
             Boolean res = orderDeliveryService.saveByObj(orderDeliveryDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-dely save fail(保存失败)--"+orderDeliveryDO.toString()+":{}", true);
+            return handleException(e, "order-dely save fail(保存失败)--"+orderDeliveryDO.toString()+":{}", true);
         }
     }
 
@@ -121,7 +121,7 @@ public class OrderDeliveryController extends BaseController {
             Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-dely update fail(更新失败)--"+orderDeliveryDO.toString()+":{}", true);
+            return handleException(e, "order-dely update fail(更新失败)--"+orderDeliveryDO.toString()+":{}", true);
         }
     }
 
@@ -142,7 +142,7 @@ public class OrderDeliveryController extends BaseController {
             Boolean res = orderDeliveryService.removeByObj(orderDeliveryDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-dely delete fail(删除失败)-- id:"+deliveryId+":{}", true);
+            return handleException(e, "order-dely delete fail(删除失败)-- id:"+deliveryId+":{}", true);
         }
     }
 
@@ -166,7 +166,7 @@ public class OrderDeliveryController extends BaseController {
             Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-dely ready fail(待发货失败)-- id:"+deliveryId+":{}", true);
+            return handleException(e, "order-dely ready fail(待发货失败)-- id:"+deliveryId+":{}", true);
         }
     }
 
@@ -189,7 +189,7 @@ public class OrderDeliveryController extends BaseController {
             Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-dely delivery fail(发货失败)-- id:"+deliveryId+":{}", true);
+            return handleException(e, "order-dely delivery fail(发货失败)-- id:"+deliveryId+":{}", true);
         }
     }
 
@@ -212,7 +212,7 @@ public class OrderDeliveryController extends BaseController {
             Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-dely receive fail(接收失败)-- id:"+deliveryId+":{}", true);
+            return handleException(e, "order-dely receive fail(接收失败)-- id:"+deliveryId+":{}", true);
         }
     }
 

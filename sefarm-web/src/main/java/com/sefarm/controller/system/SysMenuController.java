@@ -136,7 +136,7 @@ public class SysMenuController extends BaseController {
             Boolean res = sysMenuService.saveByObj(sysMenuDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-menu save fail(保存失败)--"+sysMenuDO.toString()+":{}", true);
+            return handleException(e, "sys-menu save fail(保存失败)--"+sysMenuDO.toString()+":{}", true);
         }
     }
 
@@ -160,7 +160,7 @@ public class SysMenuController extends BaseController {
             Boolean res = sysMenuService.updateByObj(sysMenuDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-menu update fail(更新失败)--"+sysMenuDO.toString()+":{}", true);
+            return handleException(e, "sys-menu update fail(更新失败)--"+sysMenuDO.toString()+":{}", true);
         }
     }
 
@@ -179,7 +179,7 @@ public class SysMenuController extends BaseController {
             Boolean res = sysMenuService.removeAllSubMenusByMenuId(menuId);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "sys-menu delete fail(删除失败)-- id:"+menuId+":{}", true);
+            return handleException(e, "sys-menu delete fail(删除失败)-- id:"+menuId+":{}", true);
         }
     }
 

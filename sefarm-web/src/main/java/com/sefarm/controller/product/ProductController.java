@@ -104,7 +104,7 @@ public class ProductController extends BaseController {
             Boolean res = productService.saveByObj(productDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod save fail(保存失败)--"+productDO.toString()+":{}", true);
+            return handleException(e, "prod save fail(保存失败)--"+productDO.toString()+":{}", true);
         }
     }
 
@@ -126,7 +126,7 @@ public class ProductController extends BaseController {
             Boolean res = productService.updateByObj(productDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod update fail(更新失败)--"+productDO.toString()+":{}", true);
+            return handleException(e, "prod update fail(更新失败)--"+productDO.toString()+":{}", true);
         }
     }
 
@@ -147,7 +147,7 @@ public class ProductController extends BaseController {
             Boolean res = productService.removeByObj(productDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "prod delete fail(删除失败)-- id:"+prodId+":{}", true);
+            return handleException(e, "prod delete fail(删除失败)-- id:"+prodId+":{}", true);
         }
     }
 
@@ -164,7 +164,7 @@ public class ProductController extends BaseController {
             List<ProductDO> list = productService.getProductListByTypeId(typeId);
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "product get all list by typeId (获取全部产品list失败)-- id:"+typeId+":{}", false);
+            return handleException(e, "product get all list by typeId (获取全部产品list失败)-- id:"+typeId+":{}", false);
         }
     }
 
@@ -180,7 +180,7 @@ public class ProductController extends BaseController {
             PageInfo<ProductDO> result = productService.searchProductDOPageList(pageIndex, pageSize, name);
             return new BaseResponse<>(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "search prod page list fail(搜索 产品 列表失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+"-- name:"+name+":{}", false);
+            return handleException(e, "search prod page list fail(搜索 产品 列表失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+"-- name:"+name+":{}", false);
         }
     }
 
@@ -197,7 +197,7 @@ public class ProductController extends BaseController {
             PageInfo<ProductDO> result = productService.getProductDOPageList(pageIndex, pageSize, typeId, name, newFlag, saleFlag, sortStr, orderStr);
             return new BaseResponse<>(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "get prod page list fail(按条件查询 产品 列表失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+"-- typeId:"+typeId+"-- name:"+name+"-- newFlag:"+newFlag+"-- saleFlag:"+saleFlag+"-- sortStr:"+sortStr+"-- orderStr:"+orderStr+":{}", false);
+            return handleException(e, "get prod page list fail(按条件查询 产品 列表失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+"-- typeId:"+typeId+"-- name:"+name+"-- newFlag:"+newFlag+"-- saleFlag:"+saleFlag+"-- sortStr:"+sortStr+"-- orderStr:"+orderStr+":{}", false);
         }
     }
 
@@ -216,7 +216,7 @@ public class ProductController extends BaseController {
             ProductDO result = productService.getOneByObj(productDO);
             return new BaseResponse<>(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "get prod fail(根据id查询 产品信息 失败)-- productId:" + productId + ":{}", false);
+            return handleException(e, "get prod fail(根据id查询 产品信息 失败)-- productId:" + productId + ":{}", false);
         }
     }
 

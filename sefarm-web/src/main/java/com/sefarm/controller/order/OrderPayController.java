@@ -2,10 +2,7 @@ package com.sefarm.controller.order;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
-import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
-import com.sefarm.common.constant.tips.ErrorTip;
-import com.sefarm.common.constant.tips.Tip;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.vo.OrderPayVO;
@@ -104,7 +101,7 @@ public class OrderPayController extends BaseController {
             Boolean res = orderPayService.saveByObj(orderPayDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-pay save fail(保存失败)--"+orderPayDO.toString()+":{}", true);
+            return handleException(e, "order-pay save fail(保存失败)--"+orderPayDO.toString()+":{}", true);
         }
     }
 
@@ -124,7 +121,7 @@ public class OrderPayController extends BaseController {
             Boolean res = orderPayService.updateByObj(orderPayDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-pay update fail(更新失败)--"+orderPayDO.toString()+":{}", true);
+            return handleException(e, "order-pay update fail(更新失败)--"+orderPayDO.toString()+":{}", true);
         }
     }
 
@@ -145,7 +142,7 @@ public class OrderPayController extends BaseController {
             Boolean res = orderPayService.removeByObj(orderPayDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-pay delete fail(删除失败)-- id:"+payId+":{}", true);
+            return handleException(e, "order-pay delete fail(删除失败)-- id:"+payId+":{}", true);
         }
     }
 

@@ -101,7 +101,7 @@ public class OrderItemController extends BaseController {
             Boolean res = orderItemService.saveByObj(orderItemDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-item save fail(保存失败)--"+orderItemDO.toString()+":{}", true);
+            return handleException(e, "order-item save fail(保存失败)--"+orderItemDO.toString()+":{}", true);
         }
     }
 
@@ -123,7 +123,7 @@ public class OrderItemController extends BaseController {
             Boolean res = orderItemService.updateByObj(orderItemDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-item update fail(更新失败)--"+orderItemDO.toString()+":{}", true);
+            return handleException(e, "order-item update fail(更新失败)--"+orderItemDO.toString()+":{}", true);
         }
     }
 
@@ -144,7 +144,7 @@ public class OrderItemController extends BaseController {
             Boolean res = orderItemService.removeByObj(orderItemDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-item delete fail(删除失败)-- id:"+itemId+":{}", true);
+            return handleException(e, "order-item delete fail(删除失败)-- id:"+itemId+":{}", true);
         }
     }
 
@@ -161,7 +161,7 @@ public class OrderItemController extends BaseController {
             List<OrderItemDO> list = orderItemService.getOrderItemDOAllListByOrderId(orderId);
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "order-item get all list by orderId (获取全部订单项list失败)-- id:" + orderId + ":{}", false);
+            return handleException(e, "order-item get all list by orderId (获取全部订单项list失败)-- id:" + orderId + ":{}", false);
         }
     }
 

@@ -104,7 +104,7 @@ public class AdvertController extends BaseController {
             Boolean res = advertService.saveByObj(advertDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "advert save fail(保存失败)--"+advertDO.toString()+":{}", true);
+            return handleException(e, "advert save fail(保存失败)--"+advertDO.toString()+":{}", true);
         }
     }
 
@@ -126,7 +126,7 @@ public class AdvertController extends BaseController {
             Boolean res = advertService.updateByObj(advertDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "advert update fail(更新失败)--"+advertDO.toString()+":{}", true);
+            return handleException(e, "advert update fail(更新失败)--"+advertDO.toString()+":{}", true);
         }
     }
 
@@ -147,7 +147,7 @@ public class AdvertController extends BaseController {
             Boolean res = advertService.removeByObj(advertDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "advert delete fail(删除失败)-- id:"+advertId+":{}", true);
+            return handleException(e, "advert delete fail(删除失败)-- id:"+advertId+":{}", true);
         }
     }
 
@@ -165,7 +165,7 @@ public class AdvertController extends BaseController {
             return new BaseResponse<>(list);
         } catch (Exception e) {
             logger.error("advert get page list (获取广告分页list失败)-- :{}", e.getMessage());
-            return baseException.handleException(e, logger, "advert get page list (获取广告分页list失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+":{}", false);
+            return handleException(e, "advert get page list (获取广告分页list失败)-- pageIndex:"+pageIndex+"-- pageSize:"+pageSize+":{}", false);
         }
     }
 

@@ -102,7 +102,7 @@ public class UserAddressController extends BaseController {
             Boolean res = userAddressService.saveByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user-adr save fail(保存失败)--"+userAddressDO.toString()+":{}", true);
+            return handleException(e, "user-adr save fail(保存失败)--"+userAddressDO.toString()+":{}", true);
         }
     }
 
@@ -122,7 +122,7 @@ public class UserAddressController extends BaseController {
             Boolean res = userAddressService.updateByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user-adr update fail(更新失败)--"+userAddressDO.toString()+":{}", true);
+            return handleException(e, "user-adr update fail(更新失败)--"+userAddressDO.toString()+":{}", true);
         }
     }
 
@@ -143,7 +143,7 @@ public class UserAddressController extends BaseController {
             Boolean res = userAddressService.removeByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user-adr delete fail(删除失败)-- id:"+addressId+":{}", true);
+            return handleException(e, "user-adr delete fail(删除失败)-- id:"+addressId+":{}", true);
         }
     }
 
@@ -191,7 +191,7 @@ public class UserAddressController extends BaseController {
             Boolean result = userAddressService.saveByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user-adr save fail(保存失败)--"+userAddressDO.toString()+":{}", false);
+            return handleException(e, "user-adr save fail(保存失败)--"+userAddressDO.toString()+":{}", false);
         }
     }
 
@@ -209,7 +209,7 @@ public class UserAddressController extends BaseController {
             Boolean result = userAddressService.removeByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user-adr delete fail(删除失败)-- id:"+userAddressId+":{}", false);
+            return handleException(e, "user-adr delete fail(删除失败)-- id:"+userAddressId+":{}", false);
         }
     }
 
@@ -259,7 +259,7 @@ public class UserAddressController extends BaseController {
             Boolean result = userAddressService.updateByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(result);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user-adr update fail(更新失败)--"+userAddressDO.toString()+":{}", false);
+            return handleException(e, "user-adr update fail(更新失败)--"+userAddressDO.toString()+":{}", false);
         }
     }
 
@@ -276,7 +276,7 @@ public class UserAddressController extends BaseController {
             List<UserAddressDO> list = userAddressService.getUserAddressDOAllListByAccountAndFlag(account, defaultFlag);
             return new BaseResponse<>(list);
         } catch (Exception e) {
-            return baseException.handleException(e, logger, "user-adr get all by account & defaultFlag (根据用户帐号和是否默认地址标签 获取所有的用户地址 数据失败)-- :{}", false);
+            return handleException(e, "user-adr get all by account & defaultFlag (根据用户帐号和是否默认地址标签 获取所有的用户地址 数据失败)-- :{}", false);
         }
     }
 
