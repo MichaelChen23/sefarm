@@ -1,6 +1,9 @@
 package com.sefarm.model.order;
 
 import com.sefarm.common.base.BaseDO;
+import com.sefarm.common.util.DateUtil;
+import com.sefarm.common.vo.OrderPayVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
@@ -114,6 +117,30 @@ public class OrderPayDO extends BaseDO implements Serializable {
      */
     @Column(name = "trade_type")
     private String tradeType;
+
+    /**
+     * 付款银行
+     */
+    @Column(name = "bank_type")
+    private String bankType;
+
+    /**
+     * 货币种类，默认人民币：CNY
+     */
+    @Column(name = "fee_type")
+    private String feeType;
+
+    /**
+     * 是否关注公众账号：Y-关注，N-未关注
+     */
+    @Column(name = "subscribe_flag")
+    private String subscribeFlag;
+
+    /**
+     * 微信支付订单号
+     */
+    @Column(name = "transaction_id")
+    private String transactionId;
 
     /**
      * 第三方支付反馈状态：PAY_SUCCESS 支付成功；PAY_FAIL 支付失败；REFUNDIND 退款中；REFUND_SUCCESS 退款成功；REFUND_FAIL 退款失败
@@ -446,6 +473,78 @@ public class OrderPayDO extends BaseDO implements Serializable {
     }
 
     /**
+     * 获取付款银行
+     *
+     * @return bank_type - 付款银行
+     */
+    public String getBankType() {
+        return bankType;
+    }
+
+    /**
+     * 设置付款银行
+     *
+     * @param bankType 交付款银行
+     */
+    public void setBankType(String bankType) {
+        this.bankType = bankType;
+    }
+
+    /**
+     * 获取货币种类，默认人民币：CNY
+     *
+     * @return fee_type - 货币种类，默认人民币：CNY
+     */
+    public String getFeeType() {
+        return feeType;
+    }
+
+    /**
+     * 设置货币种类，默认人民币：CNY
+     *
+     * @param feeType 货币种类，默认人民币：CNY
+     */
+    public void setFeeType(String feeType) {
+        this.feeType = feeType;
+    }
+
+    /**
+     * 获取是否关注公众账号：Y-关注，N-未关注
+     *
+     * @return subscribe_flag - 是否关注公众账号：Y-关注，N-未关注
+     */
+    public String getSubscribeFlag() {
+        return subscribeFlag;
+    }
+
+    /**
+     * 设置是否关注公众账号：Y-关注，N-未关注
+     *
+     * @param subscribeFlag 是否关注公众账号：Y-关注，N-未关注
+     */
+    public void setSubscribeFlag(String subscribeFlag) {
+        this.subscribeFlag = subscribeFlag;
+    }
+
+    /**
+     * 获取微信支付订单号
+     *
+     * @return transaction_id - 微信支付订单号
+     */
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    /**
+     * 设置微信支付订单号
+     *
+     * @param transactionId 微信支付订单号
+     */
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    /**
      * 获取第三方支付反馈状态：PAY_SUCCESS 支付成功；PAY_FAIL 支付失败；REFUNDIND 退款中；REFUND_SUCCESS 退款成功；REFUND_FAIL 退款失败
      *
      * @return pay_status - 第三方支付反馈状态：PAY_SUCCESS 支付成功；PAY_FAIL 支付失败；REFUNDIND 退款中；REFUND_SUCCESS 退款成功；REFUND_FAIL 退款失败
@@ -571,6 +670,56 @@ public class OrderPayDO extends BaseDO implements Serializable {
         this.refundTime = refundTime;
     }
 
+    /**
+     * 把VO转换为DO
+     * add by mc 2018-6-12
+     * @param orderPayVO
+     * @return
+     */
+    public static OrderPayDO changeOrderVOToDO(OrderPayVO orderPayVO) {
+        OrderPayDO orderPayDO = new OrderPayDO();
+        orderPayDO.setId(orderPayVO.getId());
+        orderPayDO.setOrderId(orderPayVO.getOrderId());
+        orderPayDO.setAccount(orderPayVO.getAccount());
+        orderPayDO.setPayAmount(orderPayVO.getPayAmount());
+        //创建时间的格式为yyyy-mm-dd hh:mm:ss
+        if (StringUtils.isNotBlank(orderPayVO.getCreateTime())) {
+            orderPayDO.setCreateTime(DateUtil.parseTime(orderPayVO.getCreateTime()));
+        }
+        orderPayDO.setPayType(orderPayVO.getPayType());
+        orderPayDO.setOpenid(orderPayVO.getOpenid());
+        orderPayDO.setAppId(orderPayVO.getAppId());
+        orderPayDO.setTimeStamp(orderPayVO.getTimeStamp());
+        orderPayDO.setNonceStr(orderPayVO.getNonceStr());
+        orderPayDO.setPrepayId(orderPayVO.getPrepayId());
+        orderPayDO.setSignType(orderPayVO.getSignType());
+        orderPayDO.setPaySign(orderPayVO.getPaySign());
+        orderPayDO.setMchId(orderPayVO.getMchId());
+        orderPayDO.setDeviceInfo(orderPayVO.getDeviceInfo());
+        orderPayDO.setTradeType(orderPayVO.getTradeType());
+        orderPayDO.setBankType(orderPayVO.getBankType());
+        orderPayDO.setFeeType(orderPayVO.getFeeType());
+        orderPayDO.setSubscribeFlag(orderPayVO.getSubscribeFlag());
+        orderPayDO.setTransactionId(orderPayVO.getTransactionId());
+        orderPayDO.setPayStatus(orderPayVO.getPayStatus());
+        orderPayDO.setErrCode(orderPayVO.getErrCode());
+        orderPayDO.setErrCodeDes(orderPayVO.getErrCodeDes());
+        orderPayDO.setPayIp(orderPayVO.getPayIp());
+        //更新时间的格式为yyyy-mm-dd hh:mm:ss
+        if (StringUtils.isNotBlank(orderPayVO.getUpdateTime())) {
+            orderPayDO.setUpdateTime(DateUtil.parseTime(orderPayVO.getUpdateTime()));
+        }
+        //支付结束时间的格式为yyyyMMddHHmmss
+        if (StringUtils.isNotBlank(orderPayVO.getEndTime())) {
+            orderPayDO.setEndTime(DateUtil.parseDatetime(orderPayVO.getEndTime()));
+        }
+        //支付结束时间的格式为yyyyMMddHHmmss
+        if (StringUtils.isNotBlank(orderPayVO.getRefundTime())) {
+            orderPayDO.setRefundTime(DateUtil.parseDatetime(orderPayVO.getRefundTime()));
+        }
+        return orderPayDO;
+    }
+
     @Override
     public String toString() {
         return "OrderPayDO{" +
@@ -590,6 +739,10 @@ public class OrderPayDO extends BaseDO implements Serializable {
                 ", mchId='" + mchId + '\'' +
                 ", deviceInfo='" + deviceInfo + '\'' +
                 ", tradeType='" + tradeType + '\'' +
+                ", bankType='" + bankType + '\'' +
+                ", feeType='" + feeType + '\'' +
+                ", subscribeFlag='" + subscribeFlag + '\'' +
+                ", transactionId='" + transactionId + '\'' +
                 ", payStatus='" + payStatus + '\'' +
                 ", errCode='" + errCode + '\'' +
                 ", errCodeDes='" + errCodeDes + '\'' +

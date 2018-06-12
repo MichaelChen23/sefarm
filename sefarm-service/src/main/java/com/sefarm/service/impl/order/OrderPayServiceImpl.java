@@ -40,4 +40,9 @@ public class OrderPayServiceImpl extends BaseServiceImpl<OrderPayMapper, OrderPa
     public List<OrderPayVO> getOrderPayVOByOrderId(Long orderId) {
         return getMapper().getOrderPayVOByOrderId(orderId);
     }
+
+    @Override
+    public List<OrderPayVO> getOrderPayVOByOrderNo(String orderNo) {
+        return getMapper().getOrderPayVOByOrderNo(orderNo);
+    }
 }

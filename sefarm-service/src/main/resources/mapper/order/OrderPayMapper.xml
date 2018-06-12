@@ -21,6 +21,10 @@
     <result column="mch_id" jdbcType="VARCHAR" property="mchId" />
     <result column="device_info" jdbcType="VARCHAR" property="deviceInfo" />
     <result column="trade_type" jdbcType="VARCHAR" property="tradeType" />
+    <result column="bank_type" jdbcType="VARCHAR" property="bankType" />
+    <result column="fee_type" jdbcType="VARCHAR" property="feeType" />
+    <result column="subscribe_flag" jdbcType="CHAR" property="subscribeFlag" />
+    <result column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
     <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
     <result column="err_code" jdbcType="VARCHAR" property="errCode" />
     <result column="err_code_des" jdbcType="VARCHAR" property="errCodeDes" />
@@ -48,6 +52,10 @@
     <result column="mch_id" jdbcType="VARCHAR" property="mchId" />
     <result column="device_info" jdbcType="VARCHAR" property="deviceInfo" />
     <result column="trade_type" jdbcType="VARCHAR" property="tradeType" />
+    <result column="bank_type" jdbcType="VARCHAR" property="bankType" />
+    <result column="fee_type" jdbcType="VARCHAR" property="feeType" />
+    <result column="subscribe_flag" jdbcType="CHAR" property="subscribeFlag" />
+    <result column="transaction_id" jdbcType="VARCHAR" property="transactionId" />
     <result column="pay_status" jdbcType="VARCHAR" property="payStatus" />
     <result column="err_code" jdbcType="VARCHAR" property="errCode" />
     <result column="err_code_des" jdbcType="VARCHAR" property="errCodeDes" />
@@ -60,7 +68,7 @@
   <sql id="selectOrderPayVOALL">
     SELECT
     sop.id, sop.order_id, so.order_no AS order_no, sop.account, sop.pay_amount, DATE_FORMAT(sop.create_time, '%Y-%m-%d %T') AS create_time, sop.pay_type,
-    sop.openid, sop.app_id, sop.time_stamp, sop.nonce_str, sop.prepay_id, sop.sign_type, sop.pay_sign, sop.mch_id, sop.device_info, sop.trade_type,
+    sop.openid, sop.app_id, sop.time_stamp, sop.nonce_str, sop.prepay_id, sop.sign_type, sop.pay_sign, sop.mch_id, sop.device_info, sop.trade_type, sop.bank_type, sop.fee_type, sop.subscribe_flag, sop.transaction_id,
     sop.pay_status, sop.err_code, sop.err_code_des, sop.pay_ip, DATE_FORMAT(sop.update_time, '%Y-%m-%d %T') AS update_time, DATE_FORMAT(sop.end_time, '%Y-%m-%d %T') AS end_time, DATE_FORMAT(sop.refund_time, '%Y-%m-%d %T') AS refund_time
     FROM sefarm_order_pay sop
     LEFT JOIN sefarm_order so ON so.id = sop.order_id
@@ -103,6 +111,14 @@
     <include refid="selectOrderPayVOALL" />
     <where>
       sop.order_id = #{orderId}
+    </where>
+    ORDER BY create_time DESC
+  </select>
+
+  <select id="getOrderPayVOByOrderNo" resultMap="OrderPayVOResultMap">
+    <include refid="selectOrderPayVOALL" />
+    <where>
+      so.order_no = #{orderNo}
     </where>
     ORDER BY create_time DESC
   </select>

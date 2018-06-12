@@ -21,4 +21,6 @@ public interface OrderPayMapper extends SeFarmMapper<OrderPayDO> {
 
     List<OrderPayVO> getOrderPayVOByOrderId(@Param("orderId") Long orderId);
 
+    List<OrderPayVO> getOrderPayVOByOrderNo(@Param("orderNo") String orderNo);
+
 }

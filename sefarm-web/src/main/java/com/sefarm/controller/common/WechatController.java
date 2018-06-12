@@ -5,7 +5,10 @@ import com.github.wxpay.sdk.WXPayUtil;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.util.HttpKit;
+import com.sefarm.common.vo.OrderPayVO;
+import com.sefarm.model.order.OrderPayDO;
 import com.sefarm.model.user.UserDO;
+import com.sefarm.service.order.IOrderPayService;
 import com.sefarm.service.user.IUserService;
 import com.sefarm.util.ToolUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -24,8 +27,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,6 +47,9 @@ public class WechatController {
 
     @Autowired
     public IUserService userService;
+
+    @Autowired
+    public IOrderPayService orderPayService;
 
     /**
      * 根据code获取accessToken
@@ -147,7 +155,7 @@ public class WechatController {
     /**
      * 微信支付-下单后-返回结果
      */
-    @RequestMapping(value = "/notify", method = RequestMethod.GET)
+    @RequestMapping(value = "/notify")
     public void weChatNotifyPayResult(HttpServletRequest request, HttpServletResponse response) throws IOException {
         InputStream inStream = request.getInputStream();
         ByteArrayOutputStream outSteam = new ByteArrayOutputStream();
@@ -160,7 +168,7 @@ public class WechatController {
         inStream.close();
         String result = new String(outSteam.toByteArray(), "utf-8");
         logger.info("微信支付返回的result: {}" , result);
-        Map<String, String> map = null;
+        Map<String, String> map = new HashMap<>(18);
         try {
             map = WXPayUtil.xmlToMap(result);
         } catch (Exception e) {
@@ -169,23 +177,49 @@ public class WechatController {
 
         // 此处调用订单查询接口验证是否交易成功
         logger.info("微信支付返回的info: {}" , map.toString());
-        boolean isSucc = map!=null? true : false;
+        boolean isSucc = false;
+        if (!map.isEmpty() && Constant.WECHAT_SUCCESS.equals(map.get("return_code"))) {
+            isSucc = true;
+        }
+
 
         // 支付成功，商户处理后同步返回给微信参数
         PrintWriter writer = response.getWriter();
+        // 默认支付结果是失败
+        String noticeStr = setXML(Constant.WECHAT_FAIL, "BAD");
 
-        if (!isSucc) {
-            // 支付失败， 记录流水失败
-            logger.error("微信支付失败");
-        } else {
-            // 付款成功，业务处理完毕
-            logger.info("微信支付成功");
-            // 通知微信已经收到消息，不要再给我发消息了，否则微信会8连击调用本接口
-            String noticeStr = setXML("SUCCESS", "");
-            writer.write(noticeStr);
-            writer.flush();
+        if (isSucc) {
+            // 校验微信返回的支付成功信息
+            List<OrderPayVO> orderPayVOList = orderPayService.getOrderPayVOByOrderNo(map.get("out_trade_no"));
+            if (orderPayVOList != null && orderPayVOList.size() > 0) {
+                // 根据订单号 获取最新的一条支付记录
+                OrderPayVO orderPayVO = orderPayVOList.get(0);
+                // 检验支付账户和订单金额是否一致
+                String openId = map.get("openid");
+                String totalFee = map.get("total_fee");
+                //把总额转换为 分
+                String totalAmount = String.valueOf(orderPayVO.getPayAmount().multiply(new BigDecimal(100)).intValue());
+                if (openId.equals(orderPayVO.getOpenid()) && totalFee.equals(totalAmount)) {
+                    //账户&金额一致就把支付成功信息保存在订单支付记录里
+                    orderPayVO.setBankType(map.get("bank_type"));
+                    orderPayVO.setFeeType(map.get("fee_type"));
+                    orderPayVO.setSubscribeFlag(map.get("is_subscribe"));
+                    orderPayVO.setTransactionId(map.get("transaction_id"));
+                    orderPayVO.setEndTime(map.get("time_end"));
+                    //改变状态为支付成功
+                    orderPayVO.setPayStatus(Constant.PAY_SUCCESS);
+                    //更新最新支付成功的订单支付记录
+                    OrderPayDO orderPayDO = OrderPayDO.changeOrderVOToDO(orderPayVO);
+                    Boolean res = orderPayService.updateByObj(orderPayDO);
+                    if (res) {
+                        // 付款成功，业务处理完毕
+                        logger.info("订单号：" + orderPayVO.getOrderNo() + "微信支付成功!");
+                        // 通知微信已经收到消息，不要再给我发消息了，否则微信会8连击调用本接口
+                        noticeStr = setXML(Constant.WECHAT_SUCCESS, "OK");
+                    }
+                }
+            }
         }
-        String noticeStr = setXML("FAIL", "");
         writer.write(noticeStr);
         writer.flush();
     }

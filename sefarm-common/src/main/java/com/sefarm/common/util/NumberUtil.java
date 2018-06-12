@@ -2,7 +2,8 @@ package com.sefarm.common.util;
 
 /**
  * 处理数字、号码工具类
- * add by mc 2018-4-29
+ * @author mc
+ * @date 2018-4-29
  */
 public class NumberUtil {
 

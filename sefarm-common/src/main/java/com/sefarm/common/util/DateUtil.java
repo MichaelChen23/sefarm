@@ -155,6 +155,15 @@ public class DateUtil {
 	}
 
 	/**
+	 * 格式化日期时间
+	 *
+	 * @return
+	 */
+	public static Date parseDatetime(String date) {
+		return parse(date,"yyyyMMddHHmmss");
+	}
+
+	/**
 	 * 格式化日期
 	 *
 	 * @return

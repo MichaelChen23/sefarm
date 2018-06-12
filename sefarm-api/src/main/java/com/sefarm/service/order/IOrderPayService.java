@@ -26,4 +26,12 @@ public interface IOrderPayService extends IBaseService<OrderPayDO> {
      * @return
      */
     List<OrderPayVO> getOrderPayVOByOrderId(Long orderId);
+
+    /**
+     * 根据订单号查找所有的支付记录
+     * add by mc 2018-6-12
+     * @param orderNo
+     * @return
+     */
+    List<OrderPayVO> getOrderPayVOByOrderNo(String orderNo);
 }

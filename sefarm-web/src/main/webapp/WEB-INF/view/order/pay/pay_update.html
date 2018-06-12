@@ -24,6 +24,10 @@
 
                     <#input id="tradeType" name="交易类型" underline="true" value="${orderPayVO.tradeType}"/>
 
+                    <#input id="bankType" name="付款银行" underline="true" value="${orderPayVO.bankType}"/>
+
+                    <#input id="feeType" name="货币种类" underline="true" value="${orderPayVO.feeType}"/>
+
                     <#input id="updateTime" name="状态更新时间" underline="true" value="${orderPayVO.updateTime}" disabled="disabled"/>
 
                     <#input id="endTime" name="支付结束时间" underline="true" value="${orderPayVO.endTime}" disabled="disabled"/>
@@ -52,6 +56,10 @@
                         <#input id="paySign" name="签名" underline="true" value="${orderPayVO.paySign}"/>
 
                         <#input id="deviceInfo" name="设备号" underline="true" value="${orderPayVO.deviceInfo}"/>
+
+                        <#input id="subscribeFlag" name="是否关注公众号" underline="true" value="${orderPayVO.subscribeFlag}"/>
+
+                        <#input id="transactionId" name="微信支付订单号" underline="true" value="${orderPayVO.transactionId}"/>
 
                         <#input id="payStatus" name="支付状态" underline="true" value="${orderPayVO.payStatus}"/>
 

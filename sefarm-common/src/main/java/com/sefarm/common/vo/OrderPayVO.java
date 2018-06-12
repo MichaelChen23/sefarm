@@ -97,6 +97,26 @@ public class OrderPayVO implements Serializable {
     private String tradeType;
 
     /**
+     * 付款银行
+     */
+    private String bankType;
+
+    /**
+     * 货币种类，默认人民币：CNY
+     */
+    private String feeType;
+
+    /**
+     * 是否关注公众账号：Y-关注，N-未关注
+     */
+    private String subscribeFlag;
+
+    /**
+     * 微信支付订单号
+     */
+    private String transactionId;
+
+    /**
      * 第三方支付反馈状态：PAY_SUCCESS 支付成功；PAY_FAIL 支付失败；REFUNDIND 退款中；REFUND_SUCCESS 退款成功；REFUND_FAIL 退款失败
      */
     private String payStatus;
@@ -267,6 +287,38 @@ public class OrderPayVO implements Serializable {
         this.tradeType = tradeType;
     }
 
+    public String getBankType() {
+        return bankType;
+    }
+
+    public void setBankType(String bankType) {
+        this.bankType = bankType;
+    }
+
+    public String getFeeType() {
+        return feeType;
+    }
+
+    public void setFeeType(String feeType) {
+        this.feeType = feeType;
+    }
+
+    public String getSubscribeFlag() {
+        return subscribeFlag;
+    }
+
+    public void setSubscribeFlag(String subscribeFlag) {
+        this.subscribeFlag = subscribeFlag;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
     public String getPayStatus() {
         return payStatus;
     }
@@ -343,6 +395,10 @@ public class OrderPayVO implements Serializable {
                 ", mchId='" + mchId + '\'' +
                 ", deviceInfo='" + deviceInfo + '\'' +
                 ", tradeType='" + tradeType + '\'' +
+                ", bankType='" + bankType + '\'' +
+                ", feeType='" + feeType + '\'' +
+                ", subscribeFlag='" + subscribeFlag + '\'' +
+                ", transactionId='" + transactionId + '\'' +
                 ", payStatus='" + payStatus + '\'' +
                 ", errCode='" + errCode + '\'' +
                 ", errCodeDes='" + errCodeDes + '\'' +

@@ -150,4 +150,15 @@ public abstract class Constant {
 	 * 微信返回失败状态码
 	 */
 	public static final String WECHAT_FAIL = "FAIL";
+
+	/**
+	 * 微信返回成功状态码
+	 */
+	public static final String WECHAT_SUCCESS = "SUCCESS";
+
+	/**
+	 * 支付成功状态码
+	 */
+	public static final String PAY_SUCCESS = "PAY_SUCCESS";
+
 }
