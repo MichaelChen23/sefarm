@@ -41,10 +41,16 @@ Order.initColumn = function () {
  * @param index
  */
 function orderStatusFormatter(value, row, index) {
-    if (row['status'] == 'y') {
+    if (row['status'] == 'done') {
         return '完成';
     }
-    if (row['status'] == 'n') {
+    if (row['status'] == 'pay') {
+        return '支付成功';
+    }
+    if (row['status'] == 'sending') {
+        return '配送中';
+    }
+    if (row['status'] == 'undone') {
         return '未完成';
     }
     return value;

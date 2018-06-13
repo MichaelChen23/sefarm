@@ -4,11 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.constant.state.OrderStatus;
 import com.sefarm.common.util.HttpKit;
 import com.sefarm.common.vo.OrderPayVO;
+import com.sefarm.model.order.OrderDO;
 import com.sefarm.model.order.OrderPayDO;
 import com.sefarm.model.user.UserDO;
 import com.sefarm.service.order.IOrderPayService;
+import com.sefarm.service.order.IOrderService;
 import com.sefarm.service.user.IUserService;
 import com.sefarm.util.ToolUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +53,9 @@ public class WechatController {
 
     @Autowired
     public IOrderPayService orderPayService;
+
+    @Autowired
+    public IOrderService orderService;
 
     /**
      * 根据code获取accessToken
@@ -211,7 +217,14 @@ public class WechatController {
                     //更新最新支付成功的订单支付记录
                     OrderPayDO orderPayDO = OrderPayDO.changeOrderVOToDO(orderPayVO);
                     Boolean res = orderPayService.updateByObj(orderPayDO);
-                    if (res) {
+
+                    //更新订单状态为支付成功
+                    OrderDO orderDO = new OrderDO();
+                    orderDO.setId(orderPayVO.getOrderId());
+                    orderDO.setStatus(OrderStatus.PAY.getCode());
+                    Boolean orderRes = orderService.updateByObj(orderDO);
+                    //在支付记录表和订单表都改变状态为支付成功才能返回成功信息给微信后台
+                    if (res && orderRes) {
                         // 付款成功，业务处理完毕
                         logger.info("订单号：" + orderPayVO.getOrderNo() + "微信支付成功!");
                         // 通知微信已经收到消息，不要再给我发消息了，否则微信会8连击调用本接口

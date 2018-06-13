@@ -71,7 +71,7 @@ public class OrderDeliveryVO implements Serializable {
     private String expressNo;
 
     /**
-     * 订单状态：new-新增；check-审核中；ready-待发货；delivery-已发货；receive-已签收；cancel-已取消；默认：new-新增
+     * 订单配送状态：new-新增；check-审核中；ready-待发货；delivery-已发货；receive-已签收；cancel-已取消；默认：new-新增
      */
     private String status;
 

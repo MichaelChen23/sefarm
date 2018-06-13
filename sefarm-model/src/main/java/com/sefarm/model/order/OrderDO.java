@@ -327,18 +327,18 @@ public class OrderDO extends BaseDO implements Serializable {
     }
 
     /**
-     * 获取订单状态：y-完成，n-未完成，默认n
+     * 获取订单状态：done-完成，pay-支付成功，sending-配送中，undone-未完成，默认undone
      *
-     * @return status - 订单状态：y-完成，n-未完成，默认n
+     * @return status - 订单状态：done-完成，pay-支付成功，sending-配送中，undone-未完成，默认undone
      */
     public String getStatus() {
         return status;
     }
 
     /**
-     * 设置订单状态：y-完成，n-未完成，默认n
+     * 设置订单状态：done-完成，pay-支付成功，sending-配送中，undone-未完成，默认undone
      *
-     * @param status 订单状态：y-完成，n-未完成，默认n
+     * @param status 订单状态：done-完成，pay-支付成功，sending-配送中，undone-未完成，默认undone
      */
     public void setStatus(String status) {
         this.status = status;

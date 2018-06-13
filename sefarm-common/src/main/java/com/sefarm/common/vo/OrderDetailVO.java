@@ -69,7 +69,7 @@ public class OrderDetailVO implements Serializable {
     private String requirement;
 
     /**
-     * 订单状态：y-完成，n-未完成，默认n
+     * 订单状态：done-完成，pay-支付成功，sending-配送中，undone-未完成，默认undone
      */
     private String status;
 
@@ -94,7 +94,7 @@ public class OrderDetailVO implements Serializable {
     private String mobile;
 
     /**
-     * 派送状态：new-新增；check-审核中；ready-待发货；delivery-已发货；receive-已签收；cancel-已取消；默认：new-新增
+     * 配送状态：new-新增；check-审核中；ready-待发货；delivery-已发货；receive-已签收；cancel-已取消；默认：new-新增
      */
     private String deliveryStatus;
 

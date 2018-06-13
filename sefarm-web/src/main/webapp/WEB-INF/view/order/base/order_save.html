@@ -38,8 +38,10 @@
                         <#input id="requirement" name="客户要求" underline="true"/>
 
                         <#select id="status" name="订单状态">
-                            <option value="y">完成</option>
-                            <option value="n" selected="true">未完成</option>
+                            <option value="done">完成</option>
+                            <option value="pay">支付成功</option>
+                            <option value="sending">配送中</option>
+                            <option value="undone" selected="true">未完成</option>
                         </#select>
 
                     </div>

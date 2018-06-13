@@ -190,6 +190,7 @@ OrderDelivery.readyOrder = function () {
 OrderDelivery.deliveryOrder = function () {
     if (this.check()) {
         var deliveryId = OrderDelivery.seItem.id;
+        var orderId = OrderDelivery.seItem.orderId;
         var ajax = new $ax(Feng.ctxPath + "/api/order-dely/delivery", function (data) {
             if (data.code == 200) {
                 Feng.success("发货成功!");
@@ -201,6 +202,7 @@ OrderDelivery.deliveryOrder = function () {
             Feng.infoDetail("发货失败!", data.msg);
         });
         ajax.set("deliveryId", deliveryId);
+        ajax.set("orderId", orderId);
         ajax.start();
     }
 };
@@ -211,6 +213,7 @@ OrderDelivery.deliveryOrder = function () {
 OrderDelivery.receiveOrder = function () {
     if (this.check()) {
         var deliveryId = OrderDelivery.seItem.id;
+        var orderId = OrderDelivery.seItem.orderId;
         var ajax = new $ax(Feng.ctxPath + "/api/order-dely/receive", function (data) {
             if (data.code == 200) {
                 Feng.success("接收成功!");
@@ -222,6 +225,7 @@ OrderDelivery.receiveOrder = function () {
             Feng.infoDetail("接收失败!", data.msg);
         });
         ajax.set("deliveryId", deliveryId);
+        ajax.set("orderId", orderId);
         ajax.start();
     }
 };

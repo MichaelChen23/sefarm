@@ -3,6 +3,7 @@ package com.sefarm.controller.order;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseResponse;
+import com.sefarm.common.constant.state.OrderStatus;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.util.DateUtil;
@@ -391,7 +392,7 @@ public class OrderController extends BaseController {
                 OrderDO orderDO = new OrderDO();
                 orderDO.setId(orderId);
                 //只能删除未完成的订单
-                orderDO.setStatus(Constant.STATUS_LOCK);
+                orderDO.setStatus(OrderStatus.UNDONE.getCode());
                 Boolean orderResult = orderService.removeByObj(orderDO);
                 //删除订单成功之后才能删除其订单项
                 if(orderResult) {

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.Constant;
 import com.sefarm.common.base.BaseServiceImpl;
+import com.sefarm.common.constant.state.OrderStatus;
 import com.sefarm.common.util.StrKit;
 import com.sefarm.common.vo.CartVO;
 import com.sefarm.common.vo.OrderDetailVO;
@@ -112,7 +113,7 @@ public class OrderServiceImpl extends BaseServiceImpl<OrderMapper, OrderDO> impl
         //设置总费用=产品总额+运费总额
         order.setAmount(orderTotalAmount.add(order.getCarryFeeTotal() != null ? order.getCarryFeeTotal() :  new BigDecimal(0)));
         //之前插入数据的时候，要返回id，所以没有把status设置为默认值，现在设置status为未完成
-        order.setStatus(Constant.STATUS_LOCK);
+        order.setStatus(OrderStatus.UNDONE.getCode());
         //默认支付类型为wechat
         order.setPayType(Constant.WECHAT_TYPE);
         getMapper().updateByPrimaryKeySelective(order);

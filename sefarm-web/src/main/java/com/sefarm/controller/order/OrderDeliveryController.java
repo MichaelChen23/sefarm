@@ -3,12 +3,15 @@ package com.sefarm.controller.order;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.constant.state.OrderDeliveryStatus;
+import com.sefarm.common.constant.state.OrderStatus;
 import com.sefarm.common.exception.BizExceptionEnum;
 import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.vo.OrderDeliveryVO;
 import com.sefarm.controller.common.BaseController;
+import com.sefarm.model.order.OrderDO;
 import com.sefarm.model.order.OrderDeliveryDO;
 import com.sefarm.service.order.IOrderDeliveryService;
+import com.sefarm.service.order.IOrderService;
 import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +40,9 @@ public class OrderDeliveryController extends BaseController {
 
     @Autowired
     public IOrderDeliveryService orderDeliveryService;
+
+    @Autowired
+    public IOrderService orderService;
 
     /**
      * 跳转到查看 订单配送 列表的页面
@@ -173,11 +179,12 @@ public class OrderDeliveryController extends BaseController {
     /**
      * 订单配送——发货
      * @param deliveryId
+     * @param orderId
      * @return
      */
     @RequestMapping(value = "/delivery", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse deliveryOrder(@RequestParam Long deliveryId) {
+    public BaseResponse deliveryOrder(@RequestParam Long deliveryId, @RequestParam Long orderId) {
         if (ToolUtil.isEmpty(deliveryId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -187,7 +194,12 @@ public class OrderDeliveryController extends BaseController {
             orderDeliveryDO.setStatus(OrderDeliveryStatus.DELIVERY.getCode());
             orderDeliveryDO.setDeliveryTime(new Date());
             Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
-            return BaseResponse.getRespByResultBool(res);
+            //更新订单状态为配送中
+            OrderDO orderDO = new OrderDO();
+            orderDO.setId(orderId);
+            orderDO.setStatus(OrderStatus.SENDING.getCode());
+            Boolean orderRes = orderService.updateByObj(orderDO);
+            return BaseResponse.getRespByResultBool(res && orderRes);
         } catch (Exception e) {
             return handleException(e, "order-dely delivery fail(发货失败)-- id:"+deliveryId+":{}", true);
         }
@@ -196,11 +208,12 @@ public class OrderDeliveryController extends BaseController {
     /**
      * 订单配送——已签收
      * @param deliveryId
+     * @param orderId
      * @return
      */
     @RequestMapping(value = "/receive", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse receiveOrder(@RequestParam Long deliveryId) {
+    public BaseResponse receiveOrder(@RequestParam Long deliveryId, @RequestParam Long orderId) {
         if (ToolUtil.isEmpty(deliveryId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
@@ -210,7 +223,12 @@ public class OrderDeliveryController extends BaseController {
             orderDeliveryDO.setStatus(OrderDeliveryStatus.RECEIVE.getCode());
             orderDeliveryDO.setReceiveTime(new Date());
             Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
-            return BaseResponse.getRespByResultBool(res);
+            //更新订单状态为已完成
+            OrderDO orderDO = new OrderDO();
+            orderDO.setId(orderId);
+            orderDO.setStatus(OrderStatus.DONE.getCode());
+            Boolean orderRes = orderService.updateByObj(orderDO);
+            return BaseResponse.getRespByResultBool(res && orderRes);
         } catch (Exception e) {
             return handleException(e, "order-dely receive fail(接收失败)-- id:"+deliveryId+":{}", true);
         }
