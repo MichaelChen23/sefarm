@@ -33,6 +33,11 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuDO
     }
 
     @Override
+    public List<String> getMenuUrlsByRoleId(Long roleId) {
+        return getMapper().getMenuUrlsByRoleId(roleId);
+    }
+
+    @Override
     public List<ZTreeNode> getAllMenuTree() {
         return getMapper().getAllMenuTree();
     }

@@ -1,5 +1,6 @@
 package com.sefarm.config.beetl;
 
+import com.sefarm.config.shiro.ShiroHandler;
 import com.sefarm.util.ToolUtil;
 import org.beetl.ext.spring.BeetlGroupUtilConfiguration;
 
@@ -14,7 +15,7 @@ public class BeetlConfiguration extends BeetlGroupUtilConfiguration {
 	@Override
 	public void initOther() {
 
-//		groupTemplate.registerFunctionPackage("shiro", new ShiroExt());
+		groupTemplate.registerFunctionPackage("shiro", new ShiroHandler());
 		groupTemplate.registerFunctionPackage("tool", new ToolUtil());
 
 	}

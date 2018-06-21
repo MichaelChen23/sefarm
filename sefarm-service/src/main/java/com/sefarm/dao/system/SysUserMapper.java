@@ -18,4 +18,6 @@ public interface SysUserMapper extends SeFarmMapper<SysUserDO> {
     List<SysUserVO> getSysUserVOList(@Param("sysDeptId")Long sysDeptId, @Param("name")String name, @Param("createTimeBegin")String createTimeBegin, @Param("createTimeEnd")String createTimeEnd, @Param("sortName")String sort, @Param("sortOrder")String order);
 
     SysUserVO getSysUserVO(@Param("sysUserId")Long sysUserId);
+
+    SysUserVO getSysUserVOByUsername(@Param("username")String username);
 }

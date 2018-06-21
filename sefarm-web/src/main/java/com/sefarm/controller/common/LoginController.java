@@ -2,16 +2,15 @@ package com.sefarm.controller.common;
 
 import com.google.code.kaptcha.Constants;
 import com.sefarm.common.Constant;
-import com.sefarm.common.exception.BizExceptionEnum;
-import com.sefarm.common.exception.BussinessException;
 import com.sefarm.common.exception.InvalidKaptchaException;
 import com.sefarm.common.node.MenuNode;
 import com.sefarm.common.vo.SysUserVO;
-import com.sefarm.model.system.SysUserDO;
 import com.sefarm.service.system.ISysMenuService;
 import com.sefarm.service.system.ISysUserService;
+import com.sefarm.util.ShiroUtil;
 import com.sefarm.util.ToolUtil;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,27 +39,32 @@ public class LoginController extends BaseController {
     public ISysMenuService sysMenuService;
 
     /**
-     * 跳转到主页
+     * 跳转到管理后台主页
      */
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String index(Model model) {
-        //获取菜单列表
-//        List<Integer> roleList = ShiroKit.getUser().getRoleList();
-//        if(roleList == null || roleList.size() == 0){
-//            ShiroKit.getSubject().logout();
-//        model.addAttribute("tips", "该用户没有角色，无法登陆");
-//        return "/login.html";
-//        }
-
-        Long userId = (Long) super.getSession().getAttribute("userId");
-
-        if (ToolUtil.isEmpty(userId)) {
-            throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
-        }
-
         //获取用户信息
-        SysUserVO sysUserVO = sysUserService.getSysUserVO(userId);
+        SysUserVO sysUserVO = ShiroUtil.getSysUser();
+
         if (sysUserVO != null) {
+            //判断用户角色
+            Long roleId = sysUserVO.getSysRoleId();
+            if(roleId == null || roleId <= 0){
+                //退出登录
+                ShiroUtil.getSubject().logout();
+                model.addAttribute("tips", "该用户没有角色，无法登录");
+                //跳转到登录界面
+                return "/login.html";
+            }
+            //该用户给禁用
+            if (!Constant.STATUS_UNLOCK.equals(sysUserVO.getStatus())) {
+                //退出登录
+                ShiroUtil.getSubject().logout();
+                model.addAttribute("tips", "该用户给禁用，无法登录");
+                //跳转到登录界面
+                return "/login.html";
+            }
+
             model.addAttribute("username", sysUserVO.getUsername());
             model.addAttribute("rolename", sysUserVO.getSysRoleName());
 
@@ -87,11 +91,11 @@ public class LoginController extends BaseController {
      */
     @RequestMapping(value = "/admin/login", method = RequestMethod.GET)
     public String login() {
-//        if (ShiroKit.isAuthenticated() || ShiroKit.getUser() != null) {
-//            return REDIRECT + "/";
-//        } else {
-        return "/login.html";
-//        }
+        if (ShiroUtil.isAuthenticated() || ShiroUtil.getSysUser() != null) {
+            return REDIRECT + "/admin";
+        } else {
+            return "/login.html";
+        }
     }
 
     /**
@@ -112,39 +116,17 @@ public class LoginController extends BaseController {
             }
         }
 //
-//        Subject currentUser = ShiroKit.getSubject();
-//        UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray());
+        Subject currentUser = ShiroUtil.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray());
 //        token.setRememberMe(true);
-//
-//        currentUser.login(token);
-//
-//        ShiroUser shiroUser = ShiroKit.getUser();
-//        super.getSession().setAttribute("shiroUser", shiroUser);
-//        super.getSession().setAttribute("username", shiroUser.getAccount());
-//
+        currentUser.login(token);
+
 //        LogManager.me().executeLog(LogTaskFactory.loginLog(shiroUser.getId(), getIp()));
 //
 //        ShiroKit.getSession().setAttribute("sessionFlag",true);
 //        return REDIRECT + "/";
 
-
-        SysUserDO userDO = null;
-        if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
-            SysUserDO sysUserDO = new SysUserDO();
-            sysUserDO.setUsername(username);
-            sysUserDO.setPassword(password);
-            userDO = sysUserService.getOneByObj(sysUserDO);
-        }
-        if (userDO != null && Constant.STATUS_UNLOCK.equals(userDO.getStatus())) {
-//            userDO.setLastLoginTime(new Date());
-//            //更新最新登录时间
-//            sysUserService.updateByObj(userDO);
-            super.getSession().setAttribute("userId", userDO.getId());
-            return REDIRECT + "/admin";
-        } else {
-            return "/login.html";
-        }
-
+        return REDIRECT + "/admin";
     }
 
     /**
@@ -153,7 +135,7 @@ public class LoginController extends BaseController {
     @RequestMapping(value = "/admin/logout", method = RequestMethod.GET)
     public String logOut() {
 //        LogManager.me().executeLog(LogTaskFactory.exitLog(ShiroKit.getUser().getId(), getIp()));
-//        ShiroKit.getSubject().logout();
+        ShiroUtil.getSubject().logout();
         return REDIRECT + "/admin/login";
     }
 

@@ -36,4 +36,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserDO
         return getMapper().getSysUserVO(sysUserId);
     }
 
+    @Override
+    public SysUserVO getSysUserVOByUsername(String username) {
+        return getMapper().getSysUserVOByUsername(username);
+    }
+
 }

@@ -33,6 +33,13 @@ public interface ISysMenuService extends IBaseService<SysMenuDO> {
     List<Long> getMenuIdsByRoleId(Long roleId);
 
     /**
+     * 根据角色id获取其权限下的菜单url
+     * @param roleId
+     * @return
+     */
+    List<String> getMenuUrlsByRoleId(Long roleId);
+
+    /**
      * 获取所有的菜单树
      * @return
      */

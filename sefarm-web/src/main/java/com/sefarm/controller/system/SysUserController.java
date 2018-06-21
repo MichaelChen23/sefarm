@@ -9,6 +9,7 @@ import com.sefarm.common.vo.SysUserVO;
 import com.sefarm.controller.common.BaseController;
 import com.sefarm.model.system.SysUserDO;
 import com.sefarm.service.system.ISysUserService;
+import com.sefarm.util.ShiroUtil;
 import com.sefarm.util.ToolUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +132,9 @@ public class SysUserController extends BaseController {
             // 完善账号信息
             sysUserDO.setCreateBy("sys");
             sysUserDO.setCreateTime(new Date());
-
+            //使用Shiro工具加密用户密码
+            sysUserDO.setSalt(ShiroUtil.getRandomSalt(5));
+            sysUserDO.setPassword(ShiroUtil.md5(sysUserDO.getPassword(), sysUserDO.getSalt()));
             Boolean res = sysUserService.saveByObj(sysUserDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {

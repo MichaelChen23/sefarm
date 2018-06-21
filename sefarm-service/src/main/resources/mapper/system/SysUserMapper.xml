@@ -94,4 +94,11 @@
       ssu.id = #{sysUserId}
     </where>
   </select>
+
+  <select id="getSysUserVOByUsername" resultMap="SysUserVOResultMap">
+    <include refid="selectSysUserVOALL" />
+    <where>
+      ssu.username = #{username}
+    </where>
+  </select>
 </mapper>

@@ -1,6 +1,5 @@
-package com.sefarm.config.web;
+package com.sefarm.config.beetl;
 
-import com.sefarm.config.beetl.BeetlConfiguration;
 import com.sefarm.config.properties.BeetlProperties;
 import org.beetl.core.resource.ClasspathResourceLoader;
 import org.beetl.ext.spring.BeetlSpringViewResolver;
@@ -9,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * web 配置类
+ * Beetl 配置类
  *
  * @author mc
  * @date 2018-3-30

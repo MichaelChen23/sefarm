@@ -82,6 +82,13 @@
     SELECT sys_menu_id FROM sefarm_sys_role_menu WHERE sys_role_id = #{roleId}
   </select>
 
+  <!-- 根据角色id获取权限下的菜单url -->
+  <select id="getMenuUrlsByRoleId" resultType="java.lang.String">
+    SELECT ssm.url FROM sefarm_sys_role_menu ssrm
+    INNER JOIN sefarm_sys_menu ssm ON ssrm.sys_menu_id = ssm.id
+    WHERE ssrm.sys_role_id = #{roleId}
+  </select>
+
   <!--获取所有的菜单树-->
   <select id="getAllMenuTree" resultType="com.sefarm.common.node.ZTreeNode">
     SELECT
