@@ -127,6 +127,11 @@ public abstract class Constant {
 	public static final String WECHAT_GET_USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo";
 
 	/**
+	 * 微信检查accessToken是否过期 url
+	 */
+	public static final String WECHAT_CHECK_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/sns/auth";
+
+	/**
 	 * 微信获取userInfo的lang
 	 */
 	public static final String WECHAT_LANG_TYPE = "zh_CN";
@@ -160,5 +165,10 @@ public abstract class Constant {
 	 * 支付成功状态码
 	 */
 	public static final String PAY_SUCCESS = "PAY_SUCCESS";
+
+	/**
+	 * 微信accessToken过期error code
+	 */
+	public static final Integer ACCESS_TOKEN_OVERTIME_CODE = 40003;
 
 }

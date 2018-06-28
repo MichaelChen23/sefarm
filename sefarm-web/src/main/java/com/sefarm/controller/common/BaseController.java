@@ -1,5 +1,6 @@
 package com.sefarm.controller.common;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayConstants;
 import com.github.wxpay.sdk.WXPayUtil;
@@ -10,6 +11,9 @@ import com.sefarm.common.exception.BaseExcepitonEnum;
 import com.sefarm.common.util.FileUtil;
 import com.sefarm.common.util.HttpKit;
 import com.sefarm.config.wechat.SeFarmWXPayConfig;
+import com.sefarm.model.user.UserDO;
+import com.sefarm.util.ToolUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -80,6 +84,16 @@ public class BaseController {
 
     protected void setAttr(String name, Object value) {
         HttpKit.getRequest().setAttribute(name, value);
+    }
+
+    /**
+     * 获取请求头信息，用于微信接口获取token等请求头信息
+     * add by mc 2018-6-22
+     * @param headName
+     * @return
+     */
+    protected String getHeader(String headName) {
+        return HttpKit.getRequest().getHeader(headName);
     }
 
     protected Integer getSystemInvokCount() {
@@ -244,6 +258,45 @@ public class BaseController {
         signSb.append("key="+Constant.WECHAT_API_KEY);
         String sign = MD5(signSb.toString()).toUpperCase();
         return sign;
+    }
+
+    /**
+     * 检查access_token是否过期，如果过期了，前端直接去重新登录就好，不用掉微信的刷新token接口
+     * add by mc 2018-6-26
+     * @return
+     */
+    public BaseResponse<Boolean> checkAccessToken() {
+        BaseResponse<Boolean> result = new BaseResponse<>(Boolean.TRUE);
+        //用请求头获取
+        String accessToken = getHeader("accessToken").trim();
+        UserDO userInfo = (UserDO) getSession().getAttribute(accessToken);
+        //session没有保存该用户信息
+        if (userInfo == null || (userInfo != null && StringUtils.isBlank(userInfo.getOpenid()))) {
+            result.setCode(Constant.FAIL_CODE);
+            result.setMsg("登录失败，请重新登录！");
+            result.setResult(Boolean.FALSE);
+        }
+        String openId = userInfo.getOpenid();
+        Map<String, Object> queryMaps = new HashMap<>(2);
+        queryMaps.put("access_token", accessToken);
+        queryMaps.put("openid", openId);
+        try {
+            JSONObject resultJson = HttpKit.doGet(Constant.WECHAT_CHECK_ACCESS_TOKEN_URL, queryMaps);
+            Integer errcode = resultJson.getInteger("errcode");
+            String errmsg = resultJson.getString("errmsg");
+            if (!ToolUtil.isEmpty(errcode) && StringUtils.isNotBlank(errmsg)) {
+                //accessToken过期
+                if (Constant.ACCESS_TOKEN_OVERTIME_CODE.equals(errcode)) {
+                    result.setCode(errcode);
+                    result.setMsg("accessToken已过期");
+                    result.setResult(Boolean.FALSE);
+                }
+            }
+            return result;
+        } catch (Exception e) {
+            logger.error("check accessToken fail(检查accessToken失败) -- accessToken:" + accessToken + " openId:" + openId + " :{}", e.getMessage());
+            return new BaseResponse<>(Boolean.FALSE);
+        }
     }
 
 }

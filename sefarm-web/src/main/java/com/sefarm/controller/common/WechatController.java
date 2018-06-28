@@ -7,6 +7,7 @@ import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.constant.state.OrderStatus;
 import com.sefarm.common.util.HttpKit;
 import com.sefarm.common.vo.OrderPayVO;
+import com.sefarm.config.properties.SeFarmProperties;
 import com.sefarm.model.order.OrderDO;
 import com.sefarm.model.order.OrderPayDO;
 import com.sefarm.model.user.UserDO;
@@ -24,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,6 +50,9 @@ import java.util.Map;
 public class WechatController {
 
     private static final Logger logger = LoggerFactory.getLogger(WechatController.class);
+
+    @Resource
+    private SeFarmProperties seFarmProperties;
 
     @Autowired
     public IUserService userService;
@@ -118,6 +124,10 @@ public class WechatController {
             UserDO user = new UserDO();
             user.setOpenid(openid);
             UserDO userDO = userService.getOneByObj(user);
+            //获取session来保持用户信息，如果以后多台机器分布式要考虑用redis做保持分布式共享session和用户信息缓存
+            HttpSession session = HttpKit.getRequest().getSession();
+            //设置session失效时间，就不用去删除保存旧token的session
+            session.setMaxInactiveInterval(seFarmProperties.getSessionInvalidateTime());
             if (userDO != null && userDO.getId() != 0) {
                 if (Constant.STATUS_LOCK.equals(userDO.getStatus())) {
                     //如果用户被停用，不能获取该用户信息
@@ -137,6 +147,10 @@ public class WechatController {
                 updateUserDO.setLastLoginTime(new Date());
                 Boolean result = userService.updateByObj(updateUserDO);
                 UserDO resultUser = result? updateUserDO : userDO;
+                //session保持更新用户信息，用accessToken做key
+                session.setAttribute(accessToken, resultUser);
+                //微信提议不要传输openId等秘密敏感信息
+                resultUser.setOpenid("");
                 return new BaseResponse<>(resultUser);
             } else {
                 user.setNickname(nickname);
@@ -149,6 +163,10 @@ public class WechatController {
                 user.setAccessToken(accessToken);
                 user.setCreateTime(new Date());
                 UserDO newUserDO = userService.saveWechatUser(user);
+                //session保持新建用户信息，用accessToken做key
+                session.setAttribute(accessToken, newUserDO);
+                //微信提议不要传输openId等秘密敏感信息
+                newUserDO.setOpenid("");
                 return new BaseResponse<>(newUserDO);
             }
         } catch (Exception e) {

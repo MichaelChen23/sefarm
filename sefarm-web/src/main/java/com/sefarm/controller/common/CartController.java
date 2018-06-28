@@ -27,7 +27,7 @@ import java.util.List;
  * @date 2018-5-1
  */
 @Controller
-@RequestMapping("/api/cart")
+@RequestMapping("/api")
 public class CartController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(CartController.class);
@@ -40,7 +40,7 @@ public class CartController extends BaseController {
     /**
      * 跳转到查看 购物车列表的页面
      */
-    @RequestMapping("")
+    @RequestMapping("/cart")
     public String index() {
         return PREFIX + "cart.html";
     }
@@ -48,7 +48,7 @@ public class CartController extends BaseController {
     /**
      * 跳转到新增 购物车列表的页面
      */
-    @RequestMapping("/cart_save")
+    @RequestMapping("/cart/cart_save")
     public String saveView() {
         return PREFIX + "cart_save.html";
     }
@@ -56,7 +56,7 @@ public class CartController extends BaseController {
     /**
      * 跳转到修改 购物车列表的页面
      */
-    @RequestMapping("/cart_update/{cartId}")
+    @RequestMapping("/cart/cart_update/{cartId}")
     public String updateView(@PathVariable Long cartId, Model model) {
         if(ToolUtil.isEmpty(cartId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
@@ -70,7 +70,7 @@ public class CartController extends BaseController {
      * 按照查询条件查询 购物车产品 列表
      * @return
      */
-    @RequestMapping(value = "/cart_list", method = RequestMethod.POST)
+    @RequestMapping(value = "/cart/cart_list", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo<CartVO> getCartVOPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
                                               @RequestParam(required = false) String account, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
@@ -89,7 +89,7 @@ public class CartController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/saveCart", method = RequestMethod.POST)
+    @RequestMapping(value = "/cart/saveCart", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse save(@Valid CartDO cartDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -109,7 +109,7 @@ public class CartController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/updateCart", method = RequestMethod.POST)
+    @RequestMapping(value = "/cart/updateCart", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse update(@Valid CartDO cartDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -128,7 +128,7 @@ public class CartController extends BaseController {
      * @param cartId
      * @return
      */
-    @RequestMapping(value = "/removeCart", method = RequestMethod.POST)
+    @RequestMapping(value = "/cart/removeCart", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse remove(@RequestParam Long cartId) {
         if (ToolUtil.isEmpty(cartId)) {
@@ -149,10 +149,15 @@ public class CartController extends BaseController {
      * @param account
      * @return
      */
-    @RequestMapping(value = "/getAllListByAccount", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/cart/getAllListByAccount", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<List<CartVO>> getCartVOAllListByAccount(@RequestParam String account) {
         try {
+            //检测accessToken是否过期
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return new BaseResponse<>(checkToken.getCode(), checkToken.getMsg(), null);
+            }
             List<CartVO> list = cartService.getCartVOAllListByAccount(account);
             return new BaseResponse<>(list);
         } catch (Exception e) {
@@ -167,10 +172,15 @@ public class CartController extends BaseController {
      * @param number
      * @return
      */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/cart/save", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<Boolean> saveCartDO(@RequestParam String account, @RequestParam Long productId, @RequestParam Integer number) {
         try {
+            //检测accessToken是否过期
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return checkToken;
+            }
             CartDO cartDO = new CartDO();
             cartDO.setAccount(account);
             cartDO.setProductId(productId);
@@ -189,10 +199,15 @@ public class CartController extends BaseController {
      * @param number
      * @return
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/cart/update", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<Boolean> updateCartDO(@RequestParam Long cartId, @RequestParam Integer number) {
         try {
+            //检测accessToken是否过期
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return checkToken;
+            }
             CartDO cartDO = new CartDO();
             cartDO.setId(cartId);
             cartDO.setNumber(number);
@@ -210,10 +225,15 @@ public class CartController extends BaseController {
      * @param cartId
      * @return
      */
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/cart/remove", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<Boolean> removeCartDO(@RequestParam Long cartId) {
         try {
+            //检测accessToken是否过期
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return checkToken;
+            }
             CartDO cartDO = new CartDO();
             cartDO.setId(cartId);
             Boolean result = cartService.removeByObj(cartDO);

@@ -108,6 +108,7 @@ public class ShiroConfig {
         hashMap.put("/api/image/**", "anon");
         hashMap.put("/api/kaptcha", "anon");
         hashMap.put("/admin/login", "anon");
+        hashMap.put("/api/wechat/**", "anon");
         hashMap.put("/**", "user");
         shiroFilter.setFilterChainDefinitionMap(hashMap);
         return shiroFilter;
