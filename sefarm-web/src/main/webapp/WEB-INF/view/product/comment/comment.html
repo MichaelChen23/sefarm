@@ -41,9 +41,15 @@
                             </div>
                         </div>
                         <div class="hidden-xs" id="managerTableToolbar" role="group">
+                            @if(shiro.hasPermission("/api/prod-comment/save")){
                             <#button name="添加" icon="fa-plus" clickFun="ProductComment.openSaveProductComment()" />
+                            @}
+                            @if(shiro.hasPermission("/api/prod-comment/update")){
                             <#button name="修改" icon="fa-edit" clickFun="ProductComment.openUpdateProductComment()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/api/prod-comment/remove")){
                             <#button name="删除" icon="fa-remove" clickFun="ProductComment.delProductComment()" space="true"/>
+                            @}
                         </div>
                         <#table id="productCommentTable"/>
                     </div>

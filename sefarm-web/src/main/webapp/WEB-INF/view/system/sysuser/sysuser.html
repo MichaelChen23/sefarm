@@ -48,9 +48,15 @@
 									@if(shiro.hasPermission("/api/sys-user/update")){
 									<#button name="修改" icon="fa-edit" clickFun="SysUser.openChangeUser()" space="true"/>
 									@}
+									@if(shiro.hasPermission("/api/sys-user/remove")){
 									<#button name="删除" icon="fa-remove" clickFun="SysUser.delSysUser()" space="true"/>
+									@}
+									@if(shiro.hasPermission("/api/sys-user/reset")){
 									<#button name="重置密码" icon="fa-refresh" clickFun="SysUser.resetPwd()" space="true"/>
+									@}
+									@if(shiro.hasPermission("/api/sys-user/setSysRole")){
 									<#button name="角色分配" icon="fa-user-secret" clickFun="SysUser.roleAssign()" space="true"/>
+									@}
 								</div>
 								<#table id="sysUserTable"/>
 							</div>

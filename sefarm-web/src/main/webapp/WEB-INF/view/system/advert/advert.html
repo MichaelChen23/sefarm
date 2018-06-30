@@ -32,9 +32,15 @@
                             </div>
                         </div>
                         <div class="hidden-xs" id="managerTableToolbar" role="group">
+                            @if(shiro.hasPermission("/api/advert/save")){
                             <#button name="添加" icon="fa-plus" clickFun="Advert.openSaveAdvert()" />
+                            @}
+                            @if(shiro.hasPermission("/api/advert/update")){
                             <#button name="修改" icon="fa-edit" clickFun="Advert.openUpdateAdvert()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/api/advert/remove")){
                             <#button name="删除" icon="fa-remove" clickFun="Advert.delAdvert()" space="true"/>
+                            @}
                         </div>
                         <#table id="advertTable"/>
                     </div>

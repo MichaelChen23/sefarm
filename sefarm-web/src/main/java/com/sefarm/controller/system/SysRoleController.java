@@ -194,7 +194,7 @@ public class SysRoleController extends BaseController {
      * @param ids
      * @return
      */
-    @RequestMapping("/set_authority")
+    @RequestMapping("/setAuthority")
     @ResponseBody
     public BaseResponse setMenuAuthority(@RequestParam("roleId") Long roleId, @RequestParam("ids") String ids) {
         try {

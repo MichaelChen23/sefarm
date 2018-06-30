@@ -44,9 +44,15 @@
                             </div>
                         </div>
                         <div class="hidden-xs" id="managerTableToolbar" role="group">
+                            @if(shiro.hasPermission("/api/order/save")){
                             <#button name="添加" icon="fa-plus" clickFun="Order.openSaveOrder()" />
+                            @}
+                            @if(shiro.hasPermission("/api/order/update")){
                             <#button name="修改" icon="fa-edit" clickFun="Order.openUpdateOrder()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/api/order/removeOrder")){
                             <#button name="删除" icon="fa-remove" clickFun="Order.delOrder()" space="true"/>
+                            @}
                         </div>
                         <#table id="orderTable"/>
                     </div>

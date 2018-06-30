@@ -35,9 +35,15 @@
                             </div>
                         </div>
                         <div class="hidden-xs" id="managerTableToolbar" role="group">
+                            @if(shiro.hasPermission("/api/sys-menu/save")){
                             <#button name="添加" icon="fa-plus" clickFun="SysMenu.openSaveSysMenu()" />
+                            @}
+                            @if(shiro.hasPermission("/api/sys-menu/update")){
                             <#button name="修改" icon="fa-edit" clickFun="SysMenu.openUpdateSysMenu()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/api/sys-menu/remove")){
                             <#button name="删除" icon="fa-remove" clickFun="SysMenu.delSysMenu()" space="true"/>
+                            @}
                         </div>
                         <#table id="sysMenuTable"/>
                     </div>
