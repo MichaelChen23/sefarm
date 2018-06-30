@@ -61,12 +61,13 @@ public class SysMenuServiceImpl extends BaseServiceImpl<SysMenuMapper, SysMenuDO
     public Boolean removeAllSubMenusByMenuId(Long MenuId) {
         SysMenuDO pSysMenuDO = getMapper().selectByPrimaryKey(MenuId);
         //删除当前菜单
-        removeByObj(pSysMenuDO);
+        Boolean delPMenuRes = removeByObj(pSysMenuDO);
         //删除所有子菜单
         Example example = new Example(SysMenuDO.class);
         example.createCriteria().andLike("pcodes","%[" + pSysMenuDO.getCode() + "]%");
         Integer res = getMapper().deleteByExample(example);
-        return res > 0;
+        //删除父菜单或者所有子菜单成功都算删除成功
+        return delPMenuRes || res > 0;
     }
 
 }
