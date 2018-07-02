@@ -27,7 +27,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/api/prod-cata")
+@RequestMapping("/api")
 public class ProductCatalogController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductCatalogController.class);
@@ -40,7 +40,7 @@ public class ProductCatalogController extends BaseController {
     /**
      * 跳转到查看 产品目录 列表的页面
      */
-    @RequestMapping("")
+    @RequestMapping("/prod-cata")
     public String index() {
         return PREFIX + "catalog.html";
     }
@@ -48,7 +48,7 @@ public class ProductCatalogController extends BaseController {
     /**
      * 跳转到新增 产品目录 的页面
      */
-    @RequestMapping("/catalog_save")
+    @RequestMapping("/prod-cata/catalog_save")
     public String saveView() {
         return PREFIX + "catalog_save.html";
     }
@@ -56,7 +56,7 @@ public class ProductCatalogController extends BaseController {
     /**
      * 跳转到修改 产品目录 的页面
      */
-    @RequestMapping("/catalog_update/{catalogId}")
+    @RequestMapping("/prod-cata/catalog_update/{catalogId}")
     public String updateView(@PathVariable Long catalogId, Model model) {
         if(ToolUtil.isEmpty(catalogId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
@@ -72,7 +72,7 @@ public class ProductCatalogController extends BaseController {
      * 按照查询条件查询 产品目录 列表
      * @return
      */
-    @RequestMapping(value = "/catalog_list", method = RequestMethod.POST)
+    @RequestMapping(value = "/prod-cata/catalog_list", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo<ProductCatalogDO> getProductCatalogDOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
                                                               @RequestParam(required = false) String name, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
@@ -91,7 +91,7 @@ public class ProductCatalogController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/prod-cata/save", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse save(@Valid ProductCatalogDO productCatalogDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -114,7 +114,7 @@ public class ProductCatalogController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/prod-cata/update", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse update(@Valid ProductCatalogDO productCatalogDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -135,7 +135,7 @@ public class ProductCatalogController extends BaseController {
      * @param catalogId
      * @return
      */
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @RequestMapping(value = "/prod-cata/remove", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse remove(@RequestParam Long catalogId) {
         if (ToolUtil.isEmpty(catalogId)) {
@@ -156,7 +156,7 @@ public class ProductCatalogController extends BaseController {
      * add by mc 2018-4-24
      * @return
      */
-    @RequestMapping(value = "/getAllList", method = RequestMethod.GET)
+    @RequestMapping(value = "/wechat/prod-cata/getAllList", method = RequestMethod.GET)
     @ResponseBody
     public BaseResponse<List<ProductCatalogDO>> getAllProductCatalogList() {
         try {

@@ -46,7 +46,7 @@ import java.util.Map;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/api/order")
+@RequestMapping("/api")
 public class OrderController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -71,7 +71,7 @@ public class OrderController extends BaseController {
     /**
      * 跳转到查看 订单 列表的页面
      */
-    @RequestMapping("")
+    @RequestMapping("/order")
     public String index() {
         return PREFIX + "order.html";
     }
@@ -79,7 +79,7 @@ public class OrderController extends BaseController {
     /**
      * 跳转到新增 订单 的页面
      */
-    @RequestMapping("/order_save")
+    @RequestMapping("/order/order_save")
     public String saveView() {
         return PREFIX + "order_save.html";
     }
@@ -87,7 +87,7 @@ public class OrderController extends BaseController {
     /**
      * 跳转到修改 订单 的页面
      */
-    @RequestMapping("/order_update/{orderId}")
+    @RequestMapping("/order/order_update/{orderId}")
     public String updateView(@PathVariable Long orderId, Model model) {
         if(ToolUtil.isEmpty(orderId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
@@ -103,7 +103,7 @@ public class OrderController extends BaseController {
      * 按照查询条件查询 订单列表
      * @return
      */
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/list", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo<OrderDO> getOrderDOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr, @RequestParam(required = false) String name,
                                             @RequestParam(required = false) String orderNo, @RequestParam(required = false) String status, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
@@ -122,7 +122,7 @@ public class OrderController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/save", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse save(@Valid OrderDO orderDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -142,7 +142,7 @@ public class OrderController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/update", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse update(@Valid OrderDO orderDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -163,7 +163,7 @@ public class OrderController extends BaseController {
      * @param orderId
      * @return
      */
-    @RequestMapping(value = "/removeOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/removeOrder", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse removeOrder(@RequestParam Long orderId) {
         if (ToolUtil.isEmpty(orderId)) {
@@ -188,13 +188,19 @@ public class OrderController extends BaseController {
      * @param requirement
      * @return 返回 orderPayDO订单支付记录
      */
-    @RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/order/placeOrder", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<OrderPayDO> placeOrder(@RequestParam String account, @RequestParam Long userAddressId, @RequestParam String cartIds, @RequestParam(required = false) String requirement) {
 //        Map<String, Integer> productMaps = new HashMap<>();
         try {
             //解析所选产品jsonStr为map jsonStr为{1:8,2:10,3:12}
             //productMaps = (Map<String, Integer>) JSON.parse(productJsonStr);
+
+            //检测accessToken是否失效
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return new BaseResponse<>(checkToken.getCode(), checkToken.getMsg(), null);
+            }
 
             //获取用户唯一标识 openid 用于微信下单
             String openid = "";
@@ -256,10 +262,16 @@ public class OrderController extends BaseController {
      * @param orderId
      * @return orderPayDO订单支付记录
      */
-    @RequestMapping(value = "/replaceOrder", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/order/replaceOrder", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<OrderPayDO> replaceOrder(@RequestParam Long orderId) {
         try {
+            //检测accessToken是否失效
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return new BaseResponse<>(checkToken.getCode(), checkToken.getMsg(), null);
+            }
+
             //首先去操作最近一次的订单支付记录
             List<OrderPayVO> orderPayVOList = orderPayService.getOrderPayVOByOrderId(orderId);
             Date orderCreateTime = new Date();
@@ -362,10 +374,16 @@ public class OrderController extends BaseController {
      * @param orderId
      * @return
      */
-    @RequestMapping(value = "/getOrderDetailByOrderId", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/order/getOrderDetailByOrderId", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<OrderDetailVO> getOrderDetailByOrderId(@RequestParam Long orderId) {
         try {
+            //检测accessToken是否失效
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return new BaseResponse<>(checkToken.getCode(), checkToken.getMsg(), null);
+            }
+
             if (orderId != null && orderId > 0) {
                 OrderDetailVO result = orderService.getOrderDetailByOrderId(orderId);
                 return new BaseResponse<>(result);
@@ -383,10 +401,16 @@ public class OrderController extends BaseController {
      * @param orderId
      * @return
      */
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/order/remove", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<Boolean> remove(@RequestParam Long orderId) {
         try {
+            //检测accessToken是否失效
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return checkToken;
+            }
+
             if (orderId != null && orderId > 0) {
                 //删除订单
                 OrderDO orderDO = new OrderDO();
@@ -416,10 +440,16 @@ public class OrderController extends BaseController {
      * @param account
      * @return
      */
-    @RequestMapping(value = "/getPageList", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/order/getPageList", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<PageInfo<OrderDO>> getOrderPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam String account) {
         try {
+            //检测accessToken是否失效
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return new BaseResponse<>(checkToken.getCode(), checkToken.getMsg(), null);
+            }
+
             PageInfo<OrderDO> result = orderService.getOrderDOPageList(pageIndex, pageSize, account);
             return new BaseResponse<>(result);
         } catch (Exception e) {

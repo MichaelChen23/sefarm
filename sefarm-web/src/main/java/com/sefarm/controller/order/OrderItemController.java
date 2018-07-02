@@ -28,7 +28,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/api/order-item")
+@RequestMapping("/api")
 public class OrderItemController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderItemController.class);
@@ -41,7 +41,7 @@ public class OrderItemController extends BaseController {
     /**
      * 跳转到查看 订单项 列表的页面
      */
-    @RequestMapping("")
+    @RequestMapping("/order-item")
     public String index() {
         return PREFIX + "item.html";
     }
@@ -49,7 +49,7 @@ public class OrderItemController extends BaseController {
     /**
      * 跳转到新增 订单项 的页面
      */
-    @RequestMapping("/item_save")
+    @RequestMapping("/order-item/item_save")
     public String saveView() {
         return PREFIX + "item_save.html";
     }
@@ -57,7 +57,7 @@ public class OrderItemController extends BaseController {
     /**
      * 跳转到修改 订单项 的页面
      */
-    @RequestMapping("/item_update/{itemId}")
+    @RequestMapping("/order-item/item_update/{itemId}")
     public String updateView(@PathVariable Long itemId, Model model) {
         if(ToolUtil.isEmpty(itemId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
@@ -72,7 +72,7 @@ public class OrderItemController extends BaseController {
      * 按照查询条件查询 订单项 列表
      * @return
      */
-    @RequestMapping(value = "/item_list", method = RequestMethod.POST)
+    @RequestMapping(value = "/order-item/item_list", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo<OrderItemVO> getOrderItemVOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr, @RequestParam(required = false) String name,
                                                     @RequestParam(required = false) String orderNo, @RequestParam(required = false) String productName, @RequestParam(required = false) String commentFlag, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
@@ -91,7 +91,7 @@ public class OrderItemController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/order-item/save", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse save(@Valid OrderItemDO orderItemDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -111,7 +111,7 @@ public class OrderItemController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/order-item/update", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse update(@Valid OrderItemDO orderItemDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -132,7 +132,7 @@ public class OrderItemController extends BaseController {
      * @param itemId
      * @return
      */
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @RequestMapping(value = "/order-item/remove", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse remove(@RequestParam Long itemId) {
         if (ToolUtil.isEmpty(itemId)) {
@@ -154,7 +154,7 @@ public class OrderItemController extends BaseController {
      * @param orderId
      * @return
      */
-    @RequestMapping(value = "/getAllListByOrderId", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/order-item/getAllListByOrderId", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<List<OrderItemDO>> getOrderItemAllListByOrderId(@RequestParam Long orderId) {
         try {

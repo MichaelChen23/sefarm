@@ -153,11 +153,12 @@ public class CartController extends BaseController {
     @ResponseBody
     public BaseResponse<List<CartVO>> getCartVOAllListByAccount(@RequestParam String account) {
         try {
-            //检测accessToken是否过期
+            //检测accessToken是否失效
             BaseResponse<Boolean> checkToken = checkAccessToken();
             if (!checkToken.getResult()) {
                 return new BaseResponse<>(checkToken.getCode(), checkToken.getMsg(), null);
             }
+
             List<CartVO> list = cartService.getCartVOAllListByAccount(account);
             return new BaseResponse<>(list);
         } catch (Exception e) {
@@ -176,11 +177,12 @@ public class CartController extends BaseController {
     @ResponseBody
     public BaseResponse<Boolean> saveCartDO(@RequestParam String account, @RequestParam Long productId, @RequestParam Integer number) {
         try {
-            //检测accessToken是否过期
+            //检测accessToken是否失效
             BaseResponse<Boolean> checkToken = checkAccessToken();
             if (!checkToken.getResult()) {
                 return checkToken;
             }
+
             CartDO cartDO = new CartDO();
             cartDO.setAccount(account);
             cartDO.setProductId(productId);
@@ -203,11 +205,12 @@ public class CartController extends BaseController {
     @ResponseBody
     public BaseResponse<Boolean> updateCartDO(@RequestParam Long cartId, @RequestParam Integer number) {
         try {
-            //检测accessToken是否过期
+            //检测accessToken是否失效
             BaseResponse<Boolean> checkToken = checkAccessToken();
             if (!checkToken.getResult()) {
                 return checkToken;
             }
+
             CartDO cartDO = new CartDO();
             cartDO.setId(cartId);
             cartDO.setNumber(number);
@@ -229,11 +232,12 @@ public class CartController extends BaseController {
     @ResponseBody
     public BaseResponse<Boolean> removeCartDO(@RequestParam Long cartId) {
         try {
-            //检测accessToken是否过期
+            //检测accessToken是否失效
             BaseResponse<Boolean> checkToken = checkAccessToken();
             if (!checkToken.getResult()) {
                 return checkToken;
             }
+
             CartDO cartDO = new CartDO();
             cartDO.setId(cartId);
             Boolean result = cartService.removeByObj(cartDO);

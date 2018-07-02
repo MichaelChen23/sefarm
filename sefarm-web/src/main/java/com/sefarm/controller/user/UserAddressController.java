@@ -28,7 +28,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/api/user-adr")
+@RequestMapping("/api")
 public class UserAddressController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserAddressController.class);
@@ -41,7 +41,7 @@ public class UserAddressController extends BaseController {
     /**
      * 跳转到查看 用户地址列表的页面
      */
-    @RequestMapping("")
+    @RequestMapping("/user-adr")
     public String index() {
         return PREFIX + "address.html";
     }
@@ -49,7 +49,7 @@ public class UserAddressController extends BaseController {
     /**
      * 跳转到新增 用户地址列表的页面
      */
-    @RequestMapping("/address_save")
+    @RequestMapping("/user-adr/address_save")
     public String saveView() {
         return PREFIX + "address_save.html";
     }
@@ -57,7 +57,7 @@ public class UserAddressController extends BaseController {
     /**
      * 跳转到修改 用户地址列表的页面
      */
-    @RequestMapping("/address_update/{addressId}")
+    @RequestMapping("/user-adr/address_update/{addressId}")
     public String updateView(@PathVariable Long addressId, Model model) {
         if(ToolUtil.isEmpty(addressId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
@@ -73,7 +73,7 @@ public class UserAddressController extends BaseController {
      * 按照查询条件查询 用户地址 列表
      * @return
      */
-    @RequestMapping(value = "/address_list", method = RequestMethod.POST)
+    @RequestMapping(value = "/user-adr/address_list", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo<UserAddressDO> getUserAddressDOPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
                                                             @RequestParam(required = false) String account, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
@@ -92,7 +92,7 @@ public class UserAddressController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/saveAddress", method = RequestMethod.POST)
+    @RequestMapping(value = "/user-adr/saveAddress", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse saveAddress(@Valid UserAddressDO userAddressDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -112,7 +112,7 @@ public class UserAddressController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/updateAddress", method = RequestMethod.POST)
+    @RequestMapping(value = "/user-adr/updateAddress", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse updateAddress(@Valid UserAddressDO userAddressDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -131,7 +131,7 @@ public class UserAddressController extends BaseController {
      * @param addressId
      * @return
      */
-    @RequestMapping(value = "/removeAddress", method = RequestMethod.POST)
+    @RequestMapping(value = "/user-adr/removeAddress", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse removeAddress(@RequestParam Long addressId) {
         if (ToolUtil.isEmpty(addressId)) {
@@ -162,12 +162,18 @@ public class UserAddressController extends BaseController {
      * @param defaultFlag
      * @return
      */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/user-adr/save", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<Boolean> save(@RequestParam String account, @RequestParam String name, @RequestParam(required = false) String provinceId, @RequestParam(required = false) String province, @RequestParam(required = false) String cityId, @RequestParam(required = false) String city, @RequestParam(required = false) String areaId, @RequestParam(required = false) String area,
                                       @RequestParam String address, @RequestParam(required = false) String zip, @RequestParam(required = false) String phone, @RequestParam String mobile, @RequestParam(required = false) String defaultFlag) {
         UserAddressDO userAddressDO = new UserAddressDO();
         try {
+            //检测accessToken是否失效
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return checkToken;
+            }
+
             userAddressDO.setAccount(account);
             userAddressDO.setName(name);
             userAddressDO.setProvinceId(provinceId);
@@ -200,10 +206,16 @@ public class UserAddressController extends BaseController {
      * @param userAddressId
      * @return
      */
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/user-adr/remove", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<Boolean> remove(@RequestParam Long userAddressId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
         try {
+            //检测accessToken是否失效
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return checkToken;
+            }
+
             UserAddressDO userAddressDO = new UserAddressDO();
             userAddressDO.setId(userAddressId);
             Boolean result = userAddressService.removeByObj(userAddressDO);
@@ -228,12 +240,18 @@ public class UserAddressController extends BaseController {
      * @param defaultFlag
      * @return
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/user-adr/update", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<Boolean> update(@RequestParam Long id, @RequestParam String account, @RequestParam String name, @RequestParam(required = false) String provinceId, @RequestParam(required = false) String province, @RequestParam(required = false) String cityId, @RequestParam(required = false) String city, @RequestParam(required = false) String areaId, @RequestParam(required = false) String area,
                                         @RequestParam String address, @RequestParam(required = false) String zip, @RequestParam(required = false) String phone, @RequestParam String mobile, @RequestParam(required = false) String defaultFlag) {//一定要通过id来修改
         UserAddressDO userAddressDO = new UserAddressDO();
         try {
+            //检测accessToken是否失效
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return checkToken;
+            }
+
             userAddressDO.setId(id);
             userAddressDO.setAccount(account);
             userAddressDO.setName(name);
@@ -269,10 +287,16 @@ public class UserAddressController extends BaseController {
      * @param defaultFlag
      * @return
      */
-    @RequestMapping(value = "/getAllListByAccountAndFlag", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/user-adr/getAllListByAccountAndFlag", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<List<UserAddressDO>> getUserAddressDOAllListByAccountAndFlag(@RequestParam String account, @RequestParam(required = false) String defaultFlag) {
         try {
+            //检测accessToken是否失效
+            BaseResponse<Boolean> checkToken = checkAccessToken();
+            if (!checkToken.getResult()) {
+                return new BaseResponse<>(checkToken.getCode(), checkToken.getMsg(), null);
+            }
+
             List<UserAddressDO> list = userAddressService.getUserAddressDOAllListByAccountAndFlag(account, defaultFlag);
             return new BaseResponse<>(list);
         } catch (Exception e) {

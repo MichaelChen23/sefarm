@@ -261,7 +261,7 @@ public class BaseController {
     }
 
     /**
-     * 检查access_token是否过期，如果过期了，前端直接去重新登录就好，不用掉微信的刷新token接口
+     * 检查access_token是否失效过期，如果过期了，前端直接去重新登录就好，不用掉微信的刷新token接口
      * add by mc 2018-6-26
      * @return
      */
@@ -287,8 +287,9 @@ public class BaseController {
             if (!ToolUtil.isEmpty(errcode) && StringUtils.isNotBlank(errmsg)) {
                 //accessToken过期
                 if (Constant.ACCESS_TOKEN_OVERTIME_CODE.equals(errcode)) {
+                    //微信返回的errcode为40003，errmsg为invalid openid
                     result.setCode(errcode);
-                    result.setMsg("accessToken已过期");
+                    result.setMsg("accessToken已失效");
                     result.setResult(Boolean.FALSE);
                 }
             }

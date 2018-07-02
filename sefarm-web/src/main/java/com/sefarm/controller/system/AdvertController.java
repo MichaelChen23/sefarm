@@ -27,7 +27,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/api/advert")
+@RequestMapping("/api")
 public class AdvertController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdvertController.class);
@@ -40,7 +40,7 @@ public class AdvertController extends BaseController {
     /**
      * 跳转到查看 广告列表的页面
      */
-    @RequestMapping("")
+    @RequestMapping("/advert")
     public String index() {
         return PREFIX + "advert.html";
     }
@@ -48,7 +48,7 @@ public class AdvertController extends BaseController {
     /**
      * 跳转到新增 广告的页面
      */
-    @RequestMapping("/advert_save")
+    @RequestMapping("/advert/advert_save")
     public String saveView() {
         return PREFIX + "advert_save.html";
     }
@@ -56,7 +56,7 @@ public class AdvertController extends BaseController {
     /**
      * 跳转到修改 广告的页面
      */
-    @RequestMapping("/advert_update/{advertId}")
+    @RequestMapping("/advert/advert_update/{advertId}")
     public String updateView(@PathVariable Long advertId, Model model) {
         if(ToolUtil.isEmpty(advertId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
@@ -72,7 +72,7 @@ public class AdvertController extends BaseController {
      * 按照查询条件查询 广告列表
      * @return
      */
-    @RequestMapping(value = "/advert_list", method = RequestMethod.POST)
+    @RequestMapping(value = "/advert/advert_list", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo<AdvertDO> getAdvertDOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr,
                                               @RequestParam(required = false) String name, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
@@ -91,7 +91,7 @@ public class AdvertController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/advert/save", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse save(@Valid AdvertDO advertDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -114,7 +114,7 @@ public class AdvertController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/advert/update", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse update(@Valid AdvertDO advertDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -135,7 +135,7 @@ public class AdvertController extends BaseController {
      * @param advertId
      * @return
      */
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @RequestMapping(value = "/advert/remove", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse remove(@RequestParam Long advertId) {//可通过id来删除，可通过其他条件是唯一性的来定位数据来删除，例如username是不相同，唯一的，就可以定位到唯一的数据
         if (ToolUtil.isEmpty(advertId)) {
@@ -157,7 +157,7 @@ public class AdvertController extends BaseController {
      * @param pageSize
      * @return
      */
-    @RequestMapping(value = "/getPageList", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/advert/getPageList", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<List<AdvertDO>> getAdvertPageList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize) {
         try {

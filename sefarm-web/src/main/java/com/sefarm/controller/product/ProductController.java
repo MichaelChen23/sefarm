@@ -1,6 +1,5 @@
 package com.sefarm.controller.product;
 
-import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.sefarm.common.base.BaseResponse;
 import com.sefarm.common.exception.BizExceptionEnum;
@@ -29,7 +28,7 @@ import java.util.List;
  * @date 2018-3-24
  */
 @Controller
-@RequestMapping("/api/prod")
+@RequestMapping("/api")
 public class ProductController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
@@ -42,7 +41,7 @@ public class ProductController extends BaseController {
     /**
      * 跳转到查看 产品 列表的页面
      */
-    @RequestMapping("")
+    @RequestMapping("/prod")
     public String index() {
         return PREFIX + "product.html";
     }
@@ -50,7 +49,7 @@ public class ProductController extends BaseController {
     /**
      * 跳转到新增 产品 的页面
      */
-    @RequestMapping("/product_save")
+    @RequestMapping("/prod/product_save")
     public String saveView() {
         return PREFIX + "product_save.html";
     }
@@ -58,7 +57,7 @@ public class ProductController extends BaseController {
     /**
      * 跳转到修改 产品 的页面
      */
-    @RequestMapping("/product_update/{prodId}")
+    @RequestMapping("/prod/product_update/{prodId}")
     public String updateView(@PathVariable Long prodId, Model model) {
         if(ToolUtil.isEmpty(prodId)) {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
@@ -73,7 +72,7 @@ public class ProductController extends BaseController {
      * 后台（用于首页搜索，产品页搜索，可根据各种条件排序） 按照查询条件查询 产品 列表
      * @return
      */
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/prod/list", method = RequestMethod.POST)
     @ResponseBody
     public PageInfo<ProductVO> getProductVOList(@RequestParam(required = false) Integer pageIndex, @RequestParam(required = false) Integer pageSize, @RequestParam String sortStr, @RequestParam String orderStr,
                                                 @RequestParam(required = false) String name, @RequestParam(required = false) Long productTypeId, @RequestParam(required = false) String createTimeBegin, @RequestParam(required = false) String createTimeEnd) {
@@ -92,7 +91,7 @@ public class ProductController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/prod/save", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse save(@Valid ProductDO productDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -114,7 +113,7 @@ public class ProductController extends BaseController {
      * @param result
      * @return
      */
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/prod/update", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse update(@Valid ProductDO productDO, BindingResult result) {
         if (result.hasErrors()) {
@@ -135,7 +134,7 @@ public class ProductController extends BaseController {
      * @param prodId
      * @return
      */
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @RequestMapping(value = "/prod/remove", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse remove(@RequestParam Long prodId) {
         if (ToolUtil.isEmpty(prodId)) {
@@ -157,7 +156,7 @@ public class ProductController extends BaseController {
      * @param typeId 产品类型id
      * @return
      */
-    @RequestMapping(value = "/getAllListByTypeId", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/prod/getAllListByTypeId", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<List<ProductDO>> getAllProductListByTypeId(@RequestParam Long typeId) {
         try {
@@ -172,7 +171,7 @@ public class ProductController extends BaseController {
      * 移动前端——（用于首页搜索，获取热门产品） 分页获取产品列表
      * @return
      */
-    @RequestMapping(value = "/searchPageList", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/prod/searchPageList", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<PageInfo<ProductDO>> searchProductPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize,
                                                     @RequestParam(required = false) String name) {
@@ -189,7 +188,7 @@ public class ProductController extends BaseController {
      * add by mc 2018-4-26
      * @return
      */
-    @RequestMapping(value = "/getPageList", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/prod/getPageList", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<PageInfo<ProductDO>> getProductPageList(@RequestParam Integer pageIndex, @RequestParam Integer pageSize, @RequestParam(required = false) Long typeId, @RequestParam(required = false) String name,
                                                   @RequestParam(required = false) String newFlag, @RequestParam(required = false) String saleFlag, @RequestParam(required = false) String sortStr, @RequestParam(required = false) String orderStr) {
@@ -207,7 +206,7 @@ public class ProductController extends BaseController {
      * @param productId
      * @return
      */
-    @RequestMapping(value = "/getProductByProductId", method = RequestMethod.POST)
+    @RequestMapping(value = "/wechat/prod/getProductByProductId", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<ProductDO> getProductByProductId(@RequestParam Long productId) {
         try {
@@ -217,69 +216,6 @@ public class ProductController extends BaseController {
             return new BaseResponse<>(result);
         } catch (Exception e) {
             return handleException(e, "get prod fail(根据id查询 产品信息 失败)-- productId:" + productId + ":{}", false);
-        }
-    }
-
-    @RequestMapping(value = "/removeList", method = RequestMethod.POST)
-    public BaseResponse<Boolean> removeList(@RequestBody String ids) {//批量删除
-        try {
-            List<String> list = JSON.parseArray(ids, String.class);
-            Boolean result = productService.batchRemoveByIds(list);
-            return BaseResponse.getRespByResultBool(result);
-        } catch (Exception e) {
-            logger.error("prod batch delete fail(批量删除失败)--"+ids+":{}", e.getMessage());
-            return BaseResponse.getRespByResultBool(false);
-        }
-    }
-
-    @RequestMapping(value = "/get", method = RequestMethod.POST)
-    public BaseResponse<ProductDO> get(@RequestBody ProductDO productDO) {//可以通过id来查找，也可以同唯一性的条件来查找出唯一的数据，例如username是不相同，唯一的，就可以定位到唯一的数据
-        ProductDO result = null;
-        try {
-            result = (ProductDO) productService.getOneByObj(productDO);
-            return new BaseResponse<ProductDO>(result);
-        } catch (Exception e) {
-            logger.error("prod get fail(获取失败)--"+productDO.toString()+":{}", e.getMessage());
-            return new BaseResponse(result);
-        }
-    }
-
-    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
-    public BaseResponse<List<ProductDO>> getAll() {
-        try {
-            List<ProductDO> list = productService.getALL();
-            return new BaseResponse<>(list);
-        } catch (Exception e) {
-            logger.error("prod get all(获取所有数据失败)-- :{}", e.getMessage());
-            return null;
-        }
-    }
-
-    @RequestMapping(value = "/count", method = RequestMethod.POST)
-    public Integer getCount(@RequestBody ProductDO productDO) {//输入为null，查询全部的数量，输入唯一性的字段，根据该字段数值查询唯一，数量为1
-        try {
-            Integer count = productService.getCount(productDO);
-            return count;
-        } catch (Exception e) {
-            logger.error("prod count fail(统计数目失败)--"+productDO.toString()+":{}", e.getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * 根据输入字段和值，进行模糊查询
-     * @param productDO
-     * @return
-     * searchKey-查询的字段，searchValue-查询字段的值
-     */
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public PageInfo<ProductDO> searchList(@RequestBody ProductDO productDO) {
-        try {
-            List<ProductDO> list = productService.searchListByKV(productDO);
-            return new PageInfo<ProductDO>(list);
-        } catch (Exception e) {
-            logger.error("prod search query fail(搜索查询失败)--"+productDO.toString()+":{}", e.getMessage());
-            return null;
         }
     }
 
