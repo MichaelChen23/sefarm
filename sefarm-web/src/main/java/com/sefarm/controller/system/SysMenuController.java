@@ -127,8 +127,8 @@ public class SysMenuController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            // 完善菜单信息
-            sysMenuDO.setCreateBy("sys");
+            // 完善菜单信息，设置当前操作用户为创建人
+            sysMenuDO.setCreateBy(getCurrentSysUser());
             sysMenuDO.setCreateTime(new Date());
             //设上级菜单和层级
             setMenuPcodeByPMenuId(sysMenuDO, true);
@@ -153,7 +153,8 @@ public class SysMenuController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            sysMenuDO.setUpdateBy("sys");
+            //设置当前操作用户为更新人
+            sysMenuDO.setUpdateBy(getCurrentSysUser());
             sysMenuDO.setUpdateTime(new Date());
             //设上级菜单和层级
             setMenuPcodeByPMenuId(sysMenuDO, false);

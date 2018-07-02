@@ -98,7 +98,8 @@ public class ProductController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            productDO.setCreateBy("sys");
+            //设置当前操作用户为创建人
+            productDO.setCreateBy(getCurrentSysUser());
             productDO.setCreateTime(new Date());
             Boolean res = productService.saveByObj(productDO);
             return BaseResponse.getRespByResultBool(res);
@@ -120,7 +121,8 @@ public class ProductController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            productDO.setUpdateBy("sys");
+            //设置当前操作用户为更新人
+            productDO.setUpdateBy(getCurrentSysUser());
             productDO.setUpdateTime(new Date());
             Boolean res = productService.updateByObj(productDO);
             return BaseResponse.getRespByResultBool(res);

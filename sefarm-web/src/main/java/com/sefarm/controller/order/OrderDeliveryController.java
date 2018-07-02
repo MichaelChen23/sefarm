@@ -124,6 +124,9 @@ public class OrderDeliveryController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
+            //设置当前操作用户为更新人
+            orderDeliveryDO.setUpdateBy(getCurrentSysUser());
+            orderDeliveryDO.setUpdateTime(new Date());
             Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
@@ -167,7 +170,8 @@ public class OrderDeliveryController extends BaseController {
             OrderDeliveryDO orderDeliveryDO = new OrderDeliveryDO();
             orderDeliveryDO.setId(deliveryId);
             orderDeliveryDO.setStatus(OrderDeliveryStatus.READY.getCode());
-            orderDeliveryDO.setUpdateBy("sys");
+            //设置当前操作用户为更新人
+            orderDeliveryDO.setUpdateBy(getCurrentSysUser());
             orderDeliveryDO.setUpdateTime(new Date());
             Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
             return BaseResponse.getRespByResultBool(res);
@@ -193,11 +197,17 @@ public class OrderDeliveryController extends BaseController {
             orderDeliveryDO.setId(deliveryId);
             orderDeliveryDO.setStatus(OrderDeliveryStatus.DELIVERY.getCode());
             orderDeliveryDO.setDeliveryTime(new Date());
+            //设置当前操作用户为更新人
+            orderDeliveryDO.setUpdateBy(getCurrentSysUser());
+            orderDeliveryDO.setUpdateTime(new Date());
             Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
             //更新订单状态为配送中
             OrderDO orderDO = new OrderDO();
             orderDO.setId(orderId);
             orderDO.setStatus(OrderStatus.SENDING.getCode());
+            //设置当前操作用户为更新人
+            orderDO.setUpdateBy(getCurrentSysUser());
+            orderDO.setUpdateTime(new Date());
             Boolean orderRes = orderService.updateByObj(orderDO);
             return BaseResponse.getRespByResultBool(res && orderRes);
         } catch (Exception e) {
@@ -222,11 +232,17 @@ public class OrderDeliveryController extends BaseController {
             orderDeliveryDO.setId(deliveryId);
             orderDeliveryDO.setStatus(OrderDeliveryStatus.RECEIVE.getCode());
             orderDeliveryDO.setReceiveTime(new Date());
+            //设置当前操作用户为更新人
+            orderDeliveryDO.setUpdateBy(getCurrentSysUser());
+            orderDeliveryDO.setUpdateTime(new Date());
             Boolean res = orderDeliveryService.updateByObj(orderDeliveryDO);
             //更新订单状态为已完成
             OrderDO orderDO = new OrderDO();
             orderDO.setId(orderId);
             orderDO.setStatus(OrderStatus.DONE.getCode());
+            //设置当前操作用户为更新人
+            orderDO.setUpdateBy(getCurrentSysUser());
+            orderDO.setUpdateTime(new Date());
             Boolean orderRes = orderService.updateByObj(orderDO);
             return BaseResponse.getRespByResultBool(res && orderRes);
         } catch (Exception e) {

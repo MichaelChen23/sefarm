@@ -129,8 +129,8 @@ public class SysUserController extends BaseController {
         }
 
         try {
-            // 完善账号信息
-            sysUserDO.setCreateBy("sys");
+            // 完善账号信息，当前系统操作人为创建人
+            sysUserDO.setCreateBy(getCurrentSysUser());
             sysUserDO.setCreateTime(new Date());
             //使用Shiro工具加密用户密码
             sysUserDO.setSalt(ShiroUtil.getRandomSalt(5));
@@ -155,7 +155,8 @@ public class SysUserController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            sysUserDO.setUpdateBy("sys");
+            //当前系统操作人为更新人
+            sysUserDO.setUpdateBy(getCurrentSysUser());
             sysUserDO.setUpdateTime(new Date());
             Boolean res = sysUserService.updateByObj(sysUserDO);
             return BaseResponse.getRespByResultBool(res);
@@ -200,8 +201,11 @@ public class SysUserController extends BaseController {
             SysUserDO sysUser = new SysUserDO();
             sysUser.setId(userId);
             SysUserDO sysUserDO = sysUserService.getOneByObj(sysUser);
-            sysUserDO.setPassword(Constant.DEFAULT_SYS_USER_PWD);
-            sysUserDO.setUpdateBy("sys");
+            //使用Shiro工具加密用户密码
+            sysUserDO.setSalt(ShiroUtil.getRandomSalt(5));
+            sysUserDO.setPassword(ShiroUtil.md5(Constant.DEFAULT_SYS_USER_PWD, sysUserDO.getSalt()));
+            //当前系统操作人为更新人
+            sysUserDO.setUpdateBy(getCurrentSysUser());
             sysUserDO.setUpdateTime(new Date());
             Boolean res = sysUserService.updateByObj(sysUserDO);
             return BaseResponse.getRespByResultBool(res);
@@ -229,7 +233,8 @@ public class SysUserController extends BaseController {
             SysUserDO sysUserDO = sysUserService.getOneByObj(sysUser);
             //只允许选择--最后选中的角色
             sysUserDO.setSysRoleId(Long.valueOf(roleIdArray[0]));
-            sysUserDO.setUpdateBy("sys");
+            //当前系统操作人为更新人
+            sysUserDO.setUpdateBy(getCurrentSysUser());
             sysUserDO.setUpdateTime(new Date());
             Boolean res = sysUserService.updateByObj(sysUserDO);
             return BaseResponse.getRespByResultBool(res);

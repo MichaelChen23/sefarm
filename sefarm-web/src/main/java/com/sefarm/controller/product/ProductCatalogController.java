@@ -98,8 +98,8 @@ public class ProductCatalogController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            // 完善创建信息
-            productCatalogDO.setCreateBy("sys");
+            // 完善创建信息，把当前操作用户当创建人
+            productCatalogDO.setCreateBy(getCurrentSysUser());
             productCatalogDO.setCreateTime(new Date());
             Boolean res = productCatalogService.saveByObj(productCatalogDO);
             return BaseResponse.getRespByResultBool(res);
@@ -121,7 +121,8 @@ public class ProductCatalogController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            productCatalogDO.setUpdateBy("sys");
+            //设置当前操作用户为更新人
+            productCatalogDO.setUpdateBy(getCurrentSysUser());
             productCatalogDO.setUpdateTime(new Date());
             Boolean res = productCatalogService.updateByObj(productCatalogDO);
             return BaseResponse.getRespByResultBool(res);

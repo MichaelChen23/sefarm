@@ -118,7 +118,8 @@ public class OrderItemController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            orderItemDO.setUpdateBy("sys");
+            //设置当前操作用户为更新人
+            orderItemDO.setUpdateBy(getCurrentSysUser());
             orderItemDO.setUpdateTime(new Date());
             Boolean res = orderItemService.updateByObj(orderItemDO);
             return BaseResponse.getRespByResultBool(res);

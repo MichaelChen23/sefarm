@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * 用户等级的Controller
@@ -96,6 +97,9 @@ public class UserRankController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
+            //当前系统操作人为创建人
+            userRankDO.setCreateBy(getCurrentSysUser());
+            userRankDO.setCreateTime(new Date());
             Boolean res = userRankService.saveByObj(userRankDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
@@ -116,6 +120,9 @@ public class UserRankController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
+            //当前系统操作人为更新人
+            userRankDO.setUpdateBy(getCurrentSysUser());
+            userRankDO.setUpdateTime(new Date());
             Boolean res = userRankService.updateByObj(userRankDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {

@@ -120,10 +120,9 @@ public class SysDeptController extends BaseController {
         }
 
         try {
-            // 完善部门信息
-            sysDeptDO.setCreateBy("sys");
+            // 完善部门信息，设置当前操作用户为创建人
+            sysDeptDO.setCreateBy(getCurrentSysUser());
             sysDeptDO.setCreateTime(new Date());
-
             Boolean res = sysDeptService.saveByObj(sysDeptDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
@@ -144,7 +143,8 @@ public class SysDeptController extends BaseController {
             if (result.hasErrors()) {
                 throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
             }
-            sysDeptDO.setUpdateBy("sys");
+            //设置当前操作用户为更新人
+            sysDeptDO.setUpdateBy(getCurrentSysUser());
             sysDeptDO.setUpdateTime(new Date());
             Boolean res = sysDeptService.updateByObj(sysDeptDO);
             return BaseResponse.getRespByResultBool(res);

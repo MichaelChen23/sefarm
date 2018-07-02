@@ -52,7 +52,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleDO
     }
 
     @Override
-    public Boolean setMenuAuthority(Long roleId, String ids) {
+    public Boolean setMenuAuthority(Long roleId, String ids, String username) {
         Integer res = 0;
         Example example = new Example(SysRoleMenuDO.class);
         example.createCriteria().andEqualTo("sysRoleId", roleId);
@@ -73,10 +73,10 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRoleDO
                     if (sysRoleMenuDOList != null && sysRoleMenuDOList.size() > 0) {
                         sysRoleMenuDO.setCreateBy(sysRoleMenuDOList.get(0).getCreateBy());
                         sysRoleMenuDO.setCreateTime(sysRoleMenuDOList.get(0).getCreateTime());
-                        sysRoleMenuDO.setUpdateBy("sys");
+                        sysRoleMenuDO.setUpdateBy(username);
                         sysRoleMenuDO.setUpdateTime(new Date());
                     } else {
-                        sysRoleMenuDO.setCreateBy("sys");
+                        sysRoleMenuDO.setCreateBy(username);
                         sysRoleMenuDO.setCreateTime(new Date());
                     }
                     sysRoleMenuList.add(sysRoleMenuDO);

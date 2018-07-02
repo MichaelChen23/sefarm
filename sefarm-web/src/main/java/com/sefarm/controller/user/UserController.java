@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * 用户的Controller
@@ -116,6 +117,9 @@ public class UserController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
+            //当前系统操作人为更新人
+            userDO.setUpdateBy(getCurrentSysUser());
+            userDO.setUpdateTime(new Date());
             Boolean res = userService.updateByObj(userDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {

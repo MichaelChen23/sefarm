@@ -134,10 +134,9 @@ public class SysRoleController extends BaseController {
         }
 
         try {
-            // 完善角色信息
-            sysRoleDO.setCreateBy("sys");
+            // 完善角色信息，设置当前操作用户为创建人
+            sysRoleDO.setCreateBy(getCurrentSysUser());
             sysRoleDO.setCreateTime(new Date());
-
             Boolean res = sysRoleService.saveByObj(sysRoleDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
@@ -158,7 +157,8 @@ public class SysRoleController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            sysRoleDO.setUpdateBy("sys");
+            //设置当前操作用户为更新人
+            sysRoleDO.setUpdateBy(getCurrentSysUser());
             sysRoleDO.setUpdateTime(new Date());
             Boolean res = sysRoleService.updateByObj(sysRoleDO);
             return BaseResponse.getRespByResultBool(res);
@@ -201,7 +201,9 @@ public class SysRoleController extends BaseController {
             if (ToolUtil.isOneEmpty(roleId)) {
                 throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
             }
-            Boolean res = sysRoleService.setMenuAuthority(roleId, ids);
+            //获取当前系统操作人
+            String username = getCurrentSysUser();
+            Boolean res = sysRoleService.setMenuAuthority(roleId, ids, username);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
             return handleException(e, "sys-role set menu authority fail(系统角色配置菜单权限失败)-- id:"+roleId+":{}", true);

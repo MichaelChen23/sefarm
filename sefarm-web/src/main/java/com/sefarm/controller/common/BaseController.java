@@ -96,6 +96,19 @@ public class BaseController {
         return HttpKit.getRequest().getHeader(headName);
     }
 
+    /**
+     * 获取当前操作系统用户的帐号
+     * add by mc 2018-7-2
+     * @return
+     */
+    protected String getCurrentSysUser() {
+        if (getSession() != null) {
+            return (String) getSession().getAttribute("username");
+        } else {
+            return "";
+        }
+    }
+
     protected Integer getSystemInvokCount() {
         return (Integer) this.getHttpServletRequest().getServletContext().getAttribute("systemCount");
     }

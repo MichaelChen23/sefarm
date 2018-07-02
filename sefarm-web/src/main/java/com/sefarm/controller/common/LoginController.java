@@ -5,6 +5,7 @@ import com.sefarm.common.Constant;
 import com.sefarm.common.exception.InvalidKaptchaException;
 import com.sefarm.common.node.MenuNode;
 import com.sefarm.common.vo.SysUserVO;
+import com.sefarm.config.properties.SeFarmProperties;
 import com.sefarm.service.system.ISysMenuService;
 import com.sefarm.service.system.ISysUserService;
 import com.sefarm.util.ShiroUtil;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
@@ -32,6 +34,9 @@ public class LoginController extends BaseController {
 
 //    @Reference(version = "1.0.0", timeout = Constant.DUBBO_TIME_OUT) 注解式导入dubbo服务与事务注解有冲突就不使用了。 modify by mc 2018-4-29
 
+    @Resource
+    private SeFarmProperties seFarmProperties;
+    
     @Autowired
     public ISysUserService sysUserService;
 
@@ -65,8 +70,10 @@ public class LoginController extends BaseController {
                 return "/login.html";
             }
 
-            model.addAttribute("username", sysUserVO.getUsername());
-            model.addAttribute("rolename", sysUserVO.getSysRoleName());
+            //保存当前操作人进session，并设置session有效时间
+            getSession().setAttribute("username", sysUserVO.getUsername());
+            getSession().setAttribute("rolename", sysUserVO.getSysRoleName());
+            getSession().setMaxInactiveInterval(seFarmProperties.getSessionInvalidateTime());
 
             List<MenuNode> menus = sysMenuService.getMenusByRoleId(sysUserVO.getSysRoleId());
             List<MenuNode> titles = MenuNode.buildTitle(menus);

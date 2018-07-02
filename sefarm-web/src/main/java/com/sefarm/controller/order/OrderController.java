@@ -149,7 +149,8 @@ public class OrderController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            orderDO.setUpdateBy("sys");
+            //设置当前操作用户为更新人
+            orderDO.setUpdateBy(getCurrentSysUser());
             orderDO.setUpdateTime(new Date());
             Boolean res = orderService.updateByObj(orderDO);
             return BaseResponse.getRespByResultBool(res);

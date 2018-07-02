@@ -119,6 +119,9 @@ public class UserAddressController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
+            //当前系统操作人为更新人
+            userAddressDO.setUpdateBy(getCurrentSysUser());
+            userAddressDO.setUpdateTime(new Date());
             Boolean res = userAddressService.updateByObj(userAddressDO);
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {

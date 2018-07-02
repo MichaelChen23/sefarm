@@ -98,8 +98,8 @@ public class AdvertController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            // 完善广告信息
-            advertDO.setCreateBy("sys");
+            // 完善广告信息，设置当前操作用户为创建人
+            advertDO.setCreateBy(getCurrentSysUser());
             advertDO.setCreateTime(new Date());
             Boolean res = advertService.saveByObj(advertDO);
             return BaseResponse.getRespByResultBool(res);
@@ -121,7 +121,8 @@ public class AdvertController extends BaseController {
             throw new BussinessException(BizExceptionEnum.REQUEST_NULL);
         }
         try {
-            advertDO.setUpdateBy("sys");
+            // 完善广告信息，设置当前操作用户为更新人
+            advertDO.setUpdateBy(getCurrentSysUser());
             advertDO.setUpdateTime(new Date());
             Boolean res = advertService.updateByObj(advertDO);
             return BaseResponse.getRespByResultBool(res);
