@@ -9,7 +9,7 @@
                                @if(isEmpty(avatar)){
                                     src="${ctxPath}/static/img/girl.gif"
                                @}else{
-                                    src="${ctxPath}/kaptcha/${avatar}"
+                                    src="${ctxPath}/images/${avatar}"
                                @}
                                width="64px" height="64px"/></span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -19,8 +19,8 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <!--<li><a class="J_menuItem" href="${ctxPath}/mgr/user_info">个人资料</a></li>-->
-                        <!--<li><a class="J_menuItem" href="${ctxPath}/mgr/user_chpwd">修改密码</a></li>-->
+                        <li><a class="J_menuItem" href="${ctxPath}/api/sys-user/sysuser_view">个人资料</a></li>
+                        <li><a class="J_menuItem" href="${ctxPath}/api/sys-user/sysuser_changepwd">修改密码</a></li>
                         <li class="divider"></li>
                         <li><a href="${ctxPath}/admin/logout">安全退出</a>
                         </li>

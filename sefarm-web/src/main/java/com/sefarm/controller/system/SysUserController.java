@@ -11,6 +11,7 @@ import com.sefarm.model.system.SysUserDO;
 import com.sefarm.service.system.ISysUserService;
 import com.sefarm.util.ShiroUtil;
 import com.sefarm.util.ToolUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,27 @@ public class SysUserController extends BaseController {
         model.addAttribute("userId", userId);
         model.addAttribute("username", sysUserDO.getUsername());
         return PREFIX + "sysuser_roleassign.html";
+    }
+
+    /**
+     * 跳转到系统用户详情的页面
+     * add by mc 2018-7-3
+     */
+    @RequestMapping("/sysuser_view")
+    public String sysUserInfoView(Model model) {
+        //获取用户信息
+        SysUserVO sysUserVO = sysUserService.getSysUserVOByUsername(getCurrentSysUser());
+        model.addAttribute(sysUserVO);
+        return PREFIX + "sysuser_view.html";
+    }
+
+    /**
+     * 跳转到修改密码的页面
+     * add by mc 2018-7-3
+     */
+    @RequestMapping("/sysuser_changepwd")
+    public String changePwdView() {
+        return PREFIX + "sysuser_changepwd.html";
     }
 
     /**
@@ -211,6 +233,53 @@ public class SysUserController extends BaseController {
             return BaseResponse.getRespByResultBool(res);
         } catch (Exception e) {
             return handleException(e, "sys-user reset password fail(重置密码失败)-- id:"+userId+":{}", true);
+        }
+    }
+
+    /**
+     * 修改当前用户的密码
+     * add by mc 2018-7-3
+     * @param oldPwd
+     * @param newPwd
+     * @param rePwd
+     * @return
+     */
+    @RequestMapping("/changePwd")
+    @ResponseBody
+    public BaseResponse changePassword(@RequestParam String oldPwd, @RequestParam String newPwd, @RequestParam String rePwd) {
+        //获取用户信息
+        SysUserVO sysUserVO = sysUserService.getSysUserVOByUsername(getCurrentSysUser());
+        try {
+            BaseResponse result = BaseResponse.getRespByResultBool(false);
+            //加密后的旧密码
+            String oldPwdMd5 = ShiroUtil.md5(oldPwd, sysUserVO.getSalt());
+            //旧密码输入错误
+            if (!sysUserVO.getPassword().equals(oldPwdMd5)) {
+                result.setMsg("原密码不正确!");
+                return result;
+            }
+            //输入新密码不能为空
+            if (StringUtils.isBlank(newPwd) || StringUtils.isBlank(rePwd)) {
+                result.setMsg("输入新密码不能为空!");
+                return result;
+            }
+            //新密码输入前后不一致
+            if (!newPwd.equals(rePwd)) {
+                result.setMsg("两次输入密码不一致!");
+                return result;
+            }
+            SysUserDO sysUserDO = new SysUserDO();
+            sysUserDO.setId(sysUserVO.getId());
+            sysUserDO.setSalt(ShiroUtil.getRandomSalt(5));
+            String newPwdMd5 = ShiroUtil.md5(newPwd, sysUserDO.getSalt());
+            sysUserDO.setPassword(newPwdMd5);
+            //当前系统操作人为更新人
+            sysUserDO.setUpdateBy(getCurrentSysUser());
+            sysUserDO.setUpdateTime(new Date());
+            Boolean res = sysUserService.updateByObj(sysUserDO);
+            return BaseResponse.getRespByResultBool(res);
+        } catch (Exception e) {
+            return handleException(e, "sys-user change password fail(修改密码失败)-- username:"+sysUserVO.getUsername()+":{}", true);
         }
     }
 

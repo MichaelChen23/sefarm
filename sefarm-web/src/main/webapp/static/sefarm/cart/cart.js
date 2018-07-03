@@ -29,19 +29,6 @@ Cart.initColumn = function () {
 };
 
 /**
- * 获取产品图片展示判断
- * @param value
- * @param row
- * @param index
- * @returns {string}
- */
-function imageFormatter(value, row, index){
-    if (value != null && value != "") {
-        return "<img  src='/images/"+ value + "' width='88' height='88'>";
-    }
-};
-
-/**
  * 检查是否选中
  */
 Cart.check = function () {

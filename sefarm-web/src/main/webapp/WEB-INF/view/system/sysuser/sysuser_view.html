@@ -1,0 +1,85 @@
+@layout("/common/_container.html"){
+<div class="col-sm-6  col-sm-offset-3">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>系统用户信息</h5>
+        </div>
+        <div class="ibox-content">
+            <div class="row row-lg">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content" style="border:none !important; ">
+                            <div class="form-horizontal">
+
+                                <input type="hidden" id="id" value="${sysUserVO.id}">
+                                <input type="hidden" id="sexValue" value="${sysUserVO.sex}">
+                                <input type="hidden" id="statusValue" value="${sysUserVO.status}">
+
+                                <div class="row">
+                                    <div class="col-sm-6 b-r">
+
+                                        <#input id="username" name="账户" underline="true" value="${sysUserVO.username}"/>
+
+                                        <#select id="sex" name="性别" underline="true">
+                                            <option value="m">男</option>
+                                            <option value="w">女</option>
+                                        </#select>
+
+                                        <#input id="mobile" name="手机" underline="true" value="${sysUserVO.mobile}"/>
+
+                                        <#input id="roleid" name="角色" underline="true" value="${sysUserVO.sysRoleName}" disabled="disabled"/>
+
+                                        <#input id="email" name="邮箱" type="email" value="${sysUserVO.email}"/>
+
+                                        <#input id="remark" name="备注" underline="true" value="${sysUserVO.remark}"/>
+
+                                        <#input id="createBy" name="创建人" underline="true" value="${sysUserVO.createBy}" disabled="disabled"/>
+
+                                        <#input id="updateBy" name="更新人" underline="true" value="${sysUserVO.updateBy}" disabled="disabled"/>
+
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div id="driverInfoContent">
+                                            <#input id="name" name="姓名" underline="true" value="${sysUserVO.name}"/>
+
+                                            <#image id="avatar" name="头像" underline="true" imageName="${sysUserVO.avatar}"/>
+
+                                            <#input id="birthday" name="出生日期" underline="true" type="date"
+                                                    value="${sysUserVO.birthday}"
+                                                    clickFun="laydate({istime: false, format: 'YYYY-MM-DD'})" />
+
+                                            <#input id="phone" name="座机电话" underline="true" value="${sysUserVO.phone}"/>
+
+                                            <#input id="deptSelect" name="部门" underline="true" readonly="readonly" hidden="sysDeptId" hiddenValue="${sysUserVO.sysDeptId}" value="${sysUserVO.sysDeptName}"
+                                                    clickFun="SysUserInfoDlg.showSysUserInfoDeptSelectTree(); return false;"
+                                                    style="background-color: #ffffff !important;"
+                                                    selectFlag="true" selectId="deptContent" selectTreeId="treeDemo" selectStyle="width:250px !important;"/>
+
+                                            <#select id="status" name="状态" underline="true">
+                                                <option value="y">开启</option>
+                                                <option value="n">停用</option>
+                                            </#select>
+
+                                            <#input id="createTime" name="创建时间" underline="true" value="${sysUserVO.createTime}" disabled="disabled"/>
+
+                                            <#input id="updateTime" name="更新时间" underline="true" value="${sysUserVO.updateTime}" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row btn-group-m-t">
+                                    <div class="col-sm-10">
+                                        <#button btnCss="info" name="更改" id="ensure" icon="fa-check" clickFun="SysUserInfoDlg.editSubmit()"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/sefarm/system/sysuser/sysuser_info.js"></script>
+@}

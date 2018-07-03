@@ -19,6 +19,7 @@ SysUser.initColumn = function () {
         {title: '账号', field: 'username', align: 'center', valign: 'middle', sortable: true},
         {title: '密码', field: 'password', align: 'center', valign: 'middle'},
         {title: '姓名', field: 'name', align: 'center', valign: 'middle', sortable: true},
+        {title: '头像', field: 'avatar', align: 'center', valign: 'middle', sortable: true, formatter: imageFormatter},
         {title: '性别', field: 'sex', align: 'center', valign: 'middle', sortable: true, formatter: sexFormatter},
         {title: '生日', field: 'birthday', align: 'center', valign: 'middle', sortable: true},
         {title: '角色', field: 'sysRoleName', align: 'center', valign: 'middle', sortable: true},
@@ -177,7 +178,6 @@ SysUser.resetPwd = function () {
 
 /**
  * 点击系统角色分配
- * @param
  */
 SysUser.roleAssign = function () {
     if (this.check()) {

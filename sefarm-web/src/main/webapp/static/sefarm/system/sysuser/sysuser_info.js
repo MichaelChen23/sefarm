@@ -74,6 +74,24 @@ SysUserInfoDlg.showDeptSelectTree = function () {
 };
 
 /**
+ * 显示 系统用户信息 部门选择的树 下拉框
+ * add by mc 2018-7-3
+ * @returns
+ */
+SysUserInfoDlg.showSysUserInfoDeptSelectTree = function () {
+    //deptSelect为部门选择框的id
+    var deptObj = $("#deptSelect");
+    var deptOffset = $("#deptSelect").position();
+    //deptContent为部门弹出框的id
+    $("#deptContent").css({
+        left: deptOffset.left + "px",
+        top: deptOffset.top + deptObj.outerHeight() + "px"
+    }).slideDown("fast");
+
+    $("body").bind("mousedown", onBodyDown);
+};
+
+/**
  * 隐藏部门选择的树
  */
 SysUserInfoDlg.hideDeptSelectTree = function () {
@@ -170,7 +188,7 @@ SysUserInfoDlg.editSubmit = function () {
 /**
  * 修改密码
  */
-SysUserInfoDlg.chPwd = function () {
+SysUserInfoDlg.changePwd = function () {
     var ajax = new $ax(Feng.ctxPath + "/api/sys-user/changePwd", function (data) {
         if (data.code == 200) {
             Feng.success("修改密码成功!");
@@ -200,8 +218,8 @@ $(function () {
     $("#status").val($("#statusValue").val());
 
     // 初始化头像上传
-    var avatarUp = new $WebUpload("avatar");
-    avatarUp.init();
+    var pictureUp = new $WebUpload("avatar");
+    pictureUp.init();
 });
 
 

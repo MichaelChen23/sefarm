@@ -153,6 +153,22 @@ public class ProductCatalogController extends BaseController {
     }
 
     /**
+     * 获取下拉框的所有选项，后台select使用
+     * @return
+     */
+    @RequestMapping(value = "/prod-cata/getAll", method = RequestMethod.GET)
+    @ResponseBody
+    public BaseResponse<List<ProductCatalogDO>> getAll() {
+        try {
+            List<ProductCatalogDO> list = productCatalogService.getALL();
+            return new BaseResponse<>(list);
+        } catch (Exception e) {
+            logger.error("prod-cata get all(获取所有数据失败)-- :{}", e.getMessage());
+            return null;
+        }
+    }
+
+    /**
      * 移动前端——获取全部产品目录
      * add by mc 2018-4-24
      * @return

@@ -34,6 +34,8 @@
 					<div id="driverInfoContent">
 						<#input id="name" name="姓名" underline="true" value="${sysUserVO.name}"/>
 
+						<#image id="avatar" name="头像" underline="true" imageName="${sysUserVO.avatar}"/>
+
 						<#input id="birthday" name="出生日期" underline="true" type="date"
 								value="${sysUserVO.birthday}"
 								clickFun="laydate({istime: false, format: 'YYYY-MM-DD'})" />

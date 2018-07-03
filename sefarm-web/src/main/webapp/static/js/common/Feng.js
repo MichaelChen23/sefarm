@@ -180,4 +180,17 @@ function fixFormatter(value) {
     return value < 10 ? ('0' + value) : value;
 };
 
+/**
+ * 获取产品图片展示判断，nginx提供的/images/**获取图片的url
+ * @param value
+ * @param row
+ * @param index
+ * @returns {string}
+ */
+function imageFormatter(value, row, index){
+    if (value != null && value != "") {
+        return "<img  src='/images/"+ value + "' width='88' height='88'>";
+    }
+};
+
 

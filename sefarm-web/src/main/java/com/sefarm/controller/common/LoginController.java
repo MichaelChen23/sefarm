@@ -72,20 +72,19 @@ public class LoginController extends BaseController {
 
             //保存当前操作人进session，并设置session有效时间
             getSession().setAttribute("username", sysUserVO.getUsername());
-            getSession().setAttribute("rolename", sysUserVO.getSysRoleName());
             getSession().setMaxInactiveInterval(seFarmProperties.getSessionInvalidateTime());
 
+            //首页显示帐号和角色
+            model.addAttribute("username", sysUserVO.getUsername());
+            model.addAttribute("rolename", sysUserVO.getSysRoleName());
+            //首页显示菜单
             List<MenuNode> menus = sysMenuService.getMenusByRoleId(sysUserVO.getSysRoleId());
             List<MenuNode> titles = MenuNode.buildTitle(menus);
             model.addAttribute("titles", titles);
 
-//
-//        //获取用户头像
-//        Integer id = ShiroKit.getUser().getId();
-//        User user = userMapper.selectById(id);
-//        String avatar = user.getAvatar();
-//        model.addAttribute("avatar", avatar);
-//
+            //获取用户头像
+            model.addAttribute("avatar", sysUserVO.getAvatar());
+
             return "/index.html";
         } else {
             return "/login.html";

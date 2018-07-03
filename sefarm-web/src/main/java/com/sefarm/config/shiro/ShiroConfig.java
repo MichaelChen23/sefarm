@@ -105,7 +105,6 @@ public class ShiroConfig {
          */
         Map<String, String> hashMap = new LinkedHashMap<>();
         hashMap.put("/static/**", "anon");
-        hashMap.put("/api/image/**", "anon");
         hashMap.put("/api/kaptcha", "anon");
         hashMap.put("/admin/login", "anon");
         hashMap.put("/api/wechat/**", "anon");
