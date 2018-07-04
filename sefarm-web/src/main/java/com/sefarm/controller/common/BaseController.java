@@ -288,6 +288,7 @@ public class BaseController {
             result.setCode(Constant.FAIL_CODE);
             result.setMsg("登录失败，请重新登录！");
             result.setResult(Boolean.FALSE);
+            return result;
         }
         String openId = userInfo.getOpenid();
         Map<String, Object> queryMaps = new HashMap<>(2);
