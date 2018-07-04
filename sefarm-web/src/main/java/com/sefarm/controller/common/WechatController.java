@@ -127,7 +127,7 @@ public class WechatController {
             //获取session来保持用户信息，如果以后多台机器分布式要考虑用redis做保持分布式共享session和用户信息缓存
             HttpSession session = HttpKit.getRequest().getSession();
             //设置session失效时间，就不用去删除保存旧token的session
-            session.setMaxInactiveInterval(seFarmProperties.getSessionInvalidateTime());
+            session.setMaxInactiveInterval(seFarmProperties.getWechatSessionEffectTime());
             if (userDO != null && userDO.getId() != 0) {
                 if (Constant.STATUS_LOCK.equals(userDO.getStatus())) {
                     //如果用户被停用，不能获取该用户信息

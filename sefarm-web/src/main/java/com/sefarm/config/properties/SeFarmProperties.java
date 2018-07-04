@@ -40,6 +40,12 @@ public class SeFarmProperties {
      */
     private Integer sessionValidationInterval = 15 * 60;
 
+    /**
+     * 微信的session 有效时间（默认2小时 单位：秒）
+     * add by mc 2018-7-4
+     */
+    private Integer wechatSessionEffectTime = 2 * 60 * 60;
+
     public String getFileUploadPath() {
         //如果没有写文件上传路径,保存到临时目录
         if (StringUtils.isEmpty(fileUploadPath)) {
@@ -101,5 +107,13 @@ public class SeFarmProperties {
 
     public void setSessionValidationInterval(Integer sessionValidationInterval) {
         this.sessionValidationInterval = sessionValidationInterval;
+    }
+
+    public Integer getWechatSessionEffectTime() {
+        return wechatSessionEffectTime;
+    }
+
+    public void setWechatSessionEffectTime(Integer wechatSessionEffectTime) {
+        this.wechatSessionEffectTime = wechatSessionEffectTime;
     }
 }

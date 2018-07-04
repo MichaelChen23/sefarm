@@ -75,15 +75,15 @@ public class LoginController extends BaseController {
             getSession().setMaxInactiveInterval(seFarmProperties.getSessionInvalidateTime());
 
             //首页显示帐号和角色
-            model.addAttribute("username", sysUserVO.getUsername());
-            model.addAttribute("rolename", sysUserVO.getSysRoleName());
+//            model.addAttribute("username", sysUserVO.getUsername());
+//            model.addAttribute("rolename", sysUserVO.getSysRoleName());
             //首页显示菜单
             List<MenuNode> menus = sysMenuService.getMenusByRoleId(sysUserVO.getSysRoleId());
             List<MenuNode> titles = MenuNode.buildTitle(menus);
             model.addAttribute("titles", titles);
 
             //获取用户头像
-            model.addAttribute("avatar", sysUserVO.getAvatar());
+//            model.addAttribute("avatar", sysUserVO.getAvatar());
 
             return "/index.html";
         } else {
