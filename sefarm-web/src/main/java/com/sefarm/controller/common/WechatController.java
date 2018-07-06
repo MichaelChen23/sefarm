@@ -127,7 +127,7 @@ public class WechatController {
             //获取session来保持用户信息，如果以后多台机器分布式要考虑用redis做保持分布式共享session和用户信息缓存
             HttpSession session = HttpKit.getRequest().getSession();
             //设置session失效时间，就不用去删除保存旧token的session
-            session.setMaxInactiveInterval(seFarmProperties.getWechatSessionEffectTime());
+            session.setMaxInactiveInterval(seFarmProperties.getSessionInvalidateTime() * 1000);
             if (userDO != null && userDO.getId() != 0) {
                 if (Constant.STATUS_LOCK.equals(userDO.getStatus())) {
                     //如果用户被停用，不能获取该用户信息
@@ -149,8 +149,8 @@ public class WechatController {
                 UserDO resultUser = result? updateUserDO : userDO;
                 //session保持更新用户信息，用accessToken做key
                 session.setAttribute(accessToken, resultUser);
-                //微信提议不要传输openId等秘密敏感信息
-                resultUser.setOpenid("");
+                //微信提议不要传输openId等秘密敏感信息，这里把openid置空导致session保存的userInfo的openid也为空
+//                resultUser.setOpenid("");
                 return new BaseResponse<>(resultUser);
             } else {
                 user.setNickname(nickname);
@@ -165,8 +165,8 @@ public class WechatController {
                 UserDO newUserDO = userService.saveWechatUser(user);
                 //session保持新建用户信息，用accessToken做key
                 session.setAttribute(accessToken, newUserDO);
-                //微信提议不要传输openId等秘密敏感信息
-                newUserDO.setOpenid("");
+                //微信提议不要传输openId等秘密敏感信息，这里把openid置空导致session保存的userInfo的openid也为空
+//                newUserDO.setOpenid("");
                 return new BaseResponse<>(newUserDO);
             }
         } catch (Exception e) {

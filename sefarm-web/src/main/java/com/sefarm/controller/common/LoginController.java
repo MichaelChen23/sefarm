@@ -72,7 +72,7 @@ public class LoginController extends BaseController {
 
             //保存当前操作人进session，并设置session有效时间
             getSession().setAttribute("username", sysUserVO.getUsername());
-            getSession().setMaxInactiveInterval(seFarmProperties.getSessionInvalidateTime());
+            getSession().setMaxInactiveInterval(seFarmProperties.getSessionInvalidateTime() * 1000);
 
             //首页显示帐号和角色
 //            model.addAttribute("username", sysUserVO.getUsername());
