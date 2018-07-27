@@ -12,8 +12,8 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         driverClassName: com.mysql.jdbc.Driver
         url: jdbc:mysql://127.0.0.1:3306/sefarm_db?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=round&allowMultiQueries=true&autoReconnect=true
-        username: ji_dba
-        password: $mcdll886
+        username:
+        password:
         # Keep the connection alive if idle for a long time (needed in production)
         testWhileIdle: true
         validationQuery: SELECT 1
@@ -80,5 +80,6 @@ logging: # 与 logback.xml配置任选其一，如果两者存在，优先xml配
           root: info # logging.level.root=WARN：root日志以WARN级别输出
           tk.mybatis: info # logging.level.com.ji=DEBUG：com.ji包下所有class以DEBUG级别输出
           com.sefarm: info
-      path: /sefarm/service/log # 设置目录，会在该目录下创建spring.log文件，并写入日志内容
-      file: sefarm_server.log
+      #path: /sefarm/service/log # 设置目录，会在该目录下创建spring.log文件，并写入日志内容
+      #logging.path和logging.file这2个属性，只需要配置其中之一即可，如果同时配置，则使用logging.file属性。
+      file: /sefarm/service/logs/sefarm_server.log

@@ -18,6 +18,7 @@ import com.sefarm.util.ToolUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -150,7 +151,9 @@ public class WechatController {
                 //session保持更新用户信息，用accessToken做key
                 session.setAttribute(accessToken, resultUser);
                 //微信提议不要传输openId等秘密敏感信息，这里把openid置空导致session保存的userInfo的openid也为空
-//                resultUser.setOpenid("");
+                UserDO resUserDO = new UserDO();
+                BeanUtils.copyProperties(resultUser, resUserDO);
+                resUserDO.setOpenid("");
                 return new BaseResponse<>(resultUser);
             } else {
                 user.setNickname(nickname);
@@ -166,8 +169,10 @@ public class WechatController {
                 //session保持新建用户信息，用accessToken做key
                 session.setAttribute(accessToken, newUserDO);
                 //微信提议不要传输openId等秘密敏感信息，这里把openid置空导致session保存的userInfo的openid也为空
-//                newUserDO.setOpenid("");
-                return new BaseResponse<>(newUserDO);
+                UserDO resUserDO = new UserDO();
+                BeanUtils.copyProperties(newUserDO, resUserDO);
+                resUserDO.setOpenid("");
+                return new BaseResponse<>(resUserDO);
             }
         } catch (Exception e) {
             logger.error("get userinfo by accessToken and openId fail(获取用户信息失败) -- accessToken:" + accessToken + " openId:" + openId + " :{}", e.getMessage());
