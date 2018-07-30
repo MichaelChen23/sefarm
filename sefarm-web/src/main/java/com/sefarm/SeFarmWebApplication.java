@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ImportResource;
  * @date 2018-3-18
  */
 @SpringBootApplication
-@ImportResource({"classpath:dubbo-consumer.xml"})
+@ImportResource(locations = {"classpath:dubbo-consumer.xml"})
 @ComponentScan(basePackages={"com.sefarm"})
 public class SeFarmWebApplication {
 
